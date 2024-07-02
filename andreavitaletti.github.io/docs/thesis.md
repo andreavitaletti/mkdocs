@@ -1,9 +1,11 @@
 
 # Thesis
 
+These thesis are in collaboration with Ivan Visconti, Pierpaolo Della Monica, Marco Zecchini, Ioannis Chatzigiannakis, Daniel Mauricio Jimenez Gutierrez and Aris Anagnostopoulos
+
 ## A browser plugin to validate the proof of a legit transformation of a private image into a public available one publicly available on the Web
 
-The Internet has plenty of public images that are transformations (e.g., resize, crop, grayscale) of original unpublished ones. Various reasons recommend to keep private an original image, such as its economic value and its sensitive content. Several concrete scenarios, including selling images over the Internet, fighting misinformation and detecting deep fakes, would highly benefit from a system allowing to efficiently prove and verify the authenticity of a transformed image (i.e., the public image is a result of a faithful transformation over a private and authentic original image). We have designed a system allowing the possessor of a signed private image to compute a faithful transformation, guaranteeing 1) confidentiality (no leak), 2) efficient proof generation (the proof can be computed with a cheap laptop), 3) integrity (only the advertised transformations have been applied) and 4) efficient fraud detection (fast detection of bogus proofs). Our system is based on a divide-et-impera approach through sub-transformations applied to tiles of the original image that are then reconnected together along with their sub-proofs. [see Do Not Trust Anybody: ZK Proofs for Image Transformations Tile by Tile on Your Laptop on RWC](https://rwc.iacr.org/2024/program.php).
+The Internet has plenty of public images that are transformations (e.g., resize, crop, grayscale) of original unpublished ones. Various reasons recommend to keep private an original image, such as its economic value and its sensitive content. Several concrete scenarios, including selling images over the Internet, fighting misinformation and detecting deep fakes, would highly benefit from a system allowing to efficiently prove and verify the authenticity of a transformed image (i.e., the public image is a result of a faithful transformation over a private and authentic original image). We have designed a system allowing the possessor of a signed private image to compute a faithful transformation, guaranteeing 1) confidentiality (no leak), 2) efficient proof generation (the proof can be computed with a cheap laptop), 3) integrity (only the advertised transformations have been applied) and 4) efficient fraud detection (fast detection of bogus proofs). Our system is based on a divide-et-impera approach through sub-transformations applied to tiles of the original image that are then reconnected together along with their sub-proofs. See [Do Not Trust Anybody: ZK Proofs for Image Transformations Tile by Tile on Your Laptop on RWC](https://rwc.iacr.org/2024/program.php) and [Trust Nobody: Privacy-Preserving Proofs for Edited Photos with Your Laptop](https://eprint.iacr.org/2024/1074).
 
 A detailed paper on the technical ingredients to develop the system will be provided 
 
@@ -50,11 +52,20 @@ The purpose of the thesis is to develop a PoC on the employment of Blockchain Te
 
 ## Federated Machine Learning and Blockchain
 
-[Federated learning](https://link.springer.com/article/10.1007/s13042-022-01647-y)(FML) is a decentralized approach to training machine learning models. It doesn't require an exchange of data from client devices to global servers. Instead, the raw data on edge devices is used to train the model locally, and share only model parameters thus increasing data privacy.
+[Federated learning](https://link.springer.com/article/10.1007/s13042-022-01647-y)(FML) is a decentralized approach to training machine learning models. It doesn't require an exchange of data from client devices to global servers. Instead, the raw data on edge devices is used to train the model locally, and share only model parameters thus increasing data privacy. At DIAG, we developed a [FedArtML](https://ieeexplore.ieee.org/document/10549893): A Tool to Facilitate the Generation of Non-IID Datasets in a Controlled Way to Support Federated Learning Research
 
 ### Goal of the thesis
 
-The thesis will investigate the integration of FML with Blockchain Technologies starting from the relevant [literature](https://dl.acm.org/doi/10.1145/3570953). We are particularly interested in designing new tools and methodology to automatically compensate, by means of smart contracts, the contribution of each distributed node to the distillation of the global model. To this purpose, we first need to identify a privacy-preserving metric to evaluate the [quality](https://research.ece.cmu.edu/lions/Papers/Federated_WiOpt.pdf) of the contribution [without revealing the data](https://arxiv.org/abs/2108.10623). 
+The thesis will investigate the integration of [FML with Blockchain](https://ieeexplore.ieee.org/abstract/document/9403374) Technologies starting from the relevant [literature](https://dl.acm.org/doi/10.1145/3570953). We are particularly interested in designing new tools and methodology to automatically [incentive](https://ieeexplore.ieee.org/abstract/document/9780573), by means of smart contracts, the [contribution](https://dl.acm.org/doi/full/10.1145/3501811) of [each distributed node](https://openreview.net/forum?id=PYAFKBc8GL4) to the distillation of the global model. To this purpose, we first need to identify a privacy-preserving metric to evaluate the [quality](https://research.ece.cmu.edu/lions/Papers/Federated_WiOpt.pdf) of the contribution [without revealing the data](https://arxiv.org/abs/2108.10623). The problem of measuring the contribution of participants
+in FML has been investigated in [WDZ19](https://ieeexplore.ieee.org/document/9006179), however in that paper privacy has not been considered.
+
+!!! question
+
+    Can we provide a Zero Knowledge Proof of the contribution of the participants in Federated Machine Learning?
+
+!!! question
+
+    Can an actor claim a reward providing privacy-preserving evidence of its contribution without revealing a) its identity, but proving he/she is part of the actors contributing to the model b) its real contribution (e.g. the dataset, the parameters of the model), c) its received reward ?
 
 ## Blockchain-based solutions for trusted and quality-aware data sharing
 
