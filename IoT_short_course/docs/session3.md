@@ -88,3 +88,9 @@ In this section we will implement the reference examples developed in day2 into 
 * About the vibration sensor SW-420 ... have a look [here](https://github.com/andreavitaletti/IoT_short_course/tree/main/src/freertos/mcpwm_capture_hc_sw420)
 
 Nice tutorials on the same topics are also available [here](https://esp32tutorials.com/getting-started-tutorial-esp32-esp-idf/)
+
+## Data Streaming in Industrial IoT
+
+* [MQTT](https://mqtt.org/)
+* [OPCUA](https://opcfoundation.org/about/opc-technologies/opc-ua/)
+* [Apache Kafka](https://kafka.apache.org/)
