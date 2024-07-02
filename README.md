@@ -7,15 +7,20 @@
 
 # To delpoy on github pages
 
+https://www.mkdocs.org/user-guide/deploying-your-docs/
+
 Assuming in the local folder you have the following organization 
 
-mkdocs/andreavitaletti.github.io/
+```
+~/github/mkdocs/andreavitaletti.github.io/
     mkdocs.yml
     docs/
     
-andreavitaletti.github.io/
-
-cd andreavitaletti.github.io/
-
+~/github/andreavitaletti.github.io/
+```
+```
+cd ~/github/andreavitaletti.github.io/
+```
+```
 mkdocs gh-deploy --config-file ../mkdocs/andreavitaletti.github.io/mkdocs.yml --remote-branch master
-
+```
