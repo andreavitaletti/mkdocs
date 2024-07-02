@@ -1,0 +1,32 @@
+site_name: A Short Course on IoT
+site_url: https://andreavitaletti.github.io/IoT_short_course
+
+repo_url: https://github.com/andreavitaletti/IoT_short_course
+
+theme:
+  name: 'material'
+  logo: assets/images/logo.png
+  icon:
+    repo: fontawesome/brands/git-alt
+  palette:
+    primary: lime
+
+nav:
+    - Home: index.md
+    - Session 1: session1.md
+    - Session 2: session2.md
+    - Session 3: session3.md
+    - Session 4: session4.md
+    - Sup. Mat. ML on node: supplement1.md
+    - Sup. Mat. Kalman Filters: supplement2.md
+    - Sup. Mat. Mobile: supplement3.md
+    - IoT-LAB: iot-lab.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/discord 
+      link: https://discord.gg/TZhMmbgq
+    - icon: fontawesome/brands/linkedin 
+      link: https://www.linkedin.com/in/andrea-vitaletti-3651442/
+
+copyright: Created by Andrea Vitaletti.<br/><img alt="" style="border-width:0" src="https://andreavitaletti.github.io/IoT_short_course/assets/images/mail.png" /></br><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
