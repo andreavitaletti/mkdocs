@@ -1,15 +1,16 @@
+---
+title: Andrea Vitaletti
+summary: Curriculum Vitae
+authors:
+    - Andrea Vitaletti
+date: 2024-07-10
+some_url: https://example.com
+---
+
 # Andrea Vitaletti
 
-<!-- https://andreavitaletti.github.io/ -->
-<!--
-|     |                          |
-| ----------- | ------------------------------------ |
-| ![Image title](assets/images/andrea_photo.png)      | Andrea Vitaletti Ph.D. in Computer Science. I am currently Associate professor @ Sapienza University of Rome. My research interests include: algorithms and protocols for wireless networks, IoT, private and distributed data management and Distributed Ledger Technologies. I co-authored more than 60 papers I have been involved in a number of EU projects as researcher, principal investigator and coordinator of the FET Open PLEASED. I am a maker and I have some successful experience in transfer of technology: I founded the spin-offs WLAB - sold in 2016 - and WSENSE - left in 2019. I teach networking, data-management and IoT topics at engineering and product design MsC and BsC @ Sapienza. Hobbies: sailing, cycling and paragliding … I play the piano and the guitar for fun… be aware!  |
-
-![Image title](assets/images/andrea_photo.png)
--->
-
-Andrea Vitaletti Ph.D. in Computer Science. I am currently Associate professor @ Sapienza University of Rome. My research interests include: algorithms and protocols for wireless networks, IoT, private and distributed data management and Distributed Ledger Technologies. I co-authored more than 60 papers I have been involved in a number of EU projects as researcher, principal investigator and coordinator of the FET Open PLEASED. I am a maker and I have some successful experience in transfer of technology: I founded the spin-offs WLAB - sold in 2016 - and WSENSE - left in 2019. I teach networking, data-management and IoT topics at engineering and product design MsC and BsC @ Sapienza.
+Andrea Vitaletti Ph.D. in Computer Science. I am currently Associate professor @ Sapienza University of Rome.My research interests are focused on devising solutions where data are collected, analyzed and valorized in distributed networks fostering a decentralized governance,  leveraging technologies such as IoT, Distributed Ledger Technologies, Federated Machine Learning and Verifiable Computation. 
+I am particularly interested in exploring and  studying tradeoffs between data utility and privacy as well as between individual interests and collective ones. I co-authored more than 80 papers I have been involved in a number of EU projects as researcher, principal investigator and coordinator of the FET Open PLEASED. I am a maker and I have some successful experience in transfer of technology: I founded the spin-offs WLAB - sold in 2016 - and WSENSE - left in 2019. 
 Hobbies: sailing, cycling and paragliding … I play the piano and the guitar for fun… be aware!
 
 
@@ -27,7 +28,7 @@ Hobbies: sailing, cycling and paragliding … I play the piano and the guitar fo
 | Dec. 2019 | Present |Associate Professor at University of Rome “La Sapienza”  |
 | Nov. 2007 | Nov. 2019 | Assistant Professor (Ricercatore) University of Rome “La Sapienza”|
 | Jul. 2007 | Jun. 2019 | Co-founder and CTO of [WSENSE](http://www.wsense.it)|
-| Jul. 2002 | Jun. 2016 | Co-founder and CTO of WLAB (acquired together with Nexse by Alten )|
+| Jul. 2002 | Jun. 2016 | Co-founder and CTO of WLAB (exit: sold to Alten)|
 | Mar. 2002 | Oct. 2007 | Post-doc and research grant at University of Rome “La Sapienza”|
 | Mar. 1998 | Oct. 2007 | Senior researcher at ETNOTEAM Research Labs (now NTT DATA) |
 | Mar. 2006 | May. 2006 | Visiting researcher at Swiss Federal Institute of Technology in Zurich (ETHZ), Zurich (Switzerland) |
@@ -41,13 +42,13 @@ He teaches networking topics at Sapienza since 2008 in the Master and Bachelor i
 
 From  2018 to 2023 he  gave a course on the Internet of Thing to the Master in Product Design at Sapienza (LM-12). 
 
-Andrea Vitaletti is instructor in the MOOC of Sapienza on Coursera entitled [“Recovering the Humankind’s Past and Saving the Universal Heritage”](https://www.coursera.org/learn/preserving-cultural-heritage).
+Andrea Vitaletti is instructor in the MOOC of Sapienza on Coursera entitled [“Recovering the Humankind’s Past and Saving the Universal Heritage”](https://www.coursera.org/learn/preserving-cultural-heritage) (16545 enrolled, 4.4 star evaluation).
 
 25-29 September 2023. Data Science PhD course: Crypto and Incentive-based Mechanisms for Blockchain Technology. Togheter with Vangelis Markakis (University of Athens), Ivan Visconti (University of Salerno) and Philip Lazos (Input Output IOG, United Kingdom).
 
 [A Short Course on IoT ](https://andreavitaletti.github.io/IoT_short_course/) taught at the [University of Stellenbosch](https://www.sun.ac.za/english) (South Africa) the 19th and 21st July 2023 during an [Erasmus+](https://erasmus-plus.ec.europa.eu/resources-and-tools/mobility-and-learning-agreements/mobility-agreements) staff mobility for teaching visit. About 40 participants selected among more the 100 candidates. The same course will be replicated in November 2024 at the [Business and Technology University](https://btu.edu.ge/en/home-english/) in Georgia
 
-In 2023 Instructor, togheter with prof. Paolo Merialdo of “L’imprenditoria digitale per la scuola” (Digital Entrepreneurship for the school) by [Fondazinoe i Lincei per la Scuola](https://www.linceiscuola.it/fondazione-lincei-scuola/)
+In 2023 Instructor, togheter with prof. Paolo Merialdo of “L’imprenditoria digitale per la scuola” (Digital Entrepreneurship for the school) by [Fondazinoe i Lincei per la Scuola](https://www.linceiscuola.it/fondazione-lincei-scuola/). This course will be taught also in 2024. 
 
 ## Transfer of Technology
 
@@ -55,10 +56,11 @@ In 2023 Instructor, togheter with prof. Paolo Merialdo of “L’imprenditoria d
 |-----------------------------------|-------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 2002                              | 2016  | In 2002 I founded WLAB, a dynamic SME created to support applied research and prototyping in the area of wireless technologies and pervasive and mobile computing. WLAB has been characterized by the synergy with the universities of Rome (Sapienza and Tor Vergata) promoting a continuous and effective technological transfer of innovative solutions from academia to the industry. I was Chief Technology Officer (CTO) of WLAB until its sale in 2016                                                                                              |
 | 2012                              | 2019  | In 2012 I founded WSENSE a spin-off of Sapienza University of Rome, with a strong and experienced R&amp;D team specialized in monitoring and communication systems with pioneering patented solutions in the Internet of Underwater Things (IoUT). I was the CTO of WSENSE and I lead the activities for the development of the WGATE, the cloud platform for the collection, analysis, visualisation and integration of IoT data. WSENSE is an international company, with WSENSE Ltd hosted in the Marine Robotics Innovation Centre of Southampton U.K. |
-| 2014                              | 2020   | Among the organizers of the Google Technologies Workshop for Cloud and Web Development now in its fifth edition. The workshop is aimed at students to develop the skills leading them to the realization of a start-up. The success of the workshop is also measured by the fact that some participants are now hosted in business accelerators                                                                                                                                                                                                            |
-|in 2014                      |       | Successful experience in a crowd-funding campaign with the project COVA that has been also boradcasted in the Italian main TV channel RAI                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| in 2014                      |       | The WSN group @ DIAG I lead designed and developed the MagoNode: a new wireless device for WSN networks operating in the 2.4Ghz ISM band deployed in many field trials.                                                                                                                                                                                                                                                                                                                                                                                    |
-| in 2001  |       | During my stay at AT&amp;T Research Labs of Florham Park, NJ - USA, my research activity led to the application of four provisional patent applications.                                                                                                                                                                                                                                                                                                                                                                                                  |
+| 2014                              | 2020   | Among the organizers of the Google Technologies Workshop for Cloud and Web Development now in its fifth edition. The workshop is aimed at students to develop the skills leading them to the realization of a start-up. The success of the workshop is also measured by the fact that some participants are now hosted in business accelerators|
+|in 2014                      |       | Successful experience in a crowd-funding campaign with the project [COVA](https://www.eppela.com/projects/1213) that has been also [bradcasted in the Italian main TV channel RAI](https://youtu.be/DKwOXz7DKWs?si=EwoqWLWgxwtEuRB3) |
+| in 2014                      |       | The WSN group @ DIAG I lead designed and developed the MagoNode: a new wireless device for WSN networks operating in the 2.4Ghz ISM band deployed in many field trials. |
+| in 2001  |       | During my stay at AT&amp;T Research Labs of Florham Park, NJ - USA, my research activity led to the application of four provisional patent applications.   |
+| in 2014 |       | I gave a talk on my research activity at [TEDXROMA](https://www.tedxroma.com/Talks/andrea-vitaletti/) |                                                                                            
 | 2019                              | today | Member of the ADI committee in the reserch for business category  |
 
 ## Patents
@@ -139,6 +141,12 @@ I lead the research activities on wireless sensor networks and the Internet of T
 I founded the laboratory on the wireless sensor network at DIAG where the solutions - both hardware and software - designed in the our research activities, are implemented and tested in the field. In the lab, we developed and implemented the MagoNode: a new wireless device for WSN networks operating in the 2.4Ghz ISM band deployed in many field trials.
 
 I enjoy a long term collaboration on cooperative design and co-design with faculties of the MSc in Product Design at Sapienza. In particular, I’m leading the research activities on the employment of genetic algorithms for product design.
+
+I am a member of the core group of the  [Italian Distributed Ledger Technology Working Group](https://dltgroup.it/index.php). In 2024 I have been co-chair of the [6th Distributed Ledger Technologies Workshop (DLT2024)](https://dlt2024.di.unito.it/) and I am guest editor of the special issue on ``Emerging Trends in Distributed Ledger Technology and its Applications`` on [Blockchain: Research and Applications](https://www.sciencedirect.com/journal/blockchain-research-and-applications) journal ([Q1](https://www.scimagojr.com/journalsearch.php?q=21101101317&tip=sid&clean=0)) 
+
+From 2008 to 2017 I was member of the PhD board  in Computer Engineering @ Sapienza
+
+Since 2018 I am member of the PhD board  in Data Science @ Sapienza
 
 ## Publications
 
