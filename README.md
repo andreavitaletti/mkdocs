@@ -15,12 +15,10 @@ Assuming in the local folder you have the following organization
 ~/github/mkdocs/andreavitaletti.github.io/
     mkdocs.yml
     docs/
-    
-~/github/andreavitaletti.github.io/
 ```
 ```
-cd ~/github/andreavitaletti.github.io/
+cd ~/github/sites/andreavitaletti.github.io/
 ```
 ```
-mkdocs gh-deploy --config-file ../mkdocs/andreavitaletti.github.io/mkdocs.yml --remote-branch master
+mkdocs gh-deploy --config-file ../../mkdocs/andreavitaletti.github.io/mkdocs.yml --remote-branch master
 ```

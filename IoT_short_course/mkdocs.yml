@@ -11,6 +11,9 @@ theme:
   palette:
     primary: lime
 
+markdown_extensions:
+  - pymdownx.critic
+
 nav:
     - Home: index.md
     - Session 1: session1.md
@@ -20,6 +23,7 @@ nav:
     - Sup. Mat. ML on node: supplement1.md
     - Sup. Mat. Kalman Filters: supplement2.md
     - Sup. Mat. Mobile: supplement3.md
+    - Wokwi to real: supplement4.md
     - IoT-LAB: iot-lab.md
 
 extra:
