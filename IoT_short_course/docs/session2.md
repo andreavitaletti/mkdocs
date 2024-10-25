@@ -15,7 +15,26 @@
 * A bit more interesting sensor, namely a [potentiometer](https://wokwi.com/projects/367338868313181185)
 * A simple example with [SR04 Ultrasonic Sensor](https://wokwi.com/projects/367320442567677953). The width is measured by the function [pulseIn()](https://www.arduino.cc/reference/en/language/functions/advanced-io/pulsein/).
 
+
 ![](assets/images/2023-07-18-14-16-39.png)
+
+* A nice example with the [MPU6050](https://randomnerdtutorials.com/esp32-mpu-6050-accelerometer-gyroscope-arduino/) accelerometer and gyroscope. [Predictive Maintenance of Motors using Machine Learning](https://www.ijnrd.org/papers/IJNRD2404282.pdf). [Ensemble Learning for Predictive Maintenance on Wafer Stick Machine Using IoT Sensor Data](https://doi.org/10.1109/ICOSICA49951.2020.9243180)
+
+## [MQTT](https://dev.to/hivemq_/series/18762)
+
+Publish/Subscribe 
+
+![](assets/images/2024-10-25-05-01-31.png)
+
+TOPICS:
+1.  myhome/groundfloor/livingroom/temperature
+2.  myhome/groundfloor/bathroom/temperature
+3.  myhome/groundfloor/bathroom/humidity
+4.  myhome/firstfloor/bathroom/temperature
+5.  myhome/groundfloor/+/temperature (1 and 2)
+6.  myhome/groundfloor/# (1,2 and 3)
+7.  myhome/# (1,2,3 and 4)
+
 
 * It's time to be connected by [MQTT](https://wokwi.com/projects/367405831605855233). The mosto convenient way is to use your mobile an Access Point and configure SSID and password consequently.
 
@@ -30,6 +49,7 @@ mosquitto_sub -h test.mosquitto.org -t "wokwi/temperature"
 
 Another possible broker is mqtt://mqtt.eclipseprojects.io
 
+* Build a simple backend with [https://io.adafruit.com/](https://io.adafruit.com/)
 * Build a simple backend with thingsboard [https://demo.thingsboard.io/login](https://demo.thingsboard.io/login)
 
 ![](assets/images/2023-07-04-16-31-57.png)
