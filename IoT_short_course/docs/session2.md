@@ -4,11 +4,27 @@
 
 ## The reference hardware: ESP32-DevKit
 
-![](assets/images/2023-07-17-12-28-17.png)
+![](assets/images/esp32_dev_kit_pinout_v1_mischianti.jpg)
 
 ## Let's start by simulating it
 
 [Wokwi](https://docs.wokwi.com/) is an online Electronics simulator. You can use it to simulate Arduino, ESP32, STM32, and many other popular boards, parts and sensors.
+
+Open a new project and select ESP32 as the platform and the Arduino template. 
+
+If you now open the diagram.json tab you have something like the following in the parts entry
+
+```
+"parts": [ { "type": "board-esp32-devkit-c-v4", "id": "esp", ...} ],
+```
+
+This implies that the pinout is the one in the [devkit v4](https://mischianti.org/esp32-devkitc-v4-high-resolution-pinout-and-specs/). 
+To get the same pinout as the one in the picture above you need a V1 devkit, so you have to modify 
+the entry as in the following
+
+```
+"parts": [ { "type": "board-esp32-devkit-v1", "id": "esp", ...} ],
+```
 
 * The simplest actuator, namely a [led](https://wokwi.com/projects/367336864678247425)
 * The Simplest sensor, namely a [button](https://wokwi.com/projects/367336996835545089)
