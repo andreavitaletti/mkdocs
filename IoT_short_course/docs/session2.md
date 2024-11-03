@@ -19,14 +19,28 @@ If you now open the diagram.json tab you have something like the following in th
 ```
 
 This implies that the pinout is the one in the [devkit v4](https://mischianti.org/esp32-devkitc-v4-high-resolution-pinout-and-specs/). 
-To get the same pinout as the one in the picture above you need a V1 devkit, so you have to modify 
-the entry as in the following
+To get the same pinout as the one in the picture above you need a V1 devkit, so you have to modify the entry as in the following
 
 ```
 "parts": [ { "type": "board-esp32-devkit-v1", "id": "esp", ...} ],
 ```
 
+To make running the serial interface be sure that under connection you have th following settings
+
+```
+"connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    .....
+```
+
+
 * The simplest actuator, namely a [led](https://wokwi.com/projects/367336864678247425)
+
+## Understanding the Breadboard
+
+![](assets/images/breadboard.png)
+
 * The Simplest sensor, namely a [button](https://wokwi.com/projects/367336996835545089)
 * A bit more interesting sensor, namely a [potentiometer](https://wokwi.com/projects/367338868313181185)
 * A simple example with [SR04 Ultrasonic Sensor](https://wokwi.com/projects/367320442567677953). The width is measured by the function [pulseIn()](https://www.arduino.cc/reference/en/language/functions/advanced-io/pulsein/).
@@ -34,7 +48,18 @@ the entry as in the following
 
 ![](assets/images/2023-07-18-14-16-39.png)
 
-* A nice example with the [MPU6050](https://randomnerdtutorials.com/esp32-mpu-6050-accelerometer-gyroscope-arduino/) accelerometer and gyroscope. [Predictive Maintenance of Motors using Machine Learning](https://www.ijnrd.org/papers/IJNRD2404282.pdf). [Ensemble Learning for Predictive Maintenance on Wafer Stick Machine Using IoT Sensor Data](https://doi.org/10.1109/ICOSICA49951.2020.9243180)
+* A nice example with the [MPU6050](https://randomnerdtutorials.com/esp32-mpu-6050-accelerometer-gyroscope-arduino/) accelerometer and gyroscope. [Predictive Maintenance of Motors using Machine Learning](https://www.ijnrd.org/papers/IJNRD2404282.pdf). [Ensemble Learning for Predictive Maintenance on Wafer Stick Machine Using IoT Sensor Data](https://doi.org/10.1109/ICOSICA4https://www.ijnrd.org/papers/IJNRD2404282.pdf9951.2020.9243180)
+
+## A simple scenario
+
+
+You want to transform a door into a **smart door**.
+
+1. A sensor will tell you when the door is open or closed &rarr; button
+2. A visual indicator will clearly show whether the door is open or closed &rarr; led
+3. Instead of a simple binary condition open/close you also want to know to what extent the door is open &rarr; potentiometer
+
+
 
 ## [MQTT](https://dev.to/hivemq_/series/18762)
 
@@ -43,6 +68,7 @@ Publish/Subscribe
 ![](assets/images/2024-10-25-05-01-31.png)
 
 TOPICS:
+
 1.  myhome/groundfloor/livingroom/temperature
 2.  myhome/groundfloor/bathroom/temperature
 3.  myhome/groundfloor/bathroom/humidity
@@ -52,21 +78,52 @@ TOPICS:
 7.  myhome/# (1,2,3 and 4)
 
 
-* It's time to be connected by [MQTT](https://wokwi.com/projects/367405831605855233). The mosto convenient way is to use your mobile an Access Point and configure SSID and password consequently.
+* It's time to be connected by [MQTT](https://wokwi.com/projects/367405831605855233). The most convenient way is to use your mobile an Access Point and configure SSID and password consequently.
+
+Note that the topics names are assigned to be consistent with the adafruit dashboard (see example below), but you are free to use any name you like.
 
 ```
-mosquitto_pub -h test.mosquitto.org -t "topicName/led" -m "on"
-mosquitto_pub -h test.mosquitto.org -t "topicName/led" -m "off"
+mosquitto_pub -h test.mosquitto.org -t "avitaletti/feeds/threshold" -m 2345
 ```
 
 ```
-mosquitto_sub -h test.mosquitto.org -t "wokwi/temperature"
+mosquitto_sub -h test.mosquitto.org -t "avitaletti/feeds/potentiometer"
 ```
 
 Another possible broker is mqtt://mqtt.eclipseprojects.io
 
-* Build a simple backend with [https://io.adafruit.com/](https://io.adafruit.com/)
-* Build a simple backend with thingsboard [https://demo.thingsboard.io/login](https://demo.thingsboard.io/login)
+###  Build a simple backend with [https://io.adafruit.com/](https://io.adafruit.com/)
+
+* Create an account on io.adafruit.com, in my case the username is avitaletti.
+* Click on the yellow key to get yor credentials to publish data
+
+```
+#define IO_USERNAME  "avitaletti"
+#define IO_KEY       "xxxxxxxxxxxxxxxxxxxx"
+```
+* Create two feeds named threshold and potentiometer with the corresponding topics avitaletti/feeds/threshold  and avitaletti/feeds/potentiometer
+
+![](assets/images/feeds.png)
+
+The following code will publish the message 33 on the topic avitaletti/feeds/potentiometer and it is used by the IoT device to send the data acquired by the ADC
+
+```
+mosquitto_pub -h io.adafruit.com -u avitaletti -P xxxxxxxxxxxxxxxxxxxx -t avitaletti/feeds/potentiometer -m 33
+```
+
+The node can subscribe to avitaletti/feeds/threshold  to get the commands from the backend
+
+```
+mosquitto_sub -h io.adafruit.com -u avitaletti -P xxxxxxxxxxxxxxxxxxxx -t avitaletti/feeds/threshold
+```
+
+* The dashboard link the components to the feeds and corresponding topics
+  
+![](assets/images/dashboard.png)
+
+In other words when the device publishes on the avitaletti/feeds/potentiometer topic a new entry is created in the line chart, while when you move the slider the corresponding value is published on avitaletti/feeds/threshold
+
+### Build a simple backend with thingsboard [https://demo.thingsboard.io/login](https://demo.thingsboard.io/login)
 
 ![](assets/images/2023-07-04-16-31-57.png)
 ![](assets/images/2023-07-04-16-33-07.png)

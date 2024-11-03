@@ -70,10 +70,18 @@ The list of material for each group: 1 ESP32-DevKit, a breadboard, some wires an
 * [FREERTOS](https://www.freertos.org/)
 * [IoT-LAB](https://www.iot-lab.info/) 
 * [Thingsboard](https://thingsboard.io/)
+* [Adafruit Io](https://io.adafruit.com/)
 * [A short paper on this course](assets/ashotcouresoniot.pdf)
+* [Getting Started with ESP32](https://lastminuteengineers.com/getting-started-with-esp32/)
+* [Andreas Spiess Youtube channel](https://www.youtube.com/@AndreasSpiess)
 
 # Editions
 
-First edition of the course 19th (Session 1 and 2) and 21st (Session 3 and 4) of July 2023 in the University of Stellenbosch (South Africa) during an [Erasmus+](https://erasmus-plus.ec.europa.eu/resources-and-tools/mobility-and-learning-agreements/mobility-agreements) staff mobility for teaching visit. About 40 participants selected among more the 100 candidates. Keep in touch on the [discord server](https://discord.gg/TZhMmbgq). A new version soon.
+First edition of the course 19th (Session 1 and 2) and 21st (Session 3 and 4) of July 2023 in the University of Stellenbosch (South Africa) during an [Erasmus+](https://erasmus-plus.ec.europa.eu/resources-and-tools/mobility-and-learning-agreements/mobility-agreements) staff mobility for teaching visit. About 40 participants selected among more the 100 candidates. 
 
 ![](assets/images/with_herman.jpg)
+
+Second edition of the course 25th, 29th and 31st Of October and 4th of November 2024 in the [Business and Technology University](https://btu.edu.ge/en/home-english/) (Tbilisi, Georgia) during an [Erasmus+](https://erasmus-plus.ec.europa.eu/resources-and-tools/mobility-and-learning-agreements/mobility-agreements) staff mobility for teaching visit. Two groups of 10 students each. 
+
+![](assets/images/BTU.jpg)
+![](assets/images/BTU1.jpg)
