@@ -24,6 +24,8 @@ nav:
     - Blockchain: BC
     - Startup: Startup
     - IoT: IoT
+    - links: links.md
+    - thesis: thesis.md
 
 extra:
   social:
