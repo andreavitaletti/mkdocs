@@ -1,0 +1,1 @@
+pandoc -V linkcolor=blue index.md -o cv.pdf
