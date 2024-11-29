@@ -1,4 +1,4 @@
-# SESSION 2
+# Simulate a sensor
 
 **GOAL:** Small experiment (a single sensor). Prove you can integrate sensors suitable for you monitoring purpose.  Focus on effectiveness, namely doing the right things, i.e., the Maker approach.
 
@@ -78,7 +78,7 @@ TOPICS:
 7.  myhome/# (1,2,3 and 4)
 
 
-* It's time to be connected by [MQTT](https://wokwi.com/projects/367405831605855233). The most convenient way is to use your mobile an Access Point and configure SSID and password consequently.
+It's time to be connected by MQTT and [here](https://wokwi.com/projects/367405831605855233) there is a reference example. The most convenient way is to use your mobile an Access Point and configure SSID and password consequently.
 
 Note that the topics names are assigned to be consistent with the adafruit dashboard (see example below), but you are free to use any name you like.
 

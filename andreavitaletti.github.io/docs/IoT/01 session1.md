@@ -1,6 +1,6 @@
-# SESSION 1
+# Introduction
 
-**GOAL:** Quick intro to the Internet of Things.
+What is the Internet of Things? Why is important? What are the main challenges? 
 
 ## Takeaway ONE
 

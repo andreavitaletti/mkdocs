@@ -8,16 +8,23 @@ theme:
     repo: fontawesome/brands/git-alt
   palette:
     primary: lime
+  features:
+    - content.tooltips
 
 markdown_extensions:
   - pymdownx.critic
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 plugins:
   - search
   - include_dir_to_nav:
+      sort_file: true
 
 nav:
     - About me: index.md
@@ -29,8 +36,6 @@ nav:
 
 extra:
   social:
-    - icon: fontawesome/brands/discord 
-      link: https://discord.gg/TZhMmbgq
     - icon: fontawesome/brands/linkedin 
       link: https://www.linkedin.com/in/andrea-vitaletti-3651442/
 
