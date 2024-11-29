@@ -1,10 +1,15 @@
 ---
 marp: true
-theme: default
+theme: beam
 paginate: true
+header: '[Get in touch](#contacts)'
+footer: 'Footer content'
 ---
 
 <style>
+
+/* 2 side-by-side blocks */
+
 /* https://github.com/marp-team/marpit/issues/137 */
 
 section.split {
@@ -14,7 +19,7 @@ section.split {
     grid-template-columns: 500px 500px;
     */
     grid-template-columns: 50% 50%;
-    grid-template-rows: 100px auto;
+    grid-template-rows: auto auto;
     grid-template-areas: 
         "slideheading slideheading"
         "leftpanel rightpanel";
@@ -25,13 +30,43 @@ section.split .ldiv,
 section.split .rdiv,
 section.split h1 {
     grid-area: slideheading;
-    /* font-size: 50px;*/
 }
 section.split .ldiv { grid-area: leftpanel; }
 section.split .rdiv { grid-area: rightpanel; }
 
+/* Subtitle in Title only */
+
+section.title h2 {
+  text-align: center;
+}
+
+/* Fonts */
+
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
+
+/* Colors */
+/*
+ :root {
+    --main: #bbb;
+    --secondary: #333;
+  }
+
+ header{
+    color: #123
+ }
+ footer{
+    color: #123
+ }
+*/
 </style>
 
+<!-- _class: title -->
+
+# Titolo
+
+## Andrea Vitaletti
+
+---
 
 # Slide 1
 
@@ -173,3 +208,17 @@ $\frac{1}{2}$
 
 ---
 
+# Contacts
+
+<i class="fa fa-linkedin-square" aria-hidden="true"> &nbsp; [https://www.linkedin.com/in/andreavitaletti/](https://www.linkedin.com/in/andreavitaletti/)</i>
+
+
+<i class="fa fa-envelope" aria-hidden="true"> &nbsp; [vitaletti@diag.uniroma1.it](vitaletti@diag.uniroma1.it)
+</i>
+
+<i class="fa fa-github-square" aria-hidden="true"> &nbsp; [https://github.com/andreavitaletti](https://github.com/andreavitaletti)</i>
+
+
+--- 
+
+<img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjUwbW0iIGhlaWdodD0iNS4zNTQ2bW0iIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDI1MCA1LjM1NDYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMC4zNDcgLTkxLjAyOCkiPgo8cmVjdCB4PSIyMC4zNDciIHk9IjkxLjAyOCIgd2lkdGg9IjEyNSIgaGVpZ2h0PSI1LjM1NDYiIGZpbGw9IiMxNDE0MTQiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc3Ryb2tlLXdpZHRoPSIwIi8+CjxwYXRoIGQ9Im0xNDUuMzUgOTMuNzA1di0yLjY3NzNoMTI1djUuMzU0NmgtMTI1eiIgZmlsbD0iIzFmMzhjNSIgc3Ryb2tlLXdpZHRoPSIwIi8+CjwvZz4KPC9zdmc+"/>
