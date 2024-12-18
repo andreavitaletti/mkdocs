@@ -1,0 +1,35 @@
+site_name: Pilde
+site_url: https://andreavitaletti.github.io/pilde
+
+theme:
+  name: 'material'
+  logo: img/logo.png
+  icon:
+    repo: fontawesome/brands/git-alt
+  palette:
+    primary: lime
+
+markdown_extensions:
+  - toc
+
+nav:
+    - 2006: blog_2006.md
+    - 2007: blog_2007.md
+    - 2008: blog_2008.md
+    - 2009: blog_2009.md
+    - 2010: blog_2010.md
+    - 2011: blog_2011.md
+    - 2012: blog_2012.md
+    - 2013: blog_2013.md
+    - 2014: blog_2014.md
+    - 2015: blog_2015.md
+    - 2016: blog_2016.md
+    - 2017: blog_2017.md
+    - 2018: blog_2018.md
+    - 2019: blog_2019.md
+    - 2020: blog_2020.md
+    - 2021: blog_2021.md
+
+
+
+copyright: Created by Andrea Vitaletti.<br/><img alt="" style="border-width:0" src="https://andreavitaletti.github.io/IoT_short_course/assets/images/mail.png" /></br><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
