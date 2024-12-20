@@ -13,6 +13,9 @@ theme:
 
 markdown_extensions:
   - pymdownx.critic
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
 
 nav:
     - Home: index.md

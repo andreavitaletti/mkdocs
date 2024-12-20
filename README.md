@@ -6,6 +6,11 @@ It contains two folders
 * [mkdocs](https://www.mkdocs.org/)
 * sites
 
+# Put sites under git
+
+git init
+git remote add origin <remote repository URL>
+
 # Standard flow
 
 Enter the directory you want to work with (e.g. IoT_short_course)

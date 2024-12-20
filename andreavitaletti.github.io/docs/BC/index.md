@@ -29,7 +29,7 @@
 
     1.  [The Bitcoin paper.](https://bitcoin.org/bitcoin.pdf "https://bitcoin.org/bitcoin.pdf")
 
-    2.  [Safety.](https://courses.grainger.illinois.edu/ece598pv/sp2021/lectureslides2021/ECE_598_PV_course_notes6.pdf "https://courses.grainger.illinois.edu/ece598pv/sp2021/lectureslides2021/ECE_598_PV_course_notes6.pdf")
+    2.  [Safety.](https://courses.grainger.illinois.edu/ece598pv/sp2021/lectureslides2021/ECE_598_PV_course_notes6.pdf "https://courses.grainger.illinois.edu/ece598pv/sp2021/lectureslides2021/ECE_598_PV_course_notes6.pdf") - [Safety from the nakamoto paper](https://doi.org/10.48550/arXiv.1701.03977 "https://doi.org/10.48550/arXiv.1701.03977")
     
     3.  [Liveness.](https://courses.grainger.illinois.edu/ece598pv/sp2021/lectureslides2021/ECE_598_PV_course_notes7.pdf "https://courses.grainger.illinois.edu/ece598pv/sp2021/lectureslides2021/ECE_598_PV_course_notes7.pdf")
     
@@ -72,12 +72,13 @@
 
 8.  [DApp and Decentralized Web](https://www.preethikasireddy.com/post/the-architecture-of-a-web-3-0-application "https://www.preethikasireddy.com/post/the-architecture-of-a-web-3-0-application")
 
-# Courses
+# Courses and material
 
 * [ece598pv Illinois Urbana-Champaign](https://courses.grainger.illinois.edu/ece598pv/sp2022/)
 * [CS251 Stanford](https://cs251.stanford.edu/)
 * [EE374 Stanford](https://ee374.stanford.edu/)
 * [15827-E / 18847-D Carnegie Mellon](http://www.cs.cmu.edu/~runting/blockchain/blockchain-course.html)
+* [Decentralized Thoughts](https://decentralizedthoughts.github.io/)
 
 # Tools
 

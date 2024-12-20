@@ -90,7 +90,10 @@ mosquitto_pub -h test.mosquitto.org -t "avitaletti/feeds/threshold" -m 2345
 mosquitto_sub -h test.mosquitto.org -t "avitaletti/feeds/potentiometer"
 ```
 
-Another possible broker is mqtt://mqtt.eclipseprojects.io
+!!! tip
+
+    * A multi platform easy to use alternative is https://mqtt-explorer.com/
+    * Another possible broker is mqtt://mqtt.eclipseprojects.io
 
 ###  Build a simple backend with [https://io.adafruit.com/](https://io.adafruit.com/)
 
