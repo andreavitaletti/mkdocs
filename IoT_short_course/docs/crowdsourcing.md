@@ -1,6 +1,26 @@
 # Interact with a Mobile Phone via BLE
 
-We aim at fast prototyping and [Thunkable](https://thunkable.com/) is an excellent tool
+Nowadays, mobile devices, such as our smart phone or watch are plenty of sensors. There are many examples to collect data from such sensors by mobile apps. 
+
+!!! warning
+
+    In this course we are not interested in mobile applications using **ONLY** the sensors available in you mobile phone. 
+
+Instead, we aim at developing solution where a node, in our case an ESP32, collects some sensor data and interact with the mobile phone (e.g. via BLE) to possibly enrich the observed data by the phone sensors and to deliver them to the backend.  
+
+!!! warning
+
+    Remember, this is a course on IoT, we are not interested in fancy mobile app, and as much work is done by the node (i.e. the ESP32), as better it is. There are plenty of useful resources on developing fancy mobile apps and backends, but we are mostly interested in the node  
+
+For this reason, we will use fast prototyping mobile app tools. 
+
+## [Remotexy](https://remotexy.com/) 
+
+[Remotexy](https://remotexy.com/) it's probably the easiest way 
+
+## [Thunkable](https://thunkable.com/)
+
+[Thunkable](https://thunkable.com/) is more powerful, but slightly more complex
 
 ![](assets/images/2024-01-04-11-26-18.png)
 
