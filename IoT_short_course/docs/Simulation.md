@@ -155,6 +155,9 @@ Serial.println((gcc.gyro.x)*180/3.14);
 
 Some more details on the [MPU6050](https://randomnerdtutorials.com/esp32-mpu-6050-accelerometer-gyroscope-arduino/) accelerometer and gyroscope. This device can be used for [Predictive Maintenance of Motors using Machine Learning](https://www.ijnrd.org/papers/IJNRD2404282.pdf) or [Ensemble Learning for Predictive Maintenance on Wafer Stick Machine Using IoT Sensor Data](https://doi.org/10.1109/ICOSICA4https://www.ijnrd.org/papers/IJNRD2404282.pdf9951.2020.9243180).
 
+A very interesting paper [Real-Time Anomaly Detection with LSTM-Autoencoder Network
+on Microcontrollers for Industrial Applications](https://dl.acm.org/doi/pdf/10.1145/3694875.3694883) demonstrates how to implement anomaly detection spending as less as $20.
+
 
 ## A simple scenario
 
@@ -202,6 +205,10 @@ mosquitto_sub -h test.mosquitto.org -t "avitaletti/feeds/potentiometer"
 
     * A multi platform easy to use alternative is https://mqtt-explorer.com/
     * Another possible broker is mqtt://mqtt.eclipseprojects.io
+
+
+![https://www.linkedin.com/feed/update/urn:li:activity:7278279702052589569/](assets/images/2025-01-03-11-03-48.png)
+
 
 ###  Build a simple backend with [https://io.adafruit.com/](https://io.adafruit.com/)
 
