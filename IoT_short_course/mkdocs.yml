@@ -23,6 +23,7 @@ nav:
     - Simulate a node: Simulation.md
     - A real node: Real.md
     - Energy matters: Power_Consumption.md
+    - Wireless Connectivity: wireless.md
     - An OS is better: Efficiency.md
     - Scale-up: Scale.md
     - Security: security.md
