@@ -63,16 +63,18 @@ The list of material for each group: 1 ESP32-DevKit, a breadboard, some wires an
    
 ## Useful links
 
-* [Code and Slides](https://github.com/andreavitaletti/IoT_short_course)
 * [The Espressif software development environment](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/#)
 * [Arduino Ide](https://support.arduino.cc/hc/en-us/articles/360019833020-Download-and-install-Arduino-IDE)
+* [PlatformIO](https://platformio.org/)
 * [Wokwi](https://wokwi.com/)
 * [FREERTOS](https://www.freertos.org/)
 * [IoT-LAB](https://www.iot-lab.info/) 
 * [Thingsboard](https://thingsboard.io/)
 * [Adafruit Io](https://io.adafruit.com/)
 * [A short paper on this course](assets/ashotcouresoniot.pdf)
-* [Getting Started with ESP32](https://lastminuteengineers.com/getting-started-with-esp32/)
+* [Lastminuteengineers](https://lastminuteengineers.com/getting-started-with-esp32/)
+* [Random Nerd Tutorial](https://randomnerdtutorials.com/projects-esp32/)
+* [Arduino Learn](https://docs.arduino.cc/learn/)
 * [Andreas Spiess Youtube channel](https://www.youtube.com/@AndreasSpiess)
 
 # Editions

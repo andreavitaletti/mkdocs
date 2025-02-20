@@ -22,15 +22,17 @@ nav:
     - Intro: Intro.md
     - Simulate a node: Simulation.md
     - A real node: Real.md
-    - Energy matters: Power_Consumption.md
+    - Sampling the Environment: Sample.md
     - Wireless Connectivity: wireless.md
-    - An OS is better: Efficiency.md
-    - Scale-up: Scale.md
+    - Digital Twin: Digital_twin.md
+    - An OS is better: OS.md
+    - Energy matters: Power_Consumption.md
     - Security: security.md
     - IoT and Web3: Iot_web3.md
     - ML on node: ML_on_nodes.md
     - Kalman Filters: kalman.md
     - Crowdsourcing: crowdsourcing.md
+    - IoT-lab: Scale.md
 
 extra:
   social:
