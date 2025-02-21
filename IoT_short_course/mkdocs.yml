@@ -17,22 +17,36 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
 
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
 nav:
     - Home: index.md
-    - Intro: Intro.md
-    - Simulate a node: Simulation.md
-    - A real node: Real.md
-    - Sampling the Environment: Sample.md
+    - Intro: intro.md
+    - Simulate a node: simulation.md
+    - A real node: real.md
+    - Sampling the Environment: sample.md
     - Wireless Connectivity: wireless.md
-    - Digital Twin: Digital_twin.md
-    - An OS is better: OS.md
-    - Energy matters: Power_Consumption.md
+    - Digital Twin: twin.md
+    - An OS is better: os.md
+    - Energy matters: energy.md
     - Security: security.md
-    - IoT and Web3: Iot_web3.md
-    - ML on node: ML_on_nodes.md
-    - Kalman Filters: kalman.md
+    - IoT and Web3: web3.md
+    - ML on node: ml.md
+    - Edge computing: edge.md
+    - Filters: filters.md
     - Crowdsourcing: crowdsourcing.md
-    - IoT-lab: Scale.md
+    - IoT-lab: scale.md
 
 extra:
   social:
@@ -40,5 +54,9 @@ extra:
       link: https://discord.gg/TZhMmbgq
     - icon: fontawesome/brands/linkedin 
       link: https://www.linkedin.com/in/andrea-vitaletti-3651442/
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 copyright: Created by Andrea Vitaletti.<br/><img alt="" style="border-width:0" src="https://andreavitaletti.github.io/IoT_short_course/assets/images/mail.png" /></br><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a>

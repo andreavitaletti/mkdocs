@@ -1,4 +1,6 @@
-# Power Consumption
+# Energy
+
+## How to measure energy consumption
 
 https://www.electronicwings.com/esp32/esp32-deep-sleep-mode
 
@@ -81,5 +83,5 @@ void loop(void)
 
 ## Energy Harvesting
 
-
+https://randomnerdtutorials.com/power-esp32-esp8266-solar-panels-battery-level-monitoring/
 

@@ -1,8 +1,14 @@
-# Kalman Filters
+# Filters
+
+## Hampel Filters
+
+![](assets/images/2025-02-21-09-45-20.png "source: https://medium.com/@migueloteropedrido/hampel-filter-with-python-17db1d265375")
+
+## Kalman Filters
 
 A very nice, rich an exhaustive source of documentation for Kalman filters is available [here](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)
 
-The main idea is that both our prior knowledge and the measurements of our sensors are to some extent inaccurate. To model such inaccuracy we use a Gaussian with mean $$\mu$$ and variance $$\rho$$
+The main idea is that both our prior knowledge and the measurements of our sensors are to some extent inaccurate. To model such inaccuracy we use a Gaussian with mean $\mu$ and variance $\rho$
 
 ![](assets/images/2023-08-22-09-46-59.png)
 
