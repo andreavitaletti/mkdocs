@@ -4,6 +4,11 @@
 
 ![](assets/images/2025-02-21-09-45-20.png "source: https://medium.com/@migueloteropedrido/hampel-filter-with-python-17db1d265375")
 
+## Moving Average
+
+![](assets/images/MA.png "source: https://en.wikipedia.org/wiki/Moving_average#/media/File:Lissage_sinus_bruite_moyenne_glissante.svg")
+
+
 ## Kalman Filters
 
 A very nice, rich an exhaustive source of documentation for Kalman filters is available [here](https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python)

@@ -4,7 +4,7 @@ Nowadays, mobile devices, such as our smart phone or watch are plenty of sensors
 
 !!! warning
 
-    In this course we are not interested in mobile applications using **ONLY** the sensors available in you mobile phone. 
+    In this course we are **NOT interested** in mobile applications using **ONLY** the sensors available in you mobile phone. 
 
 Instead, we aim at developing solution where a node, in our case an ESP32, collects some sensor data and interact with the mobile phone (e.g. via BLE) to possibly enrich the observed data by the phone sensors and to deliver them to the backend.  
 
@@ -348,3 +348,14 @@ void app_main()
     nimble_port_freertos_init(host_task);      // 6 - Run the thread
 }
 ```
+
+## Monitoring Coronavirus
+
+A remarkable use of crowdsensing has been the use of mobile phones for contact tracing, during the COVID-19. Indeed smartphone apps, given accessibility in the time of physical distancing, were widely used for tracking, tracing and educating the public about COVID-19 as reported in [Smartphone apps in the COVID-19 pandemic](https://www.nature.com/articles/s41587-022-01350-x). 
+
+!!! Note 
+
+    Despite this use case is not consistent with the requirement of integrating external sensors with the mobile phone, we will consider it for its obvious relevance. 
+
+Many efforts have been put in place to preserve tha anonymity in tracing, however the research community raised a number of issues, as discussed in [Anonymous tracing, a dangerous oxymoron](https://risques-tracage.fr/docs/tracing-risks.pdf) 
+
