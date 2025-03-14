@@ -1,16 +1,19 @@
-# SESSION 2
+# Simulation of a node
 
-**GOAL:** Small experiment (a single sensor). Prove you can integrate sensors suitable for you monitoring purpose.  Focus on effectiveness, namely doing the right things, i.e., the Maker approach.
+[Wokwi](https://docs.wokwi.com/) is an online Electronics simulator. You can use it to simulate many popular development environment (e.g. Arduino, Esp-idf and RUST just to mention few) boards (e.g. Arduino, [ESP32](https://docs.wokwi.com/guides/esp32), STM32), parts and sensors. 
 
-## The reference hardware: ESP32-DevKit
+In this course we will focus on the ESP32-DevKit-V1 and initially on the Arduino environment. Working on this environment with the ESP32 allow us to take advantage from the rich availability of libraries, but also to access  advanced and fundamental features provided by FreeRTOS. However, experimenting with the more advanced ESP-idf is strongly encouraged. 
 
 ![](assets/images/esp32_dev_kit_pinout_v1_mischianti.jpg)
 
-## Let's start by simulating it
+!!! note
+    
+    An excellent reference for all what concerns the ESP 32 is available at [electronic wings](https://www.electronicwings.com/esp32) 
+    
 
-[Wokwi](https://docs.wokwi.com/) is an online Electronics simulator. You can use it to simulate Arduino, ESP32, STM32, and many other popular boards, parts and sensors.
+## Let's start 
 
-Open a new project and select ESP32 as the platform and the Arduino template. 
+On [Wokwi](https://docs.wokwi.com/) open a new project, select ESP32 as the platform and the Arduino template. 
 
 If you now open the diagram.json tab you have something like the following in the parts entry
 
@@ -41,14 +44,120 @@ To make running the serial interface be sure that under connection you have th f
 
 ![](assets/images/breadboard.png)
 
-* The Simplest sensor, namely a [button](https://wokwi.com/projects/367336996835545089)
-* A bit more interesting sensor, namely a [potentiometer](https://wokwi.com/projects/367338868313181185)
+## The Simplest digital sensor, namely a [button](https://wokwi.com/projects/367336996835545089)
+  
+![](assets/images/2024-12-16-11-00-26.png)
+
+```C
+
+#define LED 5
+#define BUTTON 4
+
+int buttonState = 0; 
+
+void setup() {
+  pinMode(LED, OUTPUT);
+  pinMode(BUTTON, INPUT);
+}
+
+void loop() {
+
+  buttonState = digitalRead(BUTTON);
+
+  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+  if (buttonState == HIGH) {
+    // turn LED on:
+    digitalWrite(LED, HIGH);
+  } else {
+    // turn LED off:
+    digitalWrite(LED, LOW);
+  }
+}
+
+```
+
+## A bit more interesting analog sensor, namely a [potentiometer](https://wokwi.com/projects/367338868313181185)
+
+![](assets/images/2024-12-16-11-02-14.png)
+
+```c
+
+int analogPin = 12; // potentiometer wiper (middle terminal) connected to analog pin
+                    // outside leads to ground and +5V
+int val = 0;  // variable to store the value read
+
+void setup() {
+  Serial.begin(9600);           //  setup serial
+}
+
+void loop() {
+  val = analogRead(analogPin);  // read the input pin
+  Serial.println(val);          // debug value
+  delay(1000);
+}
+
+```
+<!--
 * A simple example with [SR04 Ultrasonic Sensor](https://wokwi.com/projects/367320442567677953). The width is measured by the function [pulseIn()](https://www.arduino.cc/reference/en/language/functions/advanced-io/pulsein/).
 
 
 ![](assets/images/2023-07-18-14-16-39.png)
+-->
 
-* A nice example with the [MPU6050](https://randomnerdtutorials.com/esp32-mpu-6050-accelerometer-gyroscope-arduino/) accelerometer and gyroscope. [Predictive Maintenance of Motors using Machine Learning](https://www.ijnrd.org/papers/IJNRD2404282.pdf). [Ensemble Learning for Predictive Maintenance on Wafer Stick Machine Using IoT Sensor Data](https://doi.org/10.1109/ICOSICA4https://www.ijnrd.org/papers/IJNRD2404282.pdf9951.2020.9243180)
+## Quick overview of more advanced way to interact with sensors
+
+![](assets/images/com.gif)
+
+## An I2C sensor, the [MPU6050 Accelerometer](https://wokwi.com/projects/417422405654800385)
+
+![](assets/images/2024-12-16-11-13-37.png)
+
+```C
+
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
+Adafruit_MPU6050 m_p_u;
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(115200);
+  while(!Serial)
+  delay(20);
+  if(!m_p_u.begin()){
+    while(1){
+      delay(20);
+    }
+  }
+}
+
+void loop() {
+sensors_event_t acc, gcc, temp;
+m_p_u.getEvent(&acc, &gcc, &temp);
+Serial.println("Acceleration on x axes");
+Serial.println(acc.acceleration.x);
+  delay(1000); // this speeds up the simulation
+
+Serial.println("Acceleration on y axes");
+Serial.println(acc.acceleration.y);
+  delay(1000);
+
+Serial.println("Acceleration on z axes");
+Serial.println(acc.acceleration.z);
+  delay(1000);
+
+Serial.println("Rotation of x axes: ");
+Serial.println((gcc.gyro.x)*180/3.14);
+  delay(1000);
+
+}
+
+```
+
+Some more details on the [MPU6050](https://randomnerdtutorials.com/esp32-mpu-6050-accelerometer-gyroscope-arduino/) accelerometer and gyroscope. This device can be used for [Predictive Maintenance of Motors using Machine Learning](https://www.ijnrd.org/papers/IJNRD2404282.pdf) or [Ensemble Learning for Predictive Maintenance on Wafer Stick Machine Using IoT Sensor Data](https://doi.org/10.1109/ICOSICA4https://www.ijnrd.org/papers/IJNRD2404282.pdf9951.2020.9243180).
+
+A very interesting paper [Real-Time Anomaly Detection with LSTM-Autoencoder Network
+on Microcontrollers for Industrial Applications](https://dl.acm.org/doi/pdf/10.1145/3694875.3694883) demonstrates how to implement anomaly detection spending as less as $20.
+
 
 ## A simple scenario
 
@@ -58,12 +167,12 @@ You want to transform a door into a **smart door**.
 1. A sensor will tell you when the door is open or closed &rarr; button
 2. A visual indicator will clearly show whether the door is open or closed &rarr; led
 3. Instead of a simple binary condition open/close you also want to know to what extent the door is open &rarr; potentiometer
-
+4. Finally all these information should be available online
 
 
 ## [MQTT](https://dev.to/hivemq_/series/18762)
 
-Publish/Subscribe 
+MQTT is an example of Publish/Subscribe. 
 
 ![](assets/images/2024-10-25-05-01-31.png)
 
@@ -78,7 +187,9 @@ TOPICS:
 7.  myhome/# (1,2,3 and 4)
 
 
-* It's time to be connected by [MQTT](https://wokwi.com/projects/367405831605855233). The most convenient way is to use your mobile an Access Point and configure SSID and password consequently.
+## It's time to be connected by [MQTT](https://wokwi.com/projects/367405831605855233). 
+
+The most convenient way is to use your mobile an Access Point and configure SSID and password consequently.
 
 Note that the topics names are assigned to be consistent with the adafruit dashboard (see example below), but you are free to use any name you like.
 
@@ -94,6 +205,10 @@ mosquitto_sub -h test.mosquitto.org -t "avitaletti/feeds/potentiometer"
 
     * A multi platform easy to use alternative is https://mqtt-explorer.com/
     * Another possible broker is mqtt://mqtt.eclipseprojects.io
+
+
+![https://www.linkedin.com/feed/update/urn:li:activity:7278279702052589569/](assets/images/2025-01-03-11-03-48.png)
+
 
 ###  Build a simple backend with [https://io.adafruit.com/](https://io.adafruit.com/)
 
@@ -138,54 +253,3 @@ mosquitto_pub -d -q 1 -h "$THINGSBOARD_HOST_NAME" -p "1883" -t "v1/devices/me/te
 ```
 
 **NOTE:** for the sake of convenience, we will use WiFi connectivity, however it should be now clear WiFi is usually not appropriate for IoT applications due to the excessive energy demand. 
-
-## It is time to Work with a real device
-
-* Download the code from Wokwi. It is also available on [https://github.com/andreavitaletti/IoT_short_course/tree/main/src/simulator](https://github.com/andreavitaletti/IoT_short_course/tree/main/src/simulator)
-* The easiest way it to use the [Arduino IDE](https://support.arduino.cc/hc/en-us/articles/360019833020-Download-and-install-Arduino-IDE) 
-* Since we are using the ESP32, you have to follow these [intructions](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
-* Select the DOIT ESP32 DEVKIT V1 as in the picture below and upload the code
-
-![](assets/images/2023-07-18-13-48-40.png)
-
-* The only novelty is the vibration sensor SW-420 ... but please have a look to the [SR04 Ultrasonic Sensor](https://wokwi.com/projects/367320442567677953) and adapt it to make it working with the SW-420. 
-
-This sketch could help
-
-```
-// Watch video here: https://www.youtube.com/watch?v=235BLk7vk00
-
-/* Vibration sensor connected to Arduino pins as follows:
- 
- ESP32 Arduino Vibration Sensor
- https://wolles-elektronikkiste.de/esp32-mit-arduino-code-programmieren
-   D18 --> GPIO18 --> G18        DOut
-   GND                           GND
-   +5V --> 3.3V                  VCC      
-*/
-
-int EP = 18;
-
-void setup(){
-  pinMode(EP, INPUT); //set EP input for measurment
-  Serial.begin(9600); //init serial 9600
-}
-void loop(){
-  long measurement =TP_init();
-  delay(50);
-  Serial.println(measurement);
-}
-
-long TP_init(){
-  delay(10);
-  long measurement=pulseIn (EP, HIGH);  //wait for the pin to get HIGH and returns measurement
-  return measurement;
-}
-
-```
-
-Through pulseIn() we can measure the duration of a vibration event exceeding the threshold, not the frequency of the vibrations themselves. Indeed, the Arduino pulseIn() function waits for a change in the binary input (Low to High in this instance) and returns the duration that the detected pulse was active (time for it to go back High to Low after going High).
-
-QUESTION: Can we use this function to help in anomaly detection? [see here for inspiration!](https://www.mdpi.com/1424-8220/22/16/6015)
-
-![](assets/images/com.gif)

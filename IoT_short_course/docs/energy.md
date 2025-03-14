@@ -1,4 +1,8 @@
-# Power Consumption
+# Energy
+
+## How to measure energy consumption
+
+https://www.electronicwings.com/esp32/esp32-deep-sleep-mode
 
 * Connect board VIN (red wire) to Arduino 5V if you are running a 5V board Arduino (Mega, etc.). If your board is 3V, connect to that instead.
 * Connect board GND (black wire) to Arduino GND
@@ -72,4 +76,12 @@ void loop(void)
 }
 ```
 
-![](assets/images/duty.png)
+![](assets/images/power_no_sleep.png)
+![](assets/images/power_sleep.png)
+
+[source code](https://github.com/andreavitaletti/documents/tree/main/PlatformIO/Projects/power)
+
+## Energy Harvesting
+
+https://randomnerdtutorials.com/power-esp32-esp8266-solar-panels-battery-level-monitoring/
+

@@ -16,18 +16,33 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+extra_javascript:
+  # - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
     - Home: index.md
-    - Session 1: session1.md
-    - Session 2: session2.md
-    - Session 3: session3.md
-    - Session 4: session4.md
-    - Sup. Mat. ML on node: supplement1.md
-    - Sup. Mat. Kalman Filters: supplement2.md
-    - Sup. Mat. Mobile: supplement3.md
-    - Wokwi to real: supplement4.md
-    - IoT-LAB: iot-lab.md
+    - Intro: intro.md
+    - Simulate a node: simulation.md
+    - A real node: real.md
+    - Sampling the Environment: sample.md
+    - Wireless Connectivity: wireless.md
+    - Digital Twin: twin.md
+    - An OS is better: os.md
+    - Energy matters: energy.md
+    - Security: security.md
+    - IoT and Web3: web3.md
+    - ML on node: ml.md
+    - Edge computing: edge.md
+    - Filters: filters.md
+    - Crowdsourcing: crowdsourcing.md
+    - IoT-lab: scale.md
 
 extra:
   social:

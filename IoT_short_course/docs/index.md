@@ -1,45 +1,18 @@
-# GOAL
-This short course on the Internet of Things is designed to give a first understanding of the main issues in developing IoT solutions. We do believe the most efficient way to learn this subject is experimenting, this is way the course encourage attendants to hands-on. No specific background is needed, even if a basic knowledge of electronics and computer science might help. 
+Initially this course has been conceived as a short course on IoT with the main purpose to give a first understanding of the main issues in developing IoT solutions. We do believe the most efficient way to learn this subject is experimenting, this is way the course encourage attendants to hands-on.
 
-# SESSION 1 (4 hours)
 
-**GOAL:** Quick intro to the Internet of Things.
+ No specific background is needed, even if a basic knowledge of electronics and computer science might help. 
 
-* Introduction to the IoT
-* IoT and Big Data: we can quantitatively measure phenomena that up to yesterday we were only able to guess
-* A network of Resource Constrained Devices: if computational power, memory, energy, bandwidth and costs are not constrained, it is likely Internet, not Internet of Things.
+Over the years the course evolved and it is now not so short, however, the idea is to guide the attendants step by step, incrementally.  So it is up to you how far to go. 
 
-# SESSION 2 (4 hours)
+## Tools and Materials
 
-**GOAL:** Small experiment (a single sensor). Prove you can integrate sensors suitable for you monitoring purpose.  Focus on effectiveness, namely doing the right things, i.e., the Maker approach.
+The reference hardware is the [ESP32](http://esp32.net/) and we now mostly use [PlatformIO](https://platformio.org/).  
+[vscode](https://code.visualstudio.com/) is a nice companion together with  the [Platformio extension](https://platformio.org/install/ide?install=vscode).
 
-* The reference hardware: [ESP32](http://esp32.net/)
-* Hands on with the [Arduino Ide](https://support.arduino.cc/hc/en-us/articles/360019833020-Download-and-install-Arduino-IDE) and [Wokwi](https://wokwi.com/)
-* A simple integration of sensor/actuator
-* Communicating over WiFi
+Initially we focused on [The Espressif software development environment (esp-idf)](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/#) and [FREERTOS](https://www.freertos.org/). 
 
-# SESSION 3 (4 hours)
-
-**GOAL:** Small experiment (a single sensor). Focus on efficiency, namely doing the things right, i.e., the Engineers approach. Use metrics to measure to what extent your solution satisfies the user requirements.
-
-* The need of an Operating System 
-* Hands on [FREERTOS](https://www.freertos.org/)
-* A simple integration of sensor/actuator
-* Communicating over WiFi
-
-# SESSION 4 (4 hours)
-
-**GOAL:** Scale-up in a realistic environment.
-
-* The Very Large Scale IoT Testbed [IoT-LAB](https://www.iot-lab.info/) 
-* [FreeRTOS on IoT-lab](https://iot-lab.github.io/docs/os/freertos/)
-* A simple Project
-
-# Tools and Materials
- 
-I like [vscode](https://code.visualstudio.com/) with the [Remote-SSH extension](https://code.visualstudio.com/docs/remote/ssh) to interact with the virtual machine for FreeRTOS development. However, during the class there might be many issues due to different version of the OS and vscode. To further simplify the process I use [micro](https://micro-editor.github.io/index.html) a modern and intuitive terminal-based text editor. Give it a try, it is very convenient. I also suggest to install the [file manager plugin](https://github.com/NicolaiSoeborg/filemanager-plugin). The only annoying issue I'm currently facing with micro is that [copy/past does not work smoothly over SSH](https://github.com/zyedidia/micro/issues/958), you have to use ctr + shift + V
-
-## Material
+While this is probably the way to go for doing serious stuff, we found the Arduino framework to better suits the goal of providing a step-by-step introduction. Furthermore, Arduino on the ESP32 relies "secretely" :fontawesome-regular-face-laugh-wink: on FreeRTOS, even if to take full advantage of it, esp-idf is a must. 
 
 The list of material for each group: 1 ESP32-DevKit, a breadboard, some wires and resistors, one led, one button, one potentiometer and one 3 Axis Accelerometer Gyroscope
 
@@ -63,19 +36,23 @@ The list of material for each group: 1 ESP32-DevKit, a breadboard, some wires an
    
 ## Useful links
 
-* [Code and Slides](https://github.com/andreavitaletti/IoT_short_course)
 * [The Espressif software development environment](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/#)
 * [Arduino Ide](https://support.arduino.cc/hc/en-us/articles/360019833020-Download-and-install-Arduino-IDE)
+* [PlatformIO](https://platformio.org/)
 * [Wokwi](https://wokwi.com/)
 * [FREERTOS](https://www.freertos.org/)
 * [IoT-LAB](https://www.iot-lab.info/) 
 * [Thingsboard](https://thingsboard.io/)
 * [Adafruit Io](https://io.adafruit.com/)
 * [A short paper on this course](assets/ashotcouresoniot.pdf)
-* [Getting Started with ESP32](https://lastminuteengineers.com/getting-started-with-esp32/)
+* [Lastminuteengineers](https://lastminuteengineers.com/getting-started-with-esp32/)
+* [Random Nerd Tutorial](https://randomnerdtutorials.com/projects-esp32/)
+* [Arduino Learn](https://docs.arduino.cc/learn/)
 * [Andreas Spiess Youtube channel](https://www.youtube.com/@AndreasSpiess)
 
-# Editions
+## Editions
+
+Some material of this course is used in the Sapienza University of Rome course on [Internet of Thing Algorithms and Services](http://ichatz.me/Site/InternetOfThings2025) 
 
 First edition of the course 19th (Session 1 and 2) and 21st (Session 3 and 4) of July 2023 in the University of Stellenbosch (South Africa) during an [Erasmus+](https://erasmus-plus.ec.europa.eu/resources-and-tools/mobility-and-learning-agreements/mobility-agreements) staff mobility for teaching visit. About 40 participants selected among more the 100 candidates. 
 

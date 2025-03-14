@@ -1,6 +1,6 @@
-# SESSION 1
+# A Reference Architecture
 
-**GOAL:** Quick intro to the Internet of Things.
+![](assets/images/IoT.drawio.png)
 
 ## Takeaway ONE
 

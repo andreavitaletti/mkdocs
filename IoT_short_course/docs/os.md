@@ -1,4 +1,6 @@
-# SESSION 3
+# We need an OS
+
+[Giorgio Grisetti's lectures](https://sites.google.com/diag.uniroma1.it/sistemi-operativi-2023-24/home?authuser=0) are an excellent resource. 
 
 **GOAL:** Small experiment (a single sensor). Focus on efficiency, namely doing the things right, i.e., the Engineers approach. Use metrics to measure to what extent your solution satisfies the user requirements.
 
