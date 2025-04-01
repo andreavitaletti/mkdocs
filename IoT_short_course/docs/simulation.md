@@ -170,9 +170,9 @@ You want to transform a door into a **smart door**.
 4. Finally all these information should be available online
 
 
-## [MQTT](https://dev.to/hivemq_/series/18762)
+## MQTT
 
-MQTT is an example of Publish/Subscribe. 
+[MQTT](https://dev.to/hivemq_/series/18762) is an example of Publish/Subscribe. 
 
 ![](assets/images/2024-10-25-05-01-31.png)
 
@@ -187,9 +187,11 @@ TOPICS:
 7.  myhome/# (1,2,3 and 4)
 
 
-## It's time to be connected by [MQTT](https://wokwi.com/projects/367405831605855233). 
+## It's time to be connected by MQTT. 
 
-The most convenient way is to use your mobile an Access Point and configure SSID and password consequently.
+A simulation of an MQTT connection is available [here](https://wokwi.com/projects/367405831605855233) on Wokwi.
+
+The most convenient way to run on a real device is to use your mobile as an Access Point and configure SSID and password consequently.
 
 Note that the topics names are assigned to be consistent with the adafruit dashboard (see example below), but you are free to use any name you like.
 
