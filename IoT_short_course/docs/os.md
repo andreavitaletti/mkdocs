@@ -74,6 +74,8 @@ echo 'src/freertos' >> .git/info/sparse-checkout
 git pull origin main
 ```
 
+https://github.com/FreeRTOS/Lab-Project-FreeRTOS-Tutorials
+
 ## A quick introduction to tasks
 
 Based on [ESP32 ESP-IDF FreeRTOS Tutorial: Learn to Create Tasks](https://esp32tutorials.com/esp32-esp-idf-freertos-tutorial-create-tasks/). The code is available on our github [repo](https://github.com/andreavitaletti/IoT_short_course/tree/main/src/freertos/task_tutorial)
