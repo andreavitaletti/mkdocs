@@ -1,3 +1,7 @@
+## Premise: it is a matter of trust
+
+<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSr4ItaI2ZKce06fXatWWhwNtZa0OduSxdbVGzhALzuo9isOpeEpGFPblCq2iwen8Kqux0G1PIQeU51/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
 ## Introduction to Blockchain
 
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vS9cp8CNXBqJTCWaksZU7ozOi5S3C_KzpiCceeSmkWRKVsUGtb7BS3GfGwtR_4cyBfHKQUuJjfVh0Qp/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
@@ -22,7 +26,7 @@
 
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSi2Qn1HlFgWkriY3Y4goYW5W7BZnkDtKGD7vkXQsG8JqTWd3LFon_gkk1_xOdwqH12n03_Tee-bghi/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
-## Zero Knowledge Proff (ZKP)
+## Zero Knowledge Prof (ZKP): a gentle introduction
 
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTf0VCAcoGqnkdvBkuD6I7C6Epd6Eyw3lw29GtCSGOdTxBWralG3LhzQKwSQNK0TWdxXtzdqzet8KL8/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
