@@ -1,3 +1,9 @@
+## Get in touch on Google classroom (ECI Edition)
+
+[7u6nvtcl](https://classroom.google.com/c/MjE2MDU1Njk1ODRa?cjc=7u6nvtcl)
+
+![](assets/images/2025-07-28-03-01-41.png)
+
 ## Premise: it is a matter of trust
 
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSr4ItaI2ZKce06fXatWWhwNtZa0OduSxdbVGzhALzuo9isOpeEpGFPblCq2iwen8Kqux0G1PIQeU51/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
@@ -14,7 +20,7 @@
 
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQyru0roVvHZZAoZSVeGhS6HPeqMy6WFxf00-JIg7K25fzUdqmnR3nEuDjINd2fipWRS2vs4migeRzp/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
-## Safety abd Liveness in Bitcoin
+## Safety and Liveness in Bitcoin
 
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSTS6Tyu9hXI15BM56dbGQqT6tBShqmQKVRYwkPrnjJwWxPTOJMM7-zxCnrQmqQ-6-5k64InBFQVOFE/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 

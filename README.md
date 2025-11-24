@@ -33,6 +33,9 @@ cd ~/github/sites/<mkdocs_folder>/
 ```
 mkdocs gh-deploy --config-file ../../mkdocs/<mkdocs_folder>/mkdocs.yml --remote-branch master
 ```
+```
+(cd ../mkdocs/IoT_short_course/ && mkdocs serve --livereload)
+```
 
 # Material for mkdocs
 

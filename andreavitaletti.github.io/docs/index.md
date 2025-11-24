@@ -9,9 +9,15 @@ some_url: https://example.com
 
 # Andrea Vitaletti
 
-Andrea Vitaletti Ph.D. in Computer Science. I am currently Associate professor @ Sapienza University of Rome. My research interests are focused on devising solutions where data are collected, analyzed, managed and valorized in distributed networks fostering a decentralized governance. In this context, I worked over time on IoT, Distributed Ledger Technologies, Federated Machine Learning and Verifiable Computation and I am currently teaching most of these topics @ Sapienza.
-I am particularly interested in exploring and  studying tradeoffs between data utility and privacy as well as between individual interests and collective ones. I co-authored more than 80 papers I have been involved in a number of EU projects as researcher, principal investigator and coordinator of the FET Open PLEASED. I am a maker and I have some successful experience in transfer of technology: I founded the spin-offs WLAB - sold in 2016 - and WSENSE - left in 2019. Since 2020 I have been teaching Digital Entreprenurship and I am happy that some of my students have founded a startup (e.g. [iotilize.me](https://iotilize.me/) and [yeastime](https://www.yeastime.com/))
-Hobbies: sailing, cycling and paragliding … I play the piano and the guitar for fun… be aware!
+Andrea Vitaletti, Ph.D., Associate Professor of Computer Science at Sapienza University of Rome.
+My research focuses on designing systems for collecting, analyzing, and managing data in distributed networks, with a strong emphasis on decentralized governance. Over the years, I have worked on the Internet of Things (IoT), Distributed Ledger Technologies (DLT), and Federated Machine Learning, topics I also teach at Sapienza. More recently, I’ve started exploring Verifiable Computation and Computational Gastronomy
+
+I am particularly interested in the trade-offs between data utility and privacy, as well as the balance between individual and collective interests in digital ecosystems. I have co-authored over 90 scientific papers and contributed to several European research projects, including serving as principal investigator and coordinator of the FET Open project PLEASED.
+
+A maker at heart, I have hands-on experience in technology transfer. I co-founded the spin-offs WLAB (exit in 2016) and WSENSE (which I left in 2019). Since 2020, I have been teaching Digital Entrepreneurship, and I’m proud to see some of my students launch their own startups, such as [iotilize.me](https://iotilize.me/) and [yeastime](https://www.yeastime.com/).
+
+Hobbies: Traveling, sailing, cycling, and paragliding. I also play the piano and guitar for fun... you’ve been warned!
+
 
 
 ## Education
@@ -79,8 +85,7 @@ I have acquired a significant experience on research projects, gained in more th
 
 * Made in Italy Circolare e Sostenibile ([MICS](https://www.mics.tech/en/home/)) National Plan for Recovery and Resilience NextGenerationEU ([PNRR](https://www.agenziacoesione.gov.it/dossier_tematici/nextgenerationeu-e-pnrr/)) program, [SPOKE 8](https://www.mics.tech/en/spokes/spoke-8/) Digitally-oriented factory design and management through AI and data driven approaches,  [Project 8.06](https://www.mics.tech/en/projects/8-06-blockchain-based-solutions-for-trusted-and-quality-aware-data-sharing/) Blockchain-based solutions for trusted and quality-aware data sharing
 
-*  SEcurity and RIghts in the CyberSpace [SERICS](https://serics.eu/en/) National Plan for Recovery and Resilience NextGenerationEU ([PNRR](https://www.agenziacoesione.gov.it/dossier_tematici/nextgenerationeu-e-pnrr/)), [SPOKE 9]([Securing Digital Transformation](https://serics.eu/en/services/spoke-9-sicurezza-trasformazione-digitale/)) Securing Digital Transformation,  Project Smart Decentralized Finance (SmartDeFi)
-
+*  SEcurity and RIghts in the CyberSpace [SERICS](https://serics.eu/en/) National Plan for Recovery and Resilience NextGenerationEU ([PNRR](https://www.agenziacoesione.gov.it/dossier_tematici/nextgenerationeu-e-pnrr/)), [SPOKE 9: Securing Digital Transformation](https://serics.eu/en/services/spoke-9-sicurezza-trasformazione-digitale/)
 * ERASMUS-EDU-2022-CBHE project titled “Smart City ASEAN Learning Network (SCALe)” with project number: [101083278](https://erasmus-plus.ec.europa.eu/projects/search/details/101083278) 
 
 **Past Projects**
@@ -144,11 +149,31 @@ I founded the laboratory on the wireless sensor network at DIAG where the soluti
 
 I enjoy a long term collaboration on cooperative design and co-design with faculties of the MSc in Product Design at Sapienza. In particular, I’m leading the research activities on the employment of genetic algorithms for product design.
 
-I am a member of the core group of the  [Italian Distributed Ledger Technology Working Group](https://dltgroup.it/index.php). In 2024 I have been co-chair of the [6th Distributed Ledger Technologies Workshop (DLT2024)](https://dlt2024.di.unito.it/) and I am guest editor of the special issue on ``Emerging Trends in Distributed Ledger Technology and its Applications`` on [Blockchain: Research and Applications](https://www.sciencedirect.com/journal/blockchain-research-and-applications) journal ([Q1](https://www.scimagojr.com/journalsearch.php?q=21101101317&tip=sid&clean=0)) 
+I am a member of the core group of the  [Italian Distributed Ledger Technology Working Group](https://dltgroup.it/index.php). 
 
 From 2008 to 2017 I was member of the PhD board  in Computer Engineering @ Sapienza
 
 Since 2018 I am member of the PhD board  in Data Science @ Sapienza
+
+### Recent activities include
+
+**2024**
+
+* co-chair of the [6th Distributed Ledger Technologies Workshop (DLT2024)](https://dlt2024.di.unito.it/) 
+* Guest editor of the special issue on *Emerging Trends in Distributed Ledger Technology and its Applications* on [Blockchain: Research and Applications](https://www.sciencedirect.com/journal/blockchain-research-and-applications) journal ([Q1](https://www.scimagojr.com/journalsearch.php?q=21101101317&tip=sid&clean=0)).
+* PC member - [7th International Workshop on Blockchain Oriented  Software Engineering IWBOSE 2024](https://www.agile-group.org/iwbose2024/committees/)
+* PC member - [The International Symposium on Cyber Security,Cryptology and Machine Learning (CSCML)](https://www.cscml.org/program-comittee)
+
+
+**2025**
+
+* co-chair of the [1st Workshop on Computational Gastronomy (CoGamy): Data Science for Food and Cooking](https://sites.google.com/uniroma1.it/cogamy2025) to be held in conjunctino with the A* conference [ICDM 2025](https://www3.cs.stonybrook.edu/~icdm2025/index.html)
+* Keynote speaker at [4th EAI International Conference on Blockchain Technology and Emerging Applications](https://blocktea.eai-conferences.org/2025/) with a talk entitlede [Beyond the chain: synergies between on-chain and off-chain worlds](https://blocktea.eai-conferences.org/2025/keynotes/). 
+* Tpc co-chair of the [ApPLIED Workshop](https://www.cse.chalmers.se/~elad/ApPLIED2025/)
+Advanced tools, programming languages, and PLatforms for Implementing and Evaluating algorithms for Distributed systems, Held in conjunction with PODC-2025
+* PC member - [IEEE International Conference on Blockchain and Cryptocurrency](https://icbc2025.ieee-icbc.org/committees/technical-program-committee)
+* PC member - [The 8th IEEE International Conference on Blockchain](https://ieee-cybermatics.org/2025/blockchain/tpc.html)
+
 
 ## Publications
 
