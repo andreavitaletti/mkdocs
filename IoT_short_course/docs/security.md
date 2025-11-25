@@ -1,5 +1,9 @@
 # Security
 
+> [!CAUTION]
+>This is not a course on security
+
+
 !!! disclaimer
 
     this is not a course on security
