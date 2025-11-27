@@ -10,6 +10,8 @@ You can easily deliver data from your thing via [MQTT](simulation.md#mqtt) as ex
 
 ```
 mosquitto_pub -d -q 1 -h "$THINGSBOARD_HOST_NAME" -p "1883" -t "v1/devices/me/telemetry" -u "$ACCESS_TOKEN" -m {"temperature":25}
+
+$THINGSBOARD_HOST_NAME demo.thingsboard.io
 ```
 
 A convenient multiplatform tool for experimenting is [MQTTX](https://mqttx.app/downloads). 
@@ -168,3 +170,18 @@ void publishTelemetry() {
 
 
 ![](assets/images/arch_hw.png)
+## How to receive a command on the node
+
+The node subscribe to 
+
+```
+mosquitto_sub -h "$THINGSBOARD_HOST_NAME" -p "1883" -t "v1/devices/me/rpc/request/+" -u "$ACCESS_TOKEN"
+
+
+{"method":"setState","params":true}
+{"method":"setState","params":false}
+{"method":"setState","params":true}
+{"method":"setState","params":false}
+```
+
+![](assets/images/send_command.png)

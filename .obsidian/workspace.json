@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "IoT_short_course/docs/security.md",
+                "file": "IoT_short_course/docs/backend.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "security"
+              "title": "backend"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 408.5
   },
   "right": {
     "id": "c35d2d5d38d34252",
@@ -194,12 +194,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "5fac8583684f445f",
+  "active": "0ee3fa07d9c85176",
   "lastOpenFiles": [
+    "IoT_short_course/docs/assets/images/send_command.png",
+    "IoT_short_course/docs/assets/images/Pasted image.png",
+    "IoT_short_course/docs/security.md",
     "IoT_short_course/docs/sample.md",
-    "IoT_short_course/docs/security.md",
     "IoT_short_course/docs/energy.md",
-    "IoT_short_course/docs/security.md",
     "pilde/docs/blog_2006.md",
     "IoT_short_course/docs/simulation.md",
     "README.md",
