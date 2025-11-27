@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "IoT_short_course/docs/backend.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "backend"
+              "title": "README"
             }
           }
         ]
@@ -194,8 +194,22 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "0ee3fa07d9c85176",
+  "active": "5fac8583684f445f",
   "lastOpenFiles": [
+    ".assets/image-202511274735699.png",
+    "README",
+    "README/image-202511274537562.png",
+    "IoT_short_course/site/wireless/index.html",
+    "IoT_short_course/site/wireless",
+    "IoT_short_course/site/web3/index.html",
+    "IoT_short_course/site/web3",
+    "IoT_short_course/site/twin/index.html",
+    "IoT_short_course/site/twin",
+    "IoT_short_course/site/simulation/index.html",
+    "IoT_short_course/site/simulation",
+    "IoT_short_course/site/security/index.html",
+    "IoT_short_course/README.md",
+    "IoT_short_course/docs/backend.md",
     "IoT_short_course/docs/assets/images/send_command.png",
     "IoT_short_course/docs/assets/images/Pasted image.png",
     "IoT_short_course/docs/security.md",
@@ -204,8 +218,6 @@
     "pilde/docs/blog_2006.md",
     "IoT_short_course/docs/simulation.md",
     "README.md",
-    "IoT_short_course/README.md",
-    "IoT_short_course/docs/backend.md",
     "andreavitaletti.github.io/README.md",
     "IoT_short_course/docs/scale.md"
   ]
