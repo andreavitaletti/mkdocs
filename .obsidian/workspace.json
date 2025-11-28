@@ -20,8 +20,23 @@
               "icon": "lucide-file",
               "title": "backend"
             }
+          },
+          {
+            "id": "6e4bc5986ca43baf",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "conflict-files-obsidian-git.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "conflict-files-obsidian-git"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -194,15 +209,17 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "5fac8583684f445f",
+  "active": "6e4bc5986ca43baf",
   "lastOpenFiles": [
+    "IoT_short_course/docs/backend.md",
+    "conflict-files-obsidian-git.md",
+    "IoT_short_course/docs/assets/images/send_command.png",
     "IoT_short_course/docs/security.md",
     "IoT_short_course/docs/energy.md",
     "pilde/docs/blog_2006.md",
     "IoT_short_course/docs/simulation.md",
     "README.md",
     "IoT_short_course/README.md",
-    "IoT_short_course/docs/backend.md",
     "andreavitaletti.github.io/README.md",
     "IoT_short_course/docs/scale.md"
   ]
