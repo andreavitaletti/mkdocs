@@ -27,16 +27,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "IoT_short_course/docs/backend.md",
+                "file": "IoT_short_course/INSTRUCTIONS.MD",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "backend"
+              "title": "INSTRUCTIONS"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -209,17 +208,37 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6e4bc5986ca43baf",
+  "active": "5fac8583684f445f",
   "lastOpenFiles": [
-    "conflict-files-obsidian-git.md",
+    "IoT_short_course/INSTRUCTIONS.MD",
+    "IoT_short_course/site/security/index.html",
+    "IoT_short_course/site/security",
+    "IoT_short_course/site/os/index.html",
+    "IoT_short_course/site/os",
+    "IoT_short_course/site/intro/index.html",
+    "IoT_short_course/site/intro",
+    "IoT_short_course/site/crowdsourcing/index.html",
+    "IoT_short_course/site/crowdsourcing",
+    "IoT_short_course/site/backend/index.html",
+    "IoT_short_course/site/backend",
+    "IoT_short_course/site/assets/images/with_herman.jpg",
+    "IoT_short_course/site/assets/images/unbalanced.png",
+    "IoT_short_course/site/assets/images/small_stud2.jpg",
+    "IoT_short_course/site/assets/images/small_stud1.jpg",
+    "IoT_short_course/site/assets/images/send_command.png",
+    "IoT_short_course/site/assets/images/schematics.png",
+    "IoT_short_course/site/assets/images/rest.png",
+    "IoT_short_course/site/assets/images/power_sleep.png",
+    "IoT_short_course/site/assets/images/power_no_sleep.png",
+    "IoT_short_course/site/assets/images/mail.png",
+    "IoT_short_course/README.md",
     "IoT_short_course/docs/backend.md",
-    "IoT_short_course/docs/assets/images/send_command.png",
+    "conflict-files-obsidian-git.md",
     "IoT_short_course/docs/security.md",
     "IoT_short_course/docs/energy.md",
     "pilde/docs/blog_2006.md",
     "IoT_short_course/docs/simulation.md",
     "README.md",
-    "IoT_short_course/README.md",
     "andreavitaletti.github.io/README.md",
     "IoT_short_course/docs/scale.md"
   ]

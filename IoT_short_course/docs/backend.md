@@ -166,6 +166,14 @@ void publishTelemetry() {
 
 ```
 
+> [!tip] 
+> Now instead of sending random temperature and humidity values, send the values read from a potentiometer connected to your node
+
+> [!caution] 
+> Some pins might interfere. As an example pin 15 is used by the WiFi. If you use that pin for analogRead it does't read properly because it is occupied by the WiFi
+
+
+
 
 ![](assets/images/arch_hw.png)
 ## How to receive a command on the node
