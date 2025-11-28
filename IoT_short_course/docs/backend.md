@@ -181,6 +181,7 @@ mosquitto_sub -h "$THINGSBOARD_HOST_NAME" -p "1883" -t "v1/devices/me/rpc/reques
 
 ![](assets/images/send_command.png)
 
+
 ```c
 
 #include <WiFi.h>
@@ -346,3 +347,6 @@ void publishTelemetry() {
 }
 
 ```
+
+
+NOTE: exactly the same process, namely publish/subscribe can be used to allow devices to communicate each other
