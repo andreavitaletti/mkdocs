@@ -357,4 +357,6 @@ void publishTelemetry() {
 ```
 
 
-NOTE: exactly the same process, namely publish/subscribe can be used to allow devices to communicate each other
+> [!note] 
+> Exactly the same process, namely publish/subscribe on a specific topic, can be used to allow devices to communicate each other
+
