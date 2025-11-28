@@ -24,6 +24,9 @@ Note that in some cases MQTT protocol is filtered out, so be sure you are in a n
 that can easily deal with MQTT.
 
 
+> [!warning] 
+> Each device either real (e.g. and ESP32) or simulated (e.g. by MQTTX) needs to have a distinct access token 
+> If you access from multiple devices with the same access token, Thingsboard recognises only one of them 
 
 Once you are satisfied by your experiments, you can easily move to a real thing with the follwoing code.
 

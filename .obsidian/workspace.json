@@ -208,9 +208,8 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "5fac8583684f445f",
+  "active": "bbb774c099316f3b",
   "lastOpenFiles": [
-    "IoT_short_course/INSTRUCTIONS.MD",
     "IoT_short_course/site/security/index.html",
     "IoT_short_course/site/security",
     "IoT_short_course/site/os/index.html",
@@ -221,6 +220,7 @@
     "IoT_short_course/site/crowdsourcing",
     "IoT_short_course/site/backend/index.html",
     "IoT_short_course/site/backend",
+    "IoT_short_course/site/index.html",
     "IoT_short_course/site/assets/images/with_herman.jpg",
     "IoT_short_course/site/assets/images/unbalanced.png",
     "IoT_short_course/site/assets/images/small_stud2.jpg",
@@ -231,6 +231,7 @@
     "IoT_short_course/site/assets/images/power_sleep.png",
     "IoT_short_course/site/assets/images/power_no_sleep.png",
     "IoT_short_course/site/assets/images/mail.png",
+    "IoT_short_course/INSTRUCTIONS.MD",
     "IoT_short_course/README.md",
     "IoT_short_course/docs/backend.md",
     "conflict-files-obsidian-git.md",
