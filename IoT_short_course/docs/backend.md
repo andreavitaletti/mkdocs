@@ -168,3 +168,15 @@ void publishTelemetry() {
 
 
 ![](assets/images/arch_hw.png)
+## How to receive a command on the node
+
+The node subscribe to
+
+```
+mosquitto_sub -h "$THINGSBOARD_HOST_NAME" -p "1883" -t "v1/devices/me/rpc/request/+" -u "$ACCESS_TOKEN" 
+
+{"method":"setState","params":true} {"method":"setState","params":false} {"method":"setState","params":true} {"method":"setState","params":false}
+```
+
+
+![](assets/images/send_command.png)
