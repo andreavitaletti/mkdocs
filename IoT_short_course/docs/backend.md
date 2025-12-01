@@ -10,8 +10,6 @@ You can easily deliver data from your thing via [MQTT](simulation.md#mqtt) as ex
 
 ```
 mosquitto_pub -d -q 1 -h "$THINGSBOARD_HOST_NAME" -p "1883" -t "v1/devices/me/telemetry" -u "$ACCESS_TOKEN" -m {"temperature":25}
-
-$THINGSBOARD_HOST_NAME demo.thingsboard.io
 ```
 
 A convenient multiplatform tool for experimenting is [MQTTX](https://mqttx.app/downloads). 
@@ -26,6 +24,9 @@ Note that in some cases MQTT protocol is filtered out, so be sure you are in a n
 that can easily deal with MQTT.
 
 
+> [!warning] 
+> Each device either real (e.g. and ESP32) or simulated (e.g. by MQTTX) needs to have a distinct access token 
+> If you access from multiple devices with the same access token, Thingsboard recognises only one of them 
 
 Once you are satisfied by your experiments, you can easily move to a real thing with the follwoing code.
 
@@ -168,20 +169,197 @@ void publishTelemetry() {
 
 ```
 
+> [!tip] 
+> Now instead of sending random temperature and humidity values, send the values read from a potentiometer connected to your node
+
+> [!caution] 
+> Some pins might interfere. As an example pin 15 is used by the WiFi. If you use that pin for analogRead it does't read properly because it is occupied by the WiFi
+
+
+
 
 ![](assets/images/arch_hw.png)
 ## How to receive a command on the node
 
-The node subscribe to 
+The node subscribe to
 
 ```
-mosquitto_sub -h "$THINGSBOARD_HOST_NAME" -p "1883" -t "v1/devices/me/rpc/request/+" -u "$ACCESS_TOKEN"
+mosquitto_sub -h "$THINGSBOARD_HOST_NAME" -p "1883" -t "v1/devices/me/rpc/request/+" -u "$ACCESS_TOKEN" 
 
-
-{"method":"setState","params":true}
-{"method":"setState","params":false}
-{"method":"setState","params":true}
-{"method":"setState","params":false}
+{"method":"setState","params":true} {"method":"setState","params":false} {"method":"setState","params":true} {"method":"setState","params":false}
 ```
+
 
 ![](assets/images/send_command.png)
+
+
+```c
+
+#include <WiFi.h>
+#include <PubSubClient.h>
+
+// --- Network Configuration ---
+const char* WIFI_SSID = "";             // <-- REPLACE with your Wi-Fi network name
+const char* WIFI_PASS = "";             // <-- REPLACE with your Wi-Fi password
+
+// --- ThingsBoard & MQTT Configuration ---
+const char* TB_SERVER = "demo.thingsboard.io";
+const int TB_PORT = 1883;
+const char* TB_ACCESS_TOKEN = "";       // <-- REPLACE with your actual Device Access Token
+
+// Topics
+const char* TELEMETRY_TOPIC = "v1/devices/me/telemetry";
+const char* ATTRIBUTES_TOPIC = "v1/devices/me/attributes";
+const char* RPC_SUBSCRIBE_TOPIC = "v1/devices/me/rpc/request/+"; // Topic for incoming RPC requests
+
+// --- Hardware Settings ---
+const int LED_PIN = 2; // GPIO 2 is usually the Built-in LED on ESP32
+
+// --- Initialize Clients ---
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+// Timing variables
+long lastMsg = 0;
+const int PUBLISH_INTERVAL = 10000;
+
+// Function prototypes
+void setup_wifi();
+void reconnect_mqtt();
+void publishTelemetry();
+void on_message(char* topic, byte* payload, unsigned int length); // Callback prototype
+
+// =========================================================================
+// SETUP
+// =========================================================================
+void setup() {
+  Serial.begin(115200);
+
+  // Initialize LED
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW); // Start with LED off
+
+  setup_wifi();
+
+  // Set the MQTT server and the callback function for incoming messages
+  client.setServer(TB_SERVER, TB_PORT);
+  client.setCallback(on_message); 
+}
+
+// =========================================================================
+// LOOP
+// =========================================================================
+void loop() {
+  if (!client.connected()) {
+    reconnect_mqtt();
+  }
+
+  client.loop(); // Keeps the MQTT connection alive and listens for incoming messages
+
+  long now = millis();
+  if (now - lastMsg > PUBLISH_INTERVAL) {
+    lastMsg = now;
+    publishTelemetry();
+  }
+}
+
+// =========================================================================
+// HELPER FUNCTIONS
+// =========================================================================
+
+// 1. Connect to Wi-Fi
+void setup_wifi() {
+  delay(10);
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(WIFI_SSID);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nWiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+// 2. Reconnect to MQTT Broker
+void reconnect_mqtt() {
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection to ThingsBoard...");
+    
+    // Connect with ClientID (Token) and Username (Token)
+    if (client.connect(TB_ACCESS_TOKEN, TB_ACCESS_TOKEN, NULL)) {
+      Serial.println("connected!");
+      
+      // Send attributes on connect
+      client.publish(ATTRIBUTES_TOPIC, "{\"firmware_version\":\"1.0.0\"}");
+      
+      // --- SUBSCRIBE TO RPC REQUESTS ---
+      // We must subscribe here so we re-subscribe if WiFi drops and reconnects
+      client.subscribe(RPC_SUBSCRIBE_TOPIC);
+      Serial.println("Subscribed to RPC requests");
+
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" trying again in 5 seconds...");
+      delay(5000);
+    }
+  }
+}
+
+// 3. MQTT Callback (Handle incoming messages)
+void on_message(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+
+  // Convert payload to a String for easy parsing
+  String message = "";
+  for (int i = 0; i < length; i++) {
+    message += (char)payload[i];
+  }
+  Serial.println(message);
+
+  // Check if the message is the 'setState' method
+  // Payload example: {"method":"setState","params":true}
+  if (message.indexOf("setState") != -1) {
+    
+    // Check for true/false in the params
+    if (message.indexOf("true") != -1) {
+      digitalWrite(LED_PIN, HIGH);
+      Serial.println("Command: LED ON");
+    } 
+    else if (message.indexOf("false") != -1) {
+      digitalWrite(LED_PIN, LOW);
+      Serial.println("Command: LED OFF");
+    }
+  }
+}
+
+// 4. Generate and publish telemetry
+void publishTelemetry() {
+  float temperature = random(200, 300) / 10.0;
+  float humidity = random(400, 600) / 10.0;
+
+  String payload = "{\"temperature\":" + String(temperature) +
+                   ",\"humidity\":" + String(humidity) + "}";
+
+  if (client.publish(TELEMETRY_TOPIC, payload.c_str())) {
+    Serial.print("Published telemetry: ");
+    Serial.println(payload);
+  } else {
+    Serial.println("Failed to publish telemetry.");
+  }
+}
+
+```
+
+
+> [!note] 
+> Exactly the same process, namely publish/subscribe on a specific topic, can be used to allow devices to communicate each other
+
