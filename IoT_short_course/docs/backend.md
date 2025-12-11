@@ -363,3 +363,6 @@ void publishTelemetry() {
 > [!note] 
 > Exactly the same process, namely publish/subscribe on a specific topic, can be used to allow devices to communicate each other
 
+## Take advantage of an ecosystem of objects
+
+https://thingsboard.io/docs/user-guide/rule-engine-2-0/tutorials/get-weather-using-rest-api-call/
