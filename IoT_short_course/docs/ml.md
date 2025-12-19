@@ -1,6 +1,7 @@
 # ML Playground
 
 [https://playground.scienxlab.org/](https://playground.scienxlab.org/)
+[https://mlplaygrounds.com/machine/learning/linearRegression.html](https://mlplaygrounds.com/machine/learning/linearRegression.html)
 
 # Tensorflow Lite Micro on ESP32 
 
