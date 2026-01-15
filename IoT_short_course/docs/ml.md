@@ -1,3 +1,8 @@
+# ML Playground
+
+[https://playground.scienxlab.org/](https://playground.scienxlab.org/)
+[https://mlplaygrounds.com/machine/learning/linearRegression.html](https://mlplaygrounds.com/machine/learning/linearRegression.html)
+
 # Tensorflow Lite Micro on ESP32 
 
 Reference examples are available [here](https://github.com/espressif/tflite-micro-esp-examples). You have to download from github [esp-nn](https://github.com/espressif/esp-nn) and [esp32-camera](https://github.com/espressif/esp32-camera) and place them into the relative folders under components.
