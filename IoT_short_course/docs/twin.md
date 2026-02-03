@@ -10,6 +10,8 @@ By building a **Digital Twin**, we aren't just syncing the time; we are creating
 
 To model the drift, the Twin needs to observe the relationship between the **Physical Clock** (ESP32) and the **Reference Clock** (PC).
 
+![image-2026231832291.png](IoT_short_course/docs/assets/images/image-2026231832291.png)
+
 ---
 
 ### 1. The Mathematical Model
