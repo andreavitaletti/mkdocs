@@ -338,3 +338,342 @@ sd.stop()
 
 [Online Tone Generator](https://onlinetonegenerator.com/)
 
+
+### Wiring Diagram
+
+| **ESP32 A (Sender)** | **Connection Type**   | **ESP32 B (Receiver)** | **Purpose**      |     |
+| -------------------- | --------------------- | ---------------------- | ---------------- | --- |
+| **GPIO25** (DAC1)    | $\rightarrow$         | **GPIO34** (ADC1)      | Signal Path      |     |
+| **GND**              | $\longleftrightarrow$ | **GND**                | Common Reference |     |
+| **USB Power**        |                       | **USB Power**          | Power Supply     |     |
+### ESP32 A: The Generator (Sender)
+
+This code uses a pre-calculated lookup table (LUT) to store sine values. This is much more efficient than calculating `sin()` on the fly, allowing for a smoother signal.
+
+```C++
+// ESP32 SENDER CODE
+#include <Arduino.h>
+
+#define DAC_PIN 25 // Uses DAC Channel 1
+const int tableSize = 256;
+uint8_t sineTable[tableSize];
+
+void setup() {
+  // Generate a sine lookup table (0 to 255)
+  // We scale it slightly (20-230) to stay in the DAC's linear range
+  for (int i = 0; i < tableSize; i++) {
+    sineTable[i] = (uint8_t)(127 + 100 * sin(2 * PI * i / tableSize));
+  }
+}
+
+void loop() {
+  for (int i = 0; i < tableSize; i++) {
+    dacWrite(DAC_PIN, sineTable[i]);
+    delayMicroseconds(100); // Adjust this to change frequency
+  }
+}
+```
+
+### ESP32 B: The Receiver (Sampler)
+
+This code reads the signal and prints it to the Serial Plotter. Note the use of `analogReadAttenuation`, which sets the voltage range to approximately 0V–3.1V to better match the DAC output.
+
+```c++
+// ESP32 RECEIVER CODE
+#include <Arduino.h>
+
+#define ADC_PIN 34 // ADC1_CH6
+
+void setup() {
+  Serial.begin(115200);
+  // Set attenuation to 11dB (allows 0V - 3.1V range)
+  analogSetAttenuation(ADC_11db); 
+}
+
+void loop() {
+  int rawValue = analogRead(ADC_PIN);
+  
+  // Print to Serial Plotter
+  // We include a "Floor" and "Ceiling" to keep the graph stable
+  Serial.print("Min:0,Max:4095,Signal:");
+  Serial.println(rawValue);
+  
+  delayMicroseconds(500); // Sample rate control
+}
+```
+
+### A Quick Tip on Performance
+
+The ESP32's `analogRead()` takes about **10µs to 20µs**. If you find the wave looks "steppy" or jagged, it’s usually due to electrical noise or the sampling interval. If you want to go faster (into the kHz range), the `dacWrite` method used here will eventually hit a bottleneck.
+
+### Simple Analysis 
+
+### 1. The Generator Frequency (ESP32 A)
+
+In the code I provided, the frequency is calculated by how long it takes to step through all **256 points** of the lookup table.
+
+- **Delay per step:** `100 microseconds` ($\mu s$)
+    
+- **Total steps:** 256
+    
+- **Time for 1 full wave ($T$):** $256 \times 100 \mu s = 25,600 \mu s$ (or **0.0256 seconds**)
+    
+
+To find the frequency ($f$), we use:
+
+$$f = \frac{1}{T} = \frac{1}{0.0256} \approx 39 \text{ Hz}$$
+
+> **Note:** The actual frequency will be slightly lower (closer to **37-38 Hz**) because the `dacWrite()` function and the `for` loop overhead add a few extra microseconds per step.
+
+---
+
+### 2. The Sampler Frequency (ESP32 B)
+
+The sampling frequency ($f_s$) is how many times per second the ADC "looks" at the incoming voltage.
+
+- **Delay per sample:** `500 microseconds` ($\mu s$)
+    
+- **ADC conversion time:** approx. `10-20 microseconds`
+    
+- **Serial print time:** approx. `50-100 microseconds` (at 115200 baud)
+    
+
+Total time per sample is roughly **600 $\mu s$**.
+
+$$f_s = \frac{1}{600 \times 10^{-6}} \approx 1,666 \text{ Hz} \text{ (or 1.6 kHz)}$$
+
+---
+
+### 3. Is this a good match?
+
+According to the **Nyquist-Shannon Sampling Theorem**, your sampling frequency must be at least **twice** the signal frequency to avoid "aliasing" (where the signal looks like a completely different wave).
+
+- **Your Signal:** ~39 Hz
+    
+- **Your Sampler:** ~1,666 Hz
+    
+- **Oversampling Ratio:** ~42x
+    
+
+This is excellent! A 42x oversampling ratio means you will get a very high-fidelity reconstruction of the sine wave on your Serial Plotter.
+
+### How to go faster
+
+If you want to reach **Kilohertz** signal frequencies, the `delayMicroseconds()` approach becomes unreliable because the "background noise" of the code (the time it takes to process the loop) becomes a large percentage of the total time. That is when we switch to **I2S (Inter-IC Sound)**, which uses a hardware clock to "push" data to the DAC or "pull" it from the ADC at exact intervals, like a metronome.
+
+Using **I2S (Inter-IC Sound)** is like moving from a manual gearbox to an automatic one. Instead of the CPU manually toggling the DAC or reading the ADC in a loop, the I2S hardware uses a dedicated clock to stream data in the background. This allows for frequencies in the **kilohertz (kHz)** range with perfect timing.
+
+On the ESP32, the I2S peripheral can be "routed" directly to the internal DAC and ADC.
+
+---
+
+### 1. The High-Speed Generator (Sender)
+
+This code configures I2S to "pump" a sine wave out of the DAC at a high sample rate. Note that for I2S to DAC, we use a 16-bit buffer even though the DAC is 8-bit (the hardware expects it this way).
+
+
+```c++
+#include "driver/i2s.h"
+#include <math.h>
+
+#define SAMPLE_RATE     44100 // 44.1 kHz (CD Quality)
+#define SINE_FREQ       440.0 // Standard A4 note
+#define I2S_NUM         I2S_NUM_0
+
+void setup() {
+  i2s_config_t i2s_config = {
+    .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN),
+    .sample_rate = SAMPLE_RATE,
+    .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
+    .channel_format = I2S_CHANNEL_FMT_ONLY_RIGHT,
+    .communication_format = I2S_COMM_FORMAT_STAND_I2S,
+    .intr_alloc_flags = 0,
+    .dma_buf_count = 8,
+    .dma_buf_len = 64,
+    .use_apll = false
+  };
+
+  i2s_driver_install(I2S_NUM, &i2s_config, 0, NULL);
+  i2s_set_dac_mode(I2S_DAC_CHANNEL_BOTH_EN); // Enables GPIO25 and 26
+}
+
+void loop() {
+  static float phase = 0;
+  uint16_t sample;
+  size_t bytes_written;
+
+  // Generate 1 sample of sine wave
+  float val = sin(phase);
+  sample = (uint16_t)((val + 1.0) * 127); // Scale -1.0..1.0 to 0..254
+  sample <<= 8; // I2S DAC expects high byte
+
+  i2s_write(I2S_NUM, &sample, sizeof(sample), &bytes_written, portMAX_DELAY);
+
+  phase += 2 * PI * SINE_FREQ / SAMPLE_RATE;
+  if (phase >= 2 * PI) phase -= 2 * PI;
+}
+```
+
+---
+
+### 2. The High-Speed Sampler (Receiver)
+
+The receiver uses I2S to read from the ADC. This is much faster than `analogRead()`.
+
+```c++
+#include "driver/i2s.h"
+
+#define SAMPLE_RATE 44100
+#define I2S_NUM     I2S_NUM_0
+
+void setup() {
+  Serial.begin(115200);
+
+  i2s_config_t i2s_config = {
+    .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX | I2S_MODE_ADC_BUILT_IN),
+    .sample_rate = SAMPLE_RATE,
+    .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
+    .channel_format = I2S_CHANNEL_FMT_ONLY_RIGHT,
+    .communication_format = I2S_COMM_FORMAT_STAND_I2S,
+    .intr_alloc_flags = 0,
+    .dma_buf_count = 8,
+    .dma_buf_len = 64,
+    .use_apll = false
+  };
+
+  i2s_driver_install(I2S_NUM, &i2s_config, 0, NULL);
+  i2s_set_adc_mode(ADC_UNIT_1, ADC1_CHANNEL_6); // GPIO34
+  i2s_adc_enable(I2S_NUM);
+}
+
+void loop() {
+  uint16_t buffer[64];
+  size_t bytes_read;
+
+  // Read a block of samples from the DMA buffer
+  i2s_read(I2S_NUM, &buffer, sizeof(buffer), &bytes_read, portMAX_DELAY);
+
+  // Print just the first sample of each block to Serial Plotter (to avoid flooding)
+  Serial.println(buffer[0] & 0x0FFF); // Mask 12 bits for ADC
+}
+```
+
+---
+
+### Why this is better
+
+1. **DMA (Direct Memory Access):** The I2S hardware uses DMA. This means it writes directly to a chunk of memory (the buffer) without the CPU having to intervene for every single bit.
+    
+2. **No Jitter:** In your previous code, if the CPU was busy doing a background Wi-Fi task, the sine wave would "hiccup." With I2S, the clock is generated by hardware, so the timing is rock-solid.
+    
+3. **Efficiency:** You can now generate or sample audio at **44,100 Hz** (or even higher) while the CPU is free to do other things, like processing a FFT (Fast Fourier Transform).
+    
+
+### One Final Caveat
+
+At 44.1 kHz, the **Serial Plotter** will struggle to keep up if you print every single point. That's why the receiver code above only prints one sample from every buffer "chunk." If you want to see the full wave at high speed, you'd usually store a large buffer and then "dump" it to the serial port all at once.
+
+### FFT (Fast Fourier Transform)
+
+Performing an **FFT (Fast Fourier Transform)** is where the magic happens. It allows the Receiver ESP32 to "look" at the incoming sine wave and calculate its frequency mathematically, rather than just drawing a line on a screen.
+
+To do this, we’ll use the `arduinoFFT` library. You will need to install it via the Arduino Library Manager (**Sketch > Include Library > Manage Libraries...** and search for "arduinoFFT").
+
+### The Receiver FFT Code (ESP32 B)
+
+This code collects a batch of samples (usually a power of 2, like 128 or 256) and converts that "Time Domain" data into "Frequency Domain" data.
+
+C++
+
+```
+#include "driver/i2s.h"
+#include "arduinoFFT.h"
+
+#define SAMPLE_RATE 44100
+#define SAMPLES 256             // Must be a power of 2
+#define SAMPLING_FREQ 44100     // Match the Sender
+
+double vReal[SAMPLES];
+double vImag[SAMPLES];
+ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, SAMPLES, SAMPLING_FREQ);
+
+void setup() {
+  Serial.begin(115200);
+  
+  // I2S Configuration (Same as previous Receiver code)
+  i2s_config_t i2s_config = {
+    .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX | I2S_MODE_ADC_BUILT_IN),
+    .sample_rate = SAMPLE_RATE,
+    .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
+    .channel_format = I2S_CHANNEL_FMT_ONLY_RIGHT,
+    .communication_format = I2S_COMM_FORMAT_STAND_I2S,
+    .dma_buf_count = 8,
+    .dma_buf_len = 64,
+    .use_apll = false
+  };
+
+  i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);
+  i2s_set_adc_mode(ADC_UNIT_1, ADC1_CHANNEL_6); // GPIO34
+  i2s_adc_enable(I2S_NUM_0);
+}
+
+void loop() {
+  // 1. Collect SAMPLES from I2S
+  for (int i = 0; i < SAMPLES; i++) {
+    uint16_t sample;
+    size_t bytes_read;
+    i2s_read(I2S_NUM_0, &sample, sizeof(sample), &bytes_read, portMAX_DELAY);
+    vReal[i] = (double)(sample & 0x0FFF); // Raw ADC value
+    vImag[i] = 0.0;                       // Imaginary part is 0 for real signals
+  }
+
+  // 2. Process FFT
+  FFT.windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD); // Smooth the data
+  FFT.compute(FFT_FORWARD);
+  FFT.complexToMagnitude();
+
+  // 3. Find the Peak Frequency
+  double peak = FFT.majorPeak();
+
+  // 4. Output to Serial Plotter
+  // This will show a spike at the frequency of your sine wave
+  for (int i = 2; i < (SAMPLES / 2); i++) { // Skip DC offset at index 0-1
+    Serial.println(vReal[i]); 
+  }
+  
+  Serial.print("Detected Peak: ");
+  Serial.print(peak);
+  Serial.println(" Hz");
+
+  delay(500); // Pause so we can read the text
+}
+```
+
+---
+
+### How to Interpret the Results
+
+When you open the **Serial Plotter**, you will no longer see a "moving" wave. Instead, you will see a **Spectrum**:
+
+- The **X-axis** represents Frequency (from 0 Hz to $Sampling Rate / 2$).
+    
+- The **Y-axis** represents Magnitude (how "strong" that frequency is).
+    
+- If your Sender is sending a 440 Hz tone, you will see a sharp vertical spike at the 440 Hz mark on the graph.
+    
+
+### Why use a "Window" (Hamming)?
+
+In the code, you'll see `FFT_WIN_TYP_HAMMING`. If your sample starts or ends in the middle of a wave cycle, it creates "spectral leakage" (noise in the frequency graph). The Windowing function fades the beginning and end of your sample buffer to zero to make the math cleaner and the peak sharper.
+
+---
+
+### The Experiment "Final Boss"
+
+Now that you have the infrastructure, you can try these variations:
+
+1. **Change the Sender Frequency:** Change `SINE_FREQ` to 1000.0 and watch the peak move to the right on the receiver's plot.
+    
+2. **Add Noise:** Try touching the signal wire with your finger. You'll see the "noise floor" (the messy small bumps at the bottom of the graph) jump up.
+    
+3. **Square Wave:** Change the Sender to output a square wave instead of a sine wave. In the FFT, you will see the **fundamental frequency** plus a series of "harmonics" (smaller peaks at 3x, 5x, and 7x the frequency).
