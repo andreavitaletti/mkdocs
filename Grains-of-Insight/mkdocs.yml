@@ -1,4 +1,4 @@
-site_name: A Short Course on IoT
+site_name: Grains of Insight - A Data Science Perspective on Rice in Gastronomy
 site_url: https://andreavitaletti.github.io/Grains-of-Insight
 
 # repo_url: https://github.com/andreavitaletti/IoT_short_course
@@ -31,22 +31,6 @@ plugins:
 
 nav:
     - Home: index.md
-    - Intro: intro.md
-    - Simulate a node: simulation.md
-    - A real node: real.md
-    - Sampling the Environment: sample.md
-    - Wireless Connectivity: wireless.md
-    - Digital Twin: twin.md
-    - An OS is better: os.md
-    - Energy matters: energy.md
-    - Security: security.md
-    - IoT and Web3: web3.md
-    - ML on node: ml.md
-    - Backend: backend.md
-    - Edge computing: edge.md
-    - Filters: filters.md
-    - Crowdsourcing: crowdsourcing.md
-    - IoT-lab: scale.md
 
 extra:
   social:
