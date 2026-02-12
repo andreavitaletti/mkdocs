@@ -11,20 +11,32 @@
 
 ![](assets/images/2024-12-16-17-01-45.png)
 
+## Reference Hardware
+
+You are free to use any hardware, but most of the examples will be based on the [ESP32](https://docs.espressif.com/projects/esp-idf/en/v5.1/esp32/hw-reference/index.html) 
+
+It is relatively cheap and powerful. 
+## Arduino IDE
+
 * One convenient possibility is to use [Arduino IDE](https://support.arduino.cc/hc/en-us/articles/360019833020-Download-and-install-Arduino-IDE) 
 * Since we are using the ESP32, you have to follow these [intructions](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
 * Select the DOIT ESP32 DEVKIT V1 as in the picture below and upload the code
 
 ![](assets/images/2023-07-18-13-48-40.png)
 
-* Another option is to use [PlatformIO](https://platformio.org/). In particular I like the [vscode extension](https://docs.platformio.org/en/latest/integration/ide/vscode.html). 
+## Platformio 
+
+* Another option is to use [PlatformIO](https://platformio.org/). In particular I like the [vscode extension](https://docs.platformio.org/en/latest/integration/ide/vscode.html).
+* [Quick Start](https://docs.platformio.org/en/latest/core/quickstart.html)
 * To work with the ESP32, this is the minimal setup for the platformio.ini file
 
 ```
 [env:esp32dev]
 platform = espressif32
-board = esp32dev
+;board = esp32dev
+board = esp32doit-devkit-v1
 framework = arduino
+; framework = espidf
 
 ; Custom Serial Monitor port
 monitor_port = /dev/ttyUSB0
