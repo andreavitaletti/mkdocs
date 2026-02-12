@@ -97,121 +97,206 @@ Depending on the sensor:
 
 ```python
 
-# tinyml_anomaly_train.py
-import numpy as np
 import tensorflow as tf
 
-# Simulated "normal" temperature data
-normal_data = np.random.normal(loc=25.0, scale=0.5, size=(1000, 1))  # 1000 samples
+import numpy as np
 
-# Autoencoder model
+# 1.0 Create dummy data (Normal = 20-30 degrees)
+#data = np.random.uniform(20, 30, (1000, 1)).astype('float32')
+
+# 1.1 Mean of 25 degrees, standard deviation of 2
+data = np.random.normal(25, 2, (1000, 1)).astype('float32')
+# Clip it to ensure it stays within reasonable physical bounds
+data = np.clip(normal_data, 15, 35)
+
+# 2. Define the Autoencoder
 model = tf.keras.Sequential([
-    tf.keras.layers.Input(shape=(1,)),
-    tf.keras.layers.Dense(8, activation='relu'),
-    tf.keras.layers.Dense(4, activation='relu'),
-    tf.keras.layers.Dense(8, activation='relu'),
-    tf.keras.layers.Dense(1)
+tf.keras.layers.Input(shape=(1,)),
+tf.keras.layers.Dense(4, activation='relu'), # Encoder
+tf.keras.layers.Dense(1, activation='linear') # Decoder
 ])
 
 model.compile(optimizer='adam', loss='mse')
-model.fit(normal_data, normal_data, epochs=50, batch_size=16)
+model.fit(data, data, epochs=50, verbose=0)
 
-# Save as TFLite model
+#######################################################################
+
+# 3. Convert to TFLit
 converter = tf.lite.TFLiteConverter.from_keras_model(model)
 tflite_model = converter.convert()
-with open("autoencoder.tflite", "wb") as f:
-    f.write(tflite_model)
 
-print("Model saved as autoencoder.tflite")
+# 4. Save as a C header file
+with open("model_data.h", "wb") as f:
+	f.write(b"const unsigned char autoencoder_model_data[] = {\n")
 
+	# Convert binary to hex strings
+	hex_data = [f"0x{b:02x}" for b in tflite_model]
+	f.write(", ".join(hex_data).encode())
+	f.write(b"\n};\n")
+	f.write(f"const unsigned int autoencoder_model_data_len = {len(tflite_model)};".encode())
 
 ```
-✅ This trains a tiny autoencoder on normal temperature values.
+
+This trains a tiny autoencoder on "normal" temperature values. A convenient way to make a test is to use Colab
+
+```python
+
+test_anomaly = np.array([[50.0]]) # Way too hot!
+prediction = model.predict(test_anomaly)
+print(f"Input: 50.0, Reconstruction: {prediction[0][0]}, Error: {abs(50.0 - prediction[0][0])}")
+
+```
+
+Adding **Normalization** is the "secret sauce" for neural networks.
+
+```python
+
+import numpy as np
+import tensorflow as tf
+
+# Define expected range
+MIN_TEMP = 10.0
+MAX_TEMP = 40.0
+
+def normalize(val):
+    return (val - MIN_TEMP) / (MAX_TEMP - MIN_TEMP)
+
+# Generate normal training data (20 to 30 degrees)
+raw_data = np.random.normal(25, 2, (1000, 1)).astype('float32')
+normalized_data = normalize(raw_data)
+
+# Simple Autoencoder
+model = tf.keras.Sequential([
+    tf.keras.layers.Input(shape=(1,)),
+    tf.keras.layers.Dense(8, activation='relu'), 
+    tf.keras.layers.Dense(1, activation='sigmoid') # Sigmoid forces output 0-1
+])
+
+model.compile(optimizer='adam', loss='mse')
+model.fit(normalized_data, normalized_data, epochs=50, verbose=0)
+
+# Export... (use the same conversion script as before)
+
+```
 
 ## Arduino / ESP32 – Load & Run TFLite Model
 
 ```c
 #include <Arduino.h>
-#include "TensorFlowLite.h"
-#include "model_data.h"  // autoencoder.tflite converted to a C array
+#include "model_data.h" // Must contain autoencoder_model_data and autoencoder_model_data_len
+
+// TensorFlow Lite Micro Headers
 #include "tensorflow/lite/micro/all_ops_resolver.h"
 #include "tensorflow/lite/micro/micro_interpreter.h"
+#include "tensorflow/lite/micro/micro_error_reporter.h"
 #include "tensorflow/lite/schema/schema_generated.h"
-#include "tensorflow/lite/version.h"
 
-// ----------------- Settings -----------------
+// --- Configuration ---
 #define SENSOR_PIN 34
 #define LED_PIN 2
-#define TFLITE_MODEL autoencoder_model_data
-#define TFLITE_MODEL_SIZE autoencoder_model_data_len
-#define ANOMALY_THRESHOLD 0.5  // Adjust based on training
 
-// ----------------- Globals -----------------
-const int kTensorArenaSize = 2 * 1024;
-uint8_t tensor_arena[kTensorArenaSize];
+// Normalization constants (Must match your Python script!)
+const float MIN_TEMP = 10.0;
+const float MAX_TEMP = 40.0;
+const float ANOMALY_THRESHOLD = 0.15; // 15% reconstruction error
 
-tflite::MicroInterpreter* interpreter;
-TfLiteTensor* input;
-TfLiteTensor* output;
+// --- TFLM Globals ---
+// Alignment is crucial for ESP32/ARM performance
+alignas(16) uint8_t tensor_arena[15 * 1024]; 
+
+tflite::MicroInterpreter* interpreter = nullptr;
+TfLiteTensor* input = nullptr;
+TfLiteTensor* output = nullptr;
+static tflite::MicroErrorReporter error_reporter;
 
 void setup() {
-  Serial.begin(115200);
-  pinMode(LED_PIN, OUTPUT);
+    Serial.begin(115200);
+    pinMode(LED_PIN, OUTPUT);
+    delay(1000);
 
-  // Load model
-  const tflite::Model* model = tflite::GetModel(TFLITE_MODEL);
-  if (model->version() != TFLITE_SCHEMA_VERSION) {
-    Serial.println("Model schema mismatch!");
-    while(1);
-  }
+    Serial.println("Initializing Anomaly Detector...");
 
-  // Ops resolver
-  static tflite::AllOpsResolver resolver;
+    // 1. Load the Model
+    const tflite::Model* model = tflite::GetModel(autoencoder_model_data);
+    if (model->version() != TFLITE_SCHEMA_VERSION) {
+        Serial.println("Model schema mismatch!");
+        while (1);
+    }
 
-  // Interpreter
-  static tflite::MicroInterpreter static_interpreter(model, resolver, tensor_arena, kTensorArenaSize);
-  interpreter = &static_interpreter;
-  interpreter->AllocateTensors();
+    // 2. Resolver (Registers the layers like Dense, Relu)
+    static tflite::AllOpsResolver resolver;
 
-  input = interpreter->input(0);
-  output = interpreter->output(0);
+    // 3. Create Interpreter
+    static tflite::MicroInterpreter static_interpreter(
+        model, resolver, tensor_arena, sizeof(tensor_arena), &error_reporter);
+    
+    interpreter = &static_interpreter;
+
+    // 4. Allocate memory for tensors
+    TfLiteStatus allocate_status = interpreter->AllocateTensors();
+    if (allocate_status != kTfLiteOk) {
+        Serial.println("AllocateTensors() failed! Increase arena size.");
+        while (1);
+    }
+
+    // 5. Get pointers to input/output buffers
+    input = interpreter->input(0);
+    output = interpreter->output(0);
+
+    Serial.println("System Ready. Monitoring Sensor...");
 }
 
 void loop() {
-  // --- Read sensor ---
-  float temp = analogRead(SENSOR_PIN) * (3.3 / 4095.0) * 10 + 20;  // example scaling
-  input->data.f[0] = temp;
+    // --- 1. Data Acquisition & Scaling ---
+    // Read 12-bit analog (0-4095) and convert to Celsius (example math)
+    float raw_voltage = analogRead(SENSOR_PIN) * (3.3 / 4095.0);
+    float raw_temp = (raw_voltage * 10.0) + 20.0; 
 
-  // --- Run inference ---
-  TfLiteStatus status = interpreter->Invoke();
-  if (status != kTfLiteOk) {
-    Serial.println("Invoke failed");
-    return;
-  }
+    // Normalize to 0.0 - 1.0 (Same as Python!)
+    float normalized_input = (raw_temp - MIN_TEMP) / (MAX_TEMP - MIN_TEMP);
+    
+    // Safety clip to keep input within 0.0 and 1.0
+    if (normalized_input < 0.0f) normalized_input = 0.0f;
+    if (normalized_input > 1.0f) normalized_input = 1.0f;
 
-  float recon = output->data.f[0];
-  float anomaly_score = abs(temp - recon);
+    // --- 2. Inference ---
+    input->data.f[0] = normalized_input;
 
-  Serial.print("Temp: "); Serial.print(temp);
-  Serial.print(" | Recon: "); Serial.print(recon);
-  Serial.print(" | Score: "); Serial.println(anomaly_score);
+    TfLiteStatus invoke_status = interpreter->Invoke();
+    if (invoke_status != kTfLiteOk) {
+        Serial.println("Inference failed!");
+        return;
+    }
 
-  // --- Check anomaly ---
-  if (anomaly_score > ANOMALY_THRESHOLD) {
-    digitalWrite(LED_PIN, HIGH);  // anomaly detected
-  } else {
-    digitalWrite(LED_PIN, LOW);
-  }
+    float normalized_output = output->data.f[0];
 
-  delay(200);  // sample every 200ms
+    // --- 3. Anomaly Logic ---
+    // Reconstruction error = |Input - Output|
+    float anomaly_score = abs(normalized_input - normalized_output);
+
+    // Convert reconstruction back to Celsius for display
+    float recon_temp = (normalized_output * (MAX_TEMP - MIN_TEMP)) + MIN_TEMP;
+
+    // --- 4. Reporting ---
+    Serial.print("Real: "); Serial.print(raw_temp);
+    Serial.print(" | Recon: "); Serial.print(recon_temp);
+    Serial.print(" | Score: "); Serial.println(anomaly_score, 4);
+
+    if (anomaly_score > ANOMALY_THRESHOLD) {
+        Serial.println(">>> ANOMALY DETECTED! <<<");
+        digitalWrite(LED_PIN, HIGH);
+    } else {
+        digitalWrite(LED_PIN, LOW);
+    }
+
+    delay(500); // 2Hz sampling
 }
+
 ```
 
-1. `model_data.h` can be generated from `autoencoder.tflite` using:
-`xxd -i autoencoder.tflite > model_data.h`
-2. `ANOMALY_THRESHOLD` should be tuned based on reconstruction error on validation data.
-3. Sensor reading is simulated here — replace with your **real sensor** (temperature, accelerometer, etc.).
-4. Very lightweight: **fits ESP32 with ~2 KB tensor arena**.
+
+1. In the context of an **Autoencoder**, an anomaly is detected when the model **fails to recreate the input accurately**. Anomaly Score == ∣∣x−x^∣∣ (see below)
+2. Very lightweight: **fits ESP32 with ~2 KB tensor arena**.
 
 ## Why Autoencoder?
 
@@ -305,7 +390,7 @@ Think of it like this:
 - Can extend to **multivariate input** (temperature + humidity + vibration)
 - Threshold on reconstruction error decides **anomaly vs normal**
 
-![reconstruction_error.png](IoT_short_course/docs/assets/images/reconstruction_error.png)
+![reconstruction_error.png](assets/images/reconstruction_error.png)
 
-![signal_vs_reconstruction-2026212474173.png](IoT_short_course/docs/assets/images/signal_vs_reconstruction-2026212474173.png)
+![signal_vs_reconstruction-2026212474173.png](assets/images/signal_vs_reconstruction-2026212474173.png)
 
