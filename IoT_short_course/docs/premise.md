@@ -1,0 +1,24 @@
+If you ask multiple people what the Internet of Things (IoT) is, you will likely get many different answers. Devices such as a Raspberry Pi, Jetson Nano, Arduino Uno, or ESP32 are all legitimately considered IoT devices, but they differ significantly in capabilities.
+
+The Raspberry Pi, Jetson Nano, and Arduino Uno Q can handle relatively complex tasks, including AI workloads, whereas the resource-constrained ESP32 cannot easily achieve the same performance.
+
+In this course, we make an **unconditional choice**: students will work with the **ESP32 powered by a battery**
+
+**Why?**
+
+- It presents a greater challenge, encouraging careful design.
+- Solutions developed for the resource-limited ESP32 will generally scale easily to more powerful devices.
+- The battery force you to design power efficient solutions
+- From a teaching perspective, it provides the most valuable learning experience, emphasising efficiency and thoughtful system design.
+
+Regardless of the fact that, for simplicity, you might use a more resource-demanding (“non-IoT‑friendly”) technology, we expect you to **demonstrate a thoughtful design process and provide a prototype** that shows how you optimised limited resources to meet your application’s requirements.
+
+It is well known that Wi-Fi is not particularly IoT-friendly, as it consumes a significant amount of energy. At the same time, most ESP32 devices natively support Wi-Fi, making it a very convenient choice.
+
+While we encourage you to challenge yourself with more IoT-friendly technologies (e.g., LoRa), using Wi-Fi is perfectly acceptable **provided that you demonstrate the following**:
+
+1. Measure and report the energy consumption of your solution.
+2. Discuss whether your design meets the requirements of your application, including a comparison with more efficient alternatives, at least theoretically.
+3. Optimize your design to reduce energy consumption, applying energy-aware mechanisms such as duty cycling, sleep modes, or other techniques.
+
+This approach ensures that even when using convenient technologies like Wi-Fi, you remain mindful of IoT constraints and practice efficient design principles.
