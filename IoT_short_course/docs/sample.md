@@ -115,7 +115,7 @@ void PrintVector(double *vData, uint16_t bufferSize, uint8_t scaleType)
 
 ```
 
-Note that FFT.majorPeak() ``Returns an estimation of the dominant frequency according to the interpolation of the biggest peak found on the magnitude array.`` which is  503.166771 while the max frequency of the a peak is arodun 1200 as expected. Indeed the Computed magnitudes are:
+Note that FFT.majorPeak() ``Returns an estimation of the dominant frequency according to the interpolation of the biggest peak found on the magnitude array`` which is  503.166771 while the max frequency of the a peak is around 1200 as expected. Indeed the Computed magnitudes are:
 
 ```
 0.000000Hz 19.3725
