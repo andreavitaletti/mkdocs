@@ -7,8 +7,7 @@ Usually IoT applications need to observe a physical phenomenon. This is done by 
 
 ![](assets/images/2024-12-17-04-19-02.png)
 
-[Colab Notebook on FFT](https://colab.research.google.com/drive/1nuZx095lzt2d9h42N7yNu13crGg9eS9A
-)
+[Colab Notebook on FFT](https://colab.research.google.com/drive/1nuZx095lzt2d9h42N7yNu13crGg9eS9A)
 
 [arduinoFFT library](https://github.com/kosme/arduinoFFT)
 
@@ -221,8 +220,15 @@ The two ESP32 are connected as in the following picture
 ![](assets/images/2024-12-16-17-23-45.png)
 
 The node on the left works as a **virtual signal**, it generates a signal using the [DAC](https://www.electronicwings.com/esp32/dac-digital-to-analog-converter-esp32) on PIN 25. 
-The node on the right sample the generated signal by the [ADC](https://www.electronicwings.com/esp32/adc-of-esp32) and print the [FFT](). 
+The node on the right sample the generated signal by the [ADC](https://www.electronicwings.com/esp32/adc-of-esp32)  on pin 34
 
+| **ESP32 A (Sender)** | **Connection Type**   | **ESP32 B (Receiver)** | **Purpose**      |
+| -------------------- | --------------------- | ---------------------- | ---------------- |
+| **GPIO25** (DAC1)    | $\rightarrow$         | **GPIO34** (ADC1)      | Signal Path      |
+| **GND**              | $\longleftrightarrow$ | **GND**                | Common Reference |
+| **USB Power**        |                       | **USB Power**          | Power Supply     |
+
+<!--
 ### The Signal Generator
 
 ```c
@@ -295,57 +301,7 @@ void loop() {
 
 [source code](https://github.com/andreavitaletti/documents/tree/main/PlatformIO/Projects/virtual%20sensor)
 
-## A possible alternative using the PC
-
-![](assets/images/2024-12-17-04-23-56.png)
-
-[ref](https://forum.arduino.cc/t/how-to-read-data-from-audio-jack/458301/3)
-
-``` python3 -m pip install sounddevice ```
-
-```python
-
-# Use the sounddevice module
-# http://python-sounddevice.readthedocs.io/en/0.3.10/
-
-import numpy as np
-import sounddevice as sd
-import time
-
-# Samples per second
-sps = 44100
-
-# Frequency / pitch
-freq_hz = 2
-
-# Duration
-duration_s = 5.0
-
-# Attenuation so the sound is reasonable
-atten = 1.0 # 0.3
-
-# NumpPy magic to calculate the waveform
-each_sample_number = np.arange(duration_s * sps)
-waveform = np.sin(2 * np.pi * each_sample_number * freq_hz / sps)
-waveform_quiet = waveform * atten
-
-# Play the waveform out the speakers
-sd.play(waveform_quiet, sps)
-time.sleep(duration_s)
-sd.stop()
-
-```
-
-[Online Tone Generator](https://onlinetonegenerator.com/)
-
-
-### Wiring Diagram
-
-| **ESP32 A (Sender)** | **Connection Type**   | **ESP32 B (Receiver)** | **Purpose**      |     |
-| -------------------- | --------------------- | ---------------------- | ---------------- | --- |
-| **GPIO25** (DAC1)    | $\rightarrow$         | **GPIO34** (ADC1)      | Signal Path      |     |
-| **GND**              | $\longleftrightarrow$ | **GND**                | Common Reference |     |
-| **USB Power**        |                       | **USB Power**          | Power Supply     |     |
+-->
 ### ESP32 A: The Generator (Sender)
 
 This code uses a pre-calculated lookup table (LUT) to store sine values. This is much more efficient than calculating `sin()` on the fly, allowing for a smoother signal.
@@ -374,6 +330,19 @@ void loop() {
 }
 ```
 
+The frequency is calculated by how long it takes to step through all **256 points** of the lookup table.
+
+- **Delay per step:** `100 microseconds` ($\mu s$)
+- **Total steps:** 256
+- **Time for 1 full wave ($T$):** $256 \times 100 \mu s = 25,600 \mu s$ (or **0.0256 seconds**)
+
+To find the frequency ($f$), we use:
+
+$$f = \frac{1}{T} = \frac{1}{0.0256} \approx 39 \text{ Hz}$$
+
+> **Note:** The actual frequency will be slightly lower (closer to **37-38 Hz**) because the `dacWrite()` function and the `for` loop overhead add a few extra microseconds per step.
+
+---
 ### ESP32 B: The Receiver (Sampler)
 
 This code reads the signal and prints it to the Serial Plotter. Note the use of `analogReadAttenuation`, which sets the voltage range to approximately 0V–3.1V to better match the DAC output.
@@ -402,41 +371,14 @@ void loop() {
 }
 ```
 
-### A Quick Tip on Performance
 
 The ESP32's `analogRead()` takes about **10µs to 20µs**. If you find the wave looks "steppy" or jagged, it’s usually due to electrical noise or the sampling interval. If you want to go faster (into the kHz range), the `dacWrite` method used here will eventually hit a bottleneck.
-
-### Simple Analysis 
-
-### 1. The Generator Frequency (ESP32 A)
-
-In the code I provided, the frequency is calculated by how long it takes to step through all **256 points** of the lookup table.
-
-- **Delay per step:** `100 microseconds` ($\mu s$)
-    
-- **Total steps:** 256
-    
-- **Time for 1 full wave ($T$):** $256 \times 100 \mu s = 25,600 \mu s$ (or **0.0256 seconds**)
-    
-
-To find the frequency ($f$), we use:
-
-$$f = \frac{1}{T} = \frac{1}{0.0256} \approx 39 \text{ Hz}$$
-
-> **Note:** The actual frequency will be slightly lower (closer to **37-38 Hz**) because the `dacWrite()` function and the `for` loop overhead add a few extra microseconds per step.
-
----
-
-### 2. The Sampler Frequency (ESP32 B)
 
 The sampling frequency ($f_s$) is how many times per second the ADC "looks" at the incoming voltage.
 
 - **Delay per sample:** `500 microseconds` ($\mu s$)
-    
 - **ADC conversion time:** approx. `10-20 microseconds`
-    
 - **Serial print time:** approx. `50-100 microseconds` (at 115200 baud)
-    
 
 Total time per sample is roughly **600 $\mu s$**.
 
@@ -444,30 +386,107 @@ $$f_s = \frac{1}{600 \times 10^{-6}} \approx 1,666 \text{ Hz} \text{ (or 1.6 kHz
 
 ---
 
-### 3. Is this a good match?
+### Is sampling frequency sufficient?
 
 According to the **Nyquist-Shannon Sampling Theorem**, your sampling frequency must be at least **twice** the signal frequency to avoid "aliasing" (where the signal looks like a completely different wave).
 
-- **Your Signal:** ~39 Hz
-    
-- **Your Sampler:** ~1,666 Hz
-    
+- **Signal:** ~39 Hz
+- **Sampler:** ~1,666 Hz
 - **Oversampling Ratio:** ~42x
-    
 
-This is excellent! A 42x oversampling ratio means you will get a very high-fidelity reconstruction of the sine wave on your Serial Plotter.
+A 42x oversampling ratio means you will get a very high-fidelity reconstruction of the sine wave on your Serial Plotter.
 
+## The Sampler in  FreeRTOS
+
+Two tasks, one samples the environment the other perform a computation on the samples
+
+```c++
+
+#include <Arduino.h>
+
+// Configuration
+#define ADC_PIN 34
+#define WINDOW_SIZE 20  // Number of samples to average
+#define QUEUE_LEN 50    // Size of the data buffer
+
+// Handle for the Queue
+QueueHandle_t adcQueue;
+
+// Task 1: High-frequency sampling
+void taskSampleADC(void *pvParameters) {
+    for (;;) {
+        int rawValue = analogRead(ADC_PIN);
+        
+        // Send sample to queue (don't block if full to keep timing consistent)
+        xQueueSend(adcQueue, &rawValue, 0);
+        
+        // Sampling at ~2kHz (500us)
+        vTaskDelay(pdMS_TO_TICKS(1)); 
+        // Note: For microsecond precision, use micros() timing or a hardware timer
+    }
+}
+
+// Task 2: Computation and Reporting
+void taskAverageADC(void *pvParameters) {
+    int receivedValue;
+    long sum = 0;
+    int count = 0;
+
+    for (;;) {
+        // Wait for data from the queue (block indefinitely until data arrives)
+        if (xQueueReceive(adcQueue, &receivedValue, portMAX_DELAY)) {
+            sum += receivedValue;
+            count++;
+
+            // Once we have enough samples, calculate and print
+            if (count >= WINDOW_SIZE) {
+                float average = (float)sum / WINDOW_SIZE;
+                
+                Serial.print("Min:0,Max:4095,AvgSignal:");
+                Serial.println(average);
+
+                // Reset for next window
+                sum = 0;
+                count = 0;
+            }
+        }
+    }
+}
+
+void setup() {
+    Serial.begin(115200);
+    analogSetAttenuation(ADC_11db);
+
+    // Create the queue to hold 'int' types
+    adcQueue = xQueueCreate(QUEUE_LEN, sizeof(int));
+
+    if (adcQueue != NULL) {
+        // Create Producer Task (Higher priority)
+        xTaskCreate(taskSampleADC, "SampleTask", 2048, NULL, 2, NULL);
+        
+        // Create Consumer Task (Lower priority)
+        xTaskCreate(taskAverageADC, "AverageTask", 2048, NULL, 1, NULL);
+    }
+}
+
+void loop() {
+    // FreeRTOS uses the tasks; loop() stays empty or handles low-priority UI
+    vTaskDelete(NULL); 
+}
+
+```
+
+---
 ### How to go faster
 
-If you want to reach **Kilohertz** signal frequencies, the `delayMicroseconds()` approach becomes unreliable because the "background noise" of the code (the time it takes to process the loop) becomes a large percentage of the total time. That is when we switch to **I2S (Inter-IC Sound)**, which uses a hardware clock to "push" data to the DAC or "pull" it from the ADC at exact intervals, like a metronome.
+In previous sections we achieve Hz frequencies, If you want to reach **Kilohertz** signal frequencies, the `delayMicroseconds()` approach becomes unreliable because the "background noise" of the code (the time it takes to process the loop) becomes a large percentage of the total time. That is when we switch to **I2S (Inter-IC Sound)**, which uses a hardware clock to "push" data to the DAC or "pull" it from the ADC at exact intervals, like a metronome.
 
-Using **I2S (Inter-IC Sound)** is like moving from a manual gearbox to an automatic one. Instead of the CPU manually toggling the DAC or reading the ADC in a loop, the I2S hardware uses a dedicated clock to stream data in the background. This allows for frequencies in the **kilohertz (kHz)** range with perfect timing.
+Instead of the CPU manually toggling the DAC or reading the ADC in a loop, the I2S hardware uses a dedicated clock to stream data in the background. This allows for frequencies in the **kilohertz (kHz)** range with perfect timing.
 
 On the ESP32, the I2S peripheral can be "routed" directly to the internal DAC and ADC.
 
 ---
-
-### 1. The High-Speed Generator (Sender)
+### The High-Speed Generator (Sender)
 
 This code configures I2S to "pump" a sine wave out of the DAC at a high sample rate. Note that for I2S to DAC, we use a 16-bit buffer even though the DAC is 8-bit (the hardware expects it this way).
 
@@ -516,7 +535,7 @@ void loop() {
 
 ---
 
-### 2. The High-Speed Sampler (Receiver)
+### The High-Speed Sampler (Receiver)
 
 The receiver uses I2S to read from the ADC. This is much faster than `analogRead()`.
 
@@ -583,9 +602,7 @@ To do this, we’ll use the `arduinoFFT` library. You will need to install it vi
 
 This code collects a batch of samples (usually a power of 2, like 128 or 256) and converts that "Time Domain" data into "Frequency Domain" data.
 
-C++
-
-```
+```c++
 #include "driver/i2s.h"
 #include "arduinoFFT.h"
 
@@ -668,12 +685,53 @@ In the code, you'll see `FFT_WIN_TYP_HAMMING`. If your sample starts or ends in 
 
 ---
 
-### The Experiment "Final Boss"
+### Other experiments
 
-Now that you have the infrastructure, you can try these variations:
 
-1. **Change the Sender Frequency:** Change `SINE_FREQ` to 1000.0 and watch the peak move to the right on the receiver's plot.
-    
+1. **Change the Sender Frequency:** Change `SINE_FREQ` to 1000.0 and watch the peak move to the right on the receiver's plot.    
 2. **Add Noise:** Try touching the signal wire with your finger. You'll see the "noise floor" (the messy small bumps at the bottom of the graph) jump up.
-    
 3. **Square Wave:** Change the Sender to output a square wave instead of a sine wave. In the FFT, you will see the **fundamental frequency** plus a series of "harmonics" (smaller peaks at 3x, 5x, and 7x the frequency).
+
+## A possible alternative using the PC
+
+![](assets/images/2024-12-17-04-23-56.png)
+
+[ref](https://forum.arduino.cc/t/how-to-read-data-from-audio-jack/458301/3)
+
+``` python3 -m pip install sounddevice ```
+
+```python
+
+# Use the sounddevice module
+# http://python-sounddevice.readthedocs.io/en/0.3.10/
+
+import numpy as np
+import sounddevice as sd
+import time
+
+# Samples per second
+sps = 44100
+
+# Frequency / pitch
+freq_hz = 2
+
+# Duration
+duration_s = 5.0
+
+# Attenuation so the sound is reasonable
+atten = 1.0 # 0.3
+
+# NumpPy magic to calculate the waveform
+each_sample_number = np.arange(duration_s * sps)
+waveform = np.sin(2 * np.pi * each_sample_number * freq_hz / sps)
+waveform_quiet = waveform * atten
+
+# Play the waveform out the speakers
+sd.play(waveform_quiet, sps)
+time.sleep(duration_s)
+sd.stop()
+
+```
+
+[Online Tone Generator](https://onlinetonegenerator.com/)
+
