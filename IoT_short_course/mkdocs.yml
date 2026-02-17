@@ -31,6 +31,7 @@ plugins:
 
 nav:
     - Home: index.md
+    - Premise: premise.md
     - Intro: intro.md
     - Simulate a node: simulation.md
     - A real node: real.md

@@ -10,7 +10,7 @@ By building a **Digital Twin**, we aren't just syncing the time; we are creating
 
 To model the drift, the Twin needs to observe the relationship between the **Physical Clock** (ESP32) and the **Reference Clock** (PC).
 
-![image-2026231832291.png](IoT_short_course/docs/assets/images/image-2026231832291.png)
+![image-2026231832291.png](assets/images/image-2026231832291.png)
 
 ---
 
@@ -20,7 +20,7 @@ We assume the clock drift is linear over short-to-medium durations. The relation
 
 $$t_{esp} = (1 + R) \cdot t_{ref} + \phi$$
 
-![image-2026231539281.png](IoT_short_course/docs/assets/images/image-2026231539281.png)
+![image-2026231539281.png](assets/images/image-2026231539281.png)
 
 Where:
 

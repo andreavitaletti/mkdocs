@@ -22,3 +22,95 @@ A simple code to establish a first connection si available [here](https://github
 It is basically the ttn-otaa example available in the [rgot-org/TTN_esp32](https://registry.platformio.org/libraries/rgot-org/TTN_esp32/examples) library.
 
 ![](assets/images/2025-01-18-08-11-47.png)
+
+
+## Ad-hoc networking
+
+## 1️⃣ **ESP-NOW (ESP32 Proprietary, Peer-to-Peer Mesh)**
+
+https://github.com/espressif/esp-now/tree/master
+
+A low-latency, connectionless, peer-to-peer protocol developed by Espressif. It allows multiple ESP32 devices to communicate directly without Wi-Fi infrastructure. Supports broadcast and unicast messages.
+    
+- **Features:**
+    - Low-power, fast transmission.
+    - Multi-hop is possible with custom routing logic.
+    - Can coexist with Wi-Fi AP/STA modes.
+
+- **Arduino Implementation:**
+    - `esp_now.h` library included in Arduino-ESP32 framework.
+    - Simple example for sending sensor data across nodes: each node knows neighbors and relays messages.
+
+**Pros:** Very fast, low-power, native to ESP32.  
+**Cons:** Multi-hop requires you to implement your own routing; no automatic self-organization.
+
+---
+
+## 2️⃣ **painlessMesh**
+
+https://gitlab.com/painlessMesh/painlessMesh
+
+An open-source **mesh networking library** for ESP8266/ESP32 using Arduino framework. Implements **self-organizing, multi-hop mesh** out-of-the-box.
+    
+- **Features:**
+    - Each node discovers neighbors automatically.
+    - Multi-hop routing included.
+    - Messages propagate reliably across mesh.
+    - Supports dynamic nodes joining/leaving.
+    
+- **Arduino Implementation:**
+    - Install the `painlessMesh` library from Arduino Library Manager.
+    - Example usage: `mesh.sendBroadcast("Hello World");`
+
+**Pros:** Full multi-hop, self-healing mesh, easy to integrate.  
+**Cons:** Limited to local area (Wi-Fi range ~100–200 m per hop), message size constraints (~1000 bytes).
+
+---
+
+## 3️⃣ **ESP-MESH (Espressif Official Wi-Fi Mesh)**
+
+Espressif’s **official Wi-Fi mesh protocol**. Fully multi-hop and self-organizing. Designed for **large-scale ESP32 networks**.
+    
+- **Features:**
+    - Dynamic routing and node discovery.
+    - Supports up to hundreds of nodes.
+    - Compatible with standard Wi-Fi devices at the root (bridge to AP).
+    
+- **Arduino Implementation:**
+    
+    - ESP-IDF has full support; Arduino-ESP32 includes `esp_mesh.h` examples.
+    - Example: `mesh.init()` initializes the mesh, nodes auto-connect.
+
+**Pros:** Scales well, official support, self-healing.  
+**Cons:** Slightly higher memory footprint, more complex API than painlessMesh.
+
+---
+
+## 4️⃣ **Custom Multi-Hop Protocols Using Wi-Fi Ad-Hoc Mode**
+
+ESP32 supports **Wi-Fi Station + Soft-AP mode**, which allows you to implement **ad-hoc networks manually**. Each node can act as a relay.
+    
+- **Implementation Ideas:**
+    
+    - Each node maintains a neighbor table.
+    - Implement a simple routing protocol like **flooding**, **AODV**, or **OLSR-lite**.
+    - Use Arduino Wi-Fi libraries (`WiFi.h`) for communication.
+- **Pros:** Full flexibility; can implement experimental protocols.
+- **Cons:** You must implement routing, discovery, retries manually.
+    
+
+---
+
+## 🔹 Comparison Table
+
+|Protocol / Library|Multi-Hop|Self-Organizing|Arduino Support|Ease of Use|Best Use Case|
+|---|---|---|---|---|---|
+|ESP-NOW|Optional (manual)|No|Yes (`esp_now.h`)|Easy|Low-latency peer-to-peer|
+|painlessMesh|Yes|Yes|Yes (Library)|Easy|Small-to-medium mesh networks|
+|ESP-MESH|Yes|Yes|Yes (Arduino wrapper)|Medium|Large-scale, self-healing mesh|
+|Custom Wi-Fi Ad-hoc|Yes|Yes (if implemented)|Yes|Hard|Research / experimental protocols|
+
+---
+
+💡 **Tip:**  
+For most IoT courses or projects on ESP32, **painlessMesh** is the easiest way to teach **true multi-hop, self-organizing networks** in Arduino. ESP-MESH is more production-ready but heavier.

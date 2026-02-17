@@ -29,7 +29,7 @@ plugins:
 nav:
     - About me: index.md
     - Blockchain: BC
-    - Startup: Startup
+    - Startup: Startup/index.md
     - IoT: https://andreavitaletti.github.io/IoT_short_course/
     - links: links.md
     - thesis: thesis.md
