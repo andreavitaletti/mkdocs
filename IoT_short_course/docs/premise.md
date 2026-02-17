@@ -15,10 +15,15 @@ Regardless of the fact that, for simplicity, you might use a more resource-deman
 
 It is well known that Wi-Fi is not particularly IoT-friendly, as it consumes a significant amount of energy. At the same time, most ESP32 devices natively support Wi-Fi, making it a very convenient choice.
 
-While we encourage you to challenge yourself with more IoT-friendly technologies (e.g., LoRa), using Wi-Fi is perfectly acceptable **provided that you demonstrate the following**:
+While we encourage you to challenge yourself with more IoT-friendly technologies (e.g., LoRa), using WiFi is perfectly acceptable **provided that you demonstrate the following**:
 
-1. Measure and report the energy consumption of your solution.
-2. Discuss whether your design meets the requirements of your application, including a comparison with more efficient alternatives, at least theoretically.
-3. Optimize your design to reduce energy consumption, applying energy-aware mechanisms such as duty cycling, sleep modes, or other techniques.
+1. You clarify what is the most suitable technology and you are aware of pros and cons;
+2. You measure and report the energy consumption of your solution employing WiFi;
+3. You discuss whether your design meets the requirements of your application;
+4. You optimise your design to meet the requirements (e.g. applying energy-aware mechanisms such as duty cycling, sleep modes, or other techniques) under **suitable assumptions** (e.g. assuming you are using LoRa instead of WiFi).
 
 This approach ensures that even when using convenient technologies like Wi-Fi, you remain mindful of IoT constraints and practice efficient design principles.
+
+!!! note
+
+    We value the process and the right questions with sound answers more than the final product.
