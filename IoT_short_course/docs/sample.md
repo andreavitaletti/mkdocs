@@ -3,12 +3,13 @@
 
 Usually IoT applications need to observe a physical phenomenon. This is done by sampling.
 
-## Fast Fourier Transform (FFT)
+## Sampling? How often: Fast Fourier Transform (FFT)
 
 ![](assets/images/2024-12-17-04-19-02.png)
 
 [Colab Notebook on FFT](https://colab.research.google.com/drive/1nuZx095lzt2d9h42N7yNu13crGg9eS9A)
 
+<!--
 [arduinoFFT library](https://github.com/kosme/arduinoFFT)
 
 In the following [example](https://github.com/kosme/arduinoFFT/blob/master/Examples/FFT_01/FFT_01.ino) the signal is generated internally by the node.
@@ -210,8 +211,8 @@ void loop()
   // delay(2000); /* Repeat after delay */
 }
 ```
-
-## A virtual signal
+--> 
+## A simple experimental setup
 
 A virtual signal is a practical approach to generate arbitrary signals using one EPS32 as the signal generator, and the other as the sampler. 
 
@@ -300,8 +301,8 @@ void loop() {
 ![](assets/images/2024-12-17-03-53-48.png)
 
 [source code](https://github.com/andreavitaletti/documents/tree/main/PlatformIO/Projects/virtual%20sensor)
-
 -->
+
 ### ESP32 A: The Generator (Sender)
 
 This code uses a pre-calculated lookup table (LUT) to store sine values. This is much more efficient than calculating `sin()` on the fly, allowing for a smoother signal.
