@@ -24,6 +24,12 @@ While we encourage you to challenge yourself with more IoT-friendly technologies
 
 This approach ensures that even when using convenient technologies like Wi-Fi, you remain mindful of IoT constraints and practice efficient design principles.
 
+<!--
 !!! note
 
     We value the process and the right questions with sound answers more than the final product.
+-->
+
+> [!NOTE]
+>We value the process and the right questions with sound answers more than the final product.
+
