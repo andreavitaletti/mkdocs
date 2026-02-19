@@ -12,6 +12,94 @@ The following picture from [https://doi.org/10.3390/s18072104 ](https://doi.org/
 * [ESP32 Deep Sleep Mode](https://www.electronicwings.com/esp32/esp32-deep-sleep-mode)
 * [ESP32 Deep Sleep with Arduino IDE and Wake Up Sources](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/)
 
+## Deep Sleep wakeup example
+
+1. **Deep Sleep:** The chip is off. Only the RTC controller watches the GPIO (button).
+2. **Wake Up:** The button is pressed. The ESP32 boots.
+3. **Setup:** We check _why_ we woke up. If it was the button, we start our tasks.
+4. **Task 1:** Handles user interaction or logic.
+5. **Task 2:** Performs the "Monitoring Activity" (e.g., reading a sensor).
+6. **Back to Sleep:** Once the tasks finish their job, they call for deep sleep again.
+
+
+```c++
+#include <Arduino.h>
+
+#define BUTTON_PIN GPIO_NUM_27 
+
+// This variable survives deep sleep
+RTC_DATA_ATTR bool should_monitor = false;
+
+// Task 2: The Monitor
+void taskMonitor(void *pvParameters) {
+  if (should_monitor) {
+    Serial.println("[Task 2] Monitoring activity started...");
+    // Simulate sensor reading or WiFi upload
+    delay(2000); 
+    Serial.println("[Task 2] Monitoring complete.");
+  }
+  
+  Serial.println("Mission accomplished. Going back to deep sleep in 1 second.");
+  delay(1000);
+  
+  // Prepare for next sleep
+  esp_sleep_enable_ext0_wakeup(BUTTON_PIN, 0); // Wake when button is LOW (pressed)
+  esp_deep_sleep_start();
+}
+
+// Task 1: The Coordinator
+void taskCoordinator(void *pvParameters) {
+  Serial.println("[Task 1] Checking wake-up reason...");
+  
+  esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
+
+  if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT0) {
+    Serial.println("[Task 1] Woke up by Button! Signaling Task 2.");
+    should_monitor = true;
+  } else {
+    Serial.println("[Task 1] Normal boot or other wake source.");
+    should_monitor = false;
+  }
+
+  // Task 1 can now delete itself or wait
+  vTaskDelete(NULL);
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
+  // Create Task 1: Check why we woke up
+  xTaskCreate(taskCoordinator, "Coordinator", 2048, NULL, 2, NULL);
+
+  // Create Task 2: Perform monitoring if needed
+  xTaskCreate(taskMonitor, "Monitor", 2048, NULL, 1, NULL);
+}
+
+void loop() {
+  // Empty. Everything happens in tasks and then deep sleep.
+}
+```
+
+### Ensuring Task Completion
+
+If you put the sleep command in `setup()`, the ESP32 might go to sleep before the FreeRTOS scheduler even has a chance to start your tasks.
+
+- **The Problem:** `setup()` runs, creates tasks, and then hits the "sleep" command immediately. The tasks never actually execute because the CPU powers down.
+    
+- **The Solution:** By putting the sleep command at the end of the **Monitoring Task**, we ensure that the "work" is actually finished before the lights go out.
+
+### Key Components Explained
+
+|**Feature**|**Function**|
+|---|---|
+|**`RTC_DATA_ATTR`**|Stores variables in the RTC slow memory. This is the only way Task 2 knows what Task 1 found out after a sleep cycle.|
+|**`esp_sleep_enable_ext0_wakeup`**|Configures a specific GPIO to trigger the "wake up" signal while the rest of the chip is powered down.|
+|**`esp_deep_sleep_start()`**|The "Off" switch. Execution stops here and the power draw drops to ~10µA.|
+### Important Real-World Note
+
+In a true FreeRTOS environment, if you want "Task 1" to trigger "Task 2" **while the chip is already awake**, you would use a **Semaphore** or **Event Group**. However, because Deep Sleep triggers a full reboot, the "trigger" here is actually the CPU reset and the shared RTC memory.
+
 ## Powering the ESP32
 
 To power the ESP32 you can use [several methods](https://esp32io.com/tutorials/how-to-power-esp32) 
@@ -158,16 +246,16 @@ void loop() {} // We don't need loop as ESP32 will initilize each time.
 
 ```
 
-We use [Better Serial Pltter](https://github.com/nathandunk/BetterSerialPlotter) to visualize the data.
+We use [Better Serial Plotter](https://github.com/nathandunk/BetterSerialPlotter) to visualize the data.
 
 ![](assets/images/2025-04-11-10-45-59.png)
 
 [source code](https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/power_simple)
 
-!!! example "exercise" 
-    
-    Write a simple code  that  mimics the diagram at the beginning of this section of a typical sensor working scenario and measure the consumption of each activity
+A powerful alternative is [Serial-Studio](https://github.com/Serial-Studio/Serial-Studio?tab=readme-ov-file)
 
+> [!EXERCISE]
+>Write a simple code  that  mimics the diagram at the beginning of this section of a typical sensor working scenario and measure the consumption of each activity
 ## Energy Harvesting
 
 [Power ESP32/ESP8266 with Solar Panels](https://randomnerdtutorials.com/power-esp32-esp8266-solar-panels-battery-level-monitoring/)
