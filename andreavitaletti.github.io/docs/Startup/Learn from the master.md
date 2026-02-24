@@ -2,6 +2,10 @@
 
 >> *A startup is a temporary organization designed to search for a repeatable and scalable business model.* [Steve Blank](https://steveblank.com/)
 
+## Premise
+
+![[Pasted image 20260224142154.png]]
+
 Here a selection of posts from [Ash Maurya](https://www.linkedin.com/in/ashmaurya/) on Linkedin. It’s a convenient and quick way to share some important insights.
 
 1. However, his LinkedIn profile contains many other valuable messages; I strongly encourage you to explore it further;
