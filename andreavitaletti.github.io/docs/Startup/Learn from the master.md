@@ -1,4 +1,6 @@
-# Learn from the Master
+# Learn from the Master(s)
+
+>> *A startup is a temporary organization designed to search for a repeatable and scalable business model.* [Steve Blank](https://steveblank.com/)
 
 Here a selection of posts from [Ash Maurya](https://www.linkedin.com/in/ashmaurya/) on Linkedin. It’s a convenient and quick way to share some important insights.
 
