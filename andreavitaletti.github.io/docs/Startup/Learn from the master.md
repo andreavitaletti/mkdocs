@@ -4,7 +4,7 @@
 
 ## Premise
 
-![[Pasted image 20260224142154.png]]
+![](assets/images/cone.png)
 
 [source](https://thevoroscope.com/2017/02/24/the-futures-cone-use-and-history/)
 
