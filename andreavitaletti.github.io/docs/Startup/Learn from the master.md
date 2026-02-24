@@ -17,6 +17,9 @@ Here a selection of posts from [Ash Maurya](https://www.linkedin.com/in/ashmaury
 
 <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7427734222452445184?collapsed=1" height="540" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
 
+<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7413787999634698240?collapsed=1" height="507" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
+<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7409705290893496320?collapsed=1" height="669" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
+
 <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7422306150710276097?collapsed=1" height="540" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
 <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7421561686815567891?collapsed=1" height="670" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
 <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7420852018610769920?collapsed=1" height="670" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
