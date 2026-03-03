@@ -62,3 +62,17 @@ Second edition of the course 25th, 29th and 31st Of October and 4th of November 
 
 ![](assets/images/BTU.jpg)
 ![](assets/images/BTU1.jpg)
+
+<!--
+
+TRICKS
+
+  - pymdownx.snippets:
+      check_paths: true
+      url_download: true
+
+```c
+--8<-- "https://raw.githubusercontent.com/andreavitaletti/IoT4PD/refs/heads/master/code/mqtt_esp8266_basic/mqtt_esp8266_basic.ino"
+```
+
+-->
