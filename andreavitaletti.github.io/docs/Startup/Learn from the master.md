@@ -4,11 +4,11 @@
 
 ## Premise
 
-![](assets/images/cone.png)
+![](images/cone.png)
 
 [source](https://thevoroscope.com/2017/02/24/the-futures-cone-use-and-history/)
 
-![](assets/images/roadmap.png)
+![](images/roadmap.png)
  
 
 Here a selection of posts from [Ash Maurya](https://www.linkedin.com/in/ashmaurya/) on Linkedin. It’s a convenient and quick way to share some important insights.
