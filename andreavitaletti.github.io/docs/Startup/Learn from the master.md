@@ -4,7 +4,7 @@
 
 ## Premise
 
-![](assets/images/cone.png)
+![](../assets/images/cone.png)
 
 [source](https://thevoroscope.com/2017/02/24/the-futures-cone-use-and-history/)
 
@@ -12,6 +12,7 @@ Here a selection of posts from [Ash Maurya](https://www.linkedin.com/in/ashmaury
 
 1. However, his LinkedIn profile contains many other valuable messages; I strongly encourage you to explore it further;
 2. Teaching startups has little value if you don’t continuously challenge yourself and experiment in practice.
+<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7434974618685321216?collapsed=1" height="540" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
 
 <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7428805981452570624?collapsed=1" height="540" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
 
