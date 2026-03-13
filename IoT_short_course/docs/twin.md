@@ -211,25 +211,37 @@ In other words we can use the ESP32 as a sensor of a simulated water distributio
 ```js
 const { Project, Workspace } = require('epanet-js');
 const { SerialPort } = require('serialport');
+const path = require('path');
 const fs = require('fs');
 
+// Serial port — adjust to your port (Linux: /dev/ttyACM0, Windows: COM3)
 const port = new SerialPort({ path: '/dev/ttyACM0', baudRate: 9600 }, (err) => {
     if (err) console.error('Serial Port Error:', err.message);
 });
 
-// Workspace is synchronous — no await, no loadModule()
+// Resolve network.inp relative to THIS file, not the working directory
+const inpPath = path.join(__dirname, 'network.inp');
+
+if (!fs.existsSync(inpPath)) {
+    console.error(`ERROR: network.inp not found at ${inpPath}`);
+    process.exit(1);
+}
+
+// Setup workspace once — Workspace is synchronous, no async init needed
 const ws = new Workspace();
 const model = new Project(ws);
-https://github.com/KIOS-Research/epanet-function-test/blob/master/Net1.inp
-ws.writeFile('net.inp', fs.readFileSync('01-uk-style.inp'));
-model.open('net.inp', 'net.rpt', 'net.out');
+
+ws.writeFile('net.inp', fs.readFileSync(inpPath));
+model.open('net.inp', 'report.rpt', 'out.bin');
+
+console.log('[EPANET] Network loaded. Starting simulation loop...');
 
 function runSimulation() {
     model.solveH();
 
-    const flow     = model.getLinkValue(1, 8).toFixed(4);
-    const velocity = model.getLinkValue(1, 9).toFixed(4);
-    const pressure = model.getNodeValue(2, 11).toFixed(4);
+    const flow     = model.getLinkValue(1, 8).toFixed(4);   // EN_FLOW (GPM)
+    const velocity = model.getLinkValue(1, 9).toFixed(4);   // EN_VELOCITY (ft/s)
+    const pressure = model.getNodeValue(2, 11).toFixed(4);  // EN_PRESSURE (psi)
 
     const message = `PIPE,1,${flow},${velocity},${pressure}\n`;
     console.log(`[EPANET] ${message.trim()} -> Sending to Arduino`);
