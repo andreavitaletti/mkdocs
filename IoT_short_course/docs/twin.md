@@ -167,11 +167,11 @@ def main():
 
 ![](assets/images/2025-02-22-08-39-20.png "https://www.sim-tek.com.tr/predictive-maintenance/" )
 
-## [The difference between Static and Dynamic Unbalance](https://www.youtube.com/watch?v=JB8i7LtY3mU)
+### [The difference between Static and Dynamic Unbalance](https://www.youtube.com/watch?v=JB8i7LtY3mU)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/JB8i7LtY3mU?si=5j4mh8RmYGS-83ng" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-## A simple experiment
+### A simple experiment
 
 ![](assets/images/schematics.png)
 ![](assets/images/device.png)
@@ -181,7 +181,7 @@ def main():
 
 [code](https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/Digital_twin)
 
-## A simple model 
+### A simple model 
 
 Centrifugal force of a mass $m_e$ at distance $r$ from the center of rotation, with angular velocity $\omega$: $F​=m_e ​r \omega$
 
