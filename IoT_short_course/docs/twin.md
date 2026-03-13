@@ -219,31 +219,34 @@ const port = new SerialPort({ path: '/dev/ttyACM0', baudRate: 9600 }, (err) => {
     if (err) console.error('Serial Port Error:', err.message);
 });
 
-// Resolve network.inp relative to THIS file, not the working directory
-const inpPath = path.join(__dirname, 'network.inp');
-
+const inpPath = path.join(__dirname, '01-uk-style.inp');
 if (!fs.existsSync(inpPath)) {
     console.error(`ERROR: network.inp not found at ${inpPath}`);
     process.exit(1);
 }
 
-// Setup workspace once — Workspace is synchronous, no async init needed
 const ws = new Workspace();
 const model = new Project(ws);
 
 ws.writeFile('net.inp', fs.readFileSync(inpPath));
 model.open('net.inp', 'report.rpt', 'out.bin');
 
-console.log('[EPANET] Network loaded. Starting simulation loop...');
+// Resolve named IDs to indices once at startup
+// Pipe P1 connects J43 → J27
+// Junction J1 is the first junction in the network
+const idxP1 = model.getLinkIndex('P1');
+const idxJ1 = model.getNodeIndex('J1');
+
+console.log(`[EPANET] Network loaded — P1 index: ${idxP1}, J1 index: ${idxJ1}`);
 
 function runSimulation() {
     model.solveH();
 
-    const flow     = model.getLinkValue(1, 8).toFixed(4);   // EN_FLOW (GPM)
-    const velocity = model.getLinkValue(1, 9).toFixed(4);   // EN_VELOCITY (ft/s)
-    const pressure = model.getNodeValue(2, 11).toFixed(4);  // EN_PRESSURE (psi)
+    const flow     = model.getLinkValue(idxP1, 8).toFixed(4);  // EN_FLOW (L/s)
+    const velocity = model.getLinkValue(idxP1, 9).toFixed(4);  // EN_VELOCITY (m/s)
+    const pressure = model.getNodeValue(idxJ1, 11).toFixed(4); // EN_PRESSURE (m)
 
-    const message = `PIPE,1,${flow},${velocity},${pressure}\n`;
+    const message = `PIPE,P1,${flow},${velocity},${pressure}\n`;
     console.log(`[EPANET] ${message.trim()} -> Sending to Arduino`);
 
     port.write(message, (err) => {
