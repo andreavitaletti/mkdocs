@@ -193,3 +193,51 @@ $m \ddot{x} = m_e ​r \omega^2 cos(\omega t)$
 $m \ddot{y} = m_e ​r \omega^2 sin(\omega t)$
 
 This allows us to estimate the accelerations under the simplistic assumptions we made. 
+
+## Water Distribution Systems
+
+[EPANET](https://www.epa.gov/water-research/epanet) is  a software application used throughout the world to model water distribution systems. A convenient way to experiment with EPANET is [epanet-js](https://epanetjs.com/) that claims to be 
+
+> The EPANET you know, but modern, enhanced, and entirely in your browser
+
+![image-20263135418791.png](assets/images/image-20263135418791.png)
+
+### ESP32 as a node in EPANET
+
+We can run epanet-js on nodejs and specifically run a bridge interfacing the EPANET model, in the following '01-uk-style.inp',  with the ESP32 via the serial interface. 
+
+In other words we can use the ESP32 as a sensor of a simulated water distribution network
+
+```js
+const { Project, Workspace } = require('epanet-js');
+const { SerialPort } = require('serialport');
+const fs = require('fs');
+
+const port = new SerialPort({ path: '/dev/ttyACM0', baudRate: 9600 }, (err) => {
+    if (err) console.error('Serial Port Error:', err.message);
+});
+
+// Workspace is synchronous — no await, no loadModule()
+const ws = new Workspace();
+const model = new Project(ws);
+https://github.com/KIOS-Research/epanet-function-test/blob/master/Net1.inp
+ws.writeFile('net.inp', fs.readFileSync('01-uk-style.inp'));
+model.open('net.inp', 'net.rpt', 'net.out');
+
+function runSimulation() {
+    model.solveH();
+
+    const flow     = model.getLinkValue(1, 8).toFixed(4);
+    const velocity = model.getLinkValue(1, 9).toFixed(4);
+    const pressure = model.getNodeValue(2, 11).toFixed(4);
+
+    const message = `PIPE,1,${flow},${velocity},${pressure}\n`;
+    console.log(`[EPANET] ${message.trim()} -> Sending to Arduino`);
+
+    port.write(message, (err) => {
+        if (err) console.error('Write error:', err.message);
+    });
+}
+
+setInterval(runSimulation, 3000);
+```
