@@ -9,212 +9,11 @@ Usually IoT applications need to observe a physical phenomenon. This is done by 
 
 [Colab Notebook on FFT](https://colab.research.google.com/drive/1nuZx095lzt2d9h42N7yNu13crGg9eS9A)
 
-<!--
-[arduinoFFT library](https://github.com/kosme/arduinoFFT)
-
-In the following [example](https://github.com/kosme/arduinoFFT/blob/master/Examples/FFT_01/FFT_01.ino) the signal is generated internally by the node.
-
-[on wokwi](https://wokwi.com/projects/424775322523875329)
-
-```c
-#include <arduinoFFT.h>
-
-/*
-These values can be changed in order to evaluate the functions
-*/
-const uint16_t samples = 64; //This value MUST ALWAYS be a power of 2
-
-const double samplingFrequency = 5000;
-
-
-const double signalFrequency1 = 500;  // Prima frequenza (Hz)
-const double signalFrequency2 = 1200; // Seconda frequenza (Hz)
-const uint8_t amplitude1 = 100;       // Ampiezza della prima sinusoide
-const uint8_t amplitude2 = 50;        // Ampiezza della seconda sinusoide
-
-/*
-These are the input and output vectors
-Input vectors receive computed results from FFT
-*/
-double vReal[samples];
-double vImag[samples];
-
-/* Create FFT object */
-ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, samples, samplingFrequency);
-
-#define SCL_INDEX 0x00
-#define SCL_TIME 0x01
-#define SCL_FREQUENCY 0x02
-#define SCL_PLOT 0x03
-
-void setup()
-{
-  Serial.begin(115200);
-  while(!Serial);
-  Serial.println("Ready");
-}
-
-void loop()
-{
-  /* Build raw data */
-
- double ratio1 = twoPi * signalFrequency1 / samplingFrequency;
- double ratio2 = twoPi * signalFrequency2 / samplingFrequency;
-
-
-  for (uint16_t i = 0; i < samples; i++)
-  {
-    vReal[i] = double(amplitude1 * sin(i * ratio1) + amplitude2 * sin(i * ratio2));/* Build data with positive and negative values*/
-    vImag[i] = 0.0; //Imaginary part must be zeroed in case of looping to avoid wrong calculations and overflows
-  }
-  /* Print the results of the simulated sampling according to time */
-  Serial.println("Data:");
-  PrintVector(vReal, samples, SCL_TIME);
-  FFT.windowing(FFTWindow::Hamming, FFTDirection::Forward);	/* Weigh data */
-  Serial.println("Weighed data:");
-  PrintVector(vReal, samples, SCL_TIME);
-  FFT.compute(FFTDirection::Forward); /* Compute FFT */
-  Serial.println("Computed Real values:");
-  PrintVector(vReal, samples, SCL_INDEX);
-  Serial.println("Computed Imaginary values:");
-  PrintVector(vImag, samples, SCL_INDEX);
-  FFT.complexToMagnitude(); /* Compute magnitudes */
-  Serial.println("Computed magnitudes:");
-  PrintVector(vReal, (samples >> 1), SCL_FREQUENCY);
-  double x = FFT.majorPeak();
-  Serial.println(x, 6);
-  while(1); /* Run Once */
-  // delay(2000); /* Repeat after delay */
-}
-
-void PrintVector(double *vData, uint16_t bufferSize, uint8_t scaleType)
-{
-  for (uint16_t i = 0; i < bufferSize; i++)
-  {
-    double abscissa;
-    /* Print abscissa value */
-    switch (scaleType)
-    {
-      case SCL_INDEX:
-        abscissa = (i * 1.0);
-	break;
-      case SCL_TIME:
-        abscissa = ((i * 1.0) / samplingFrequency);
-	break;
-      case SCL_FREQUENCY:
-        abscissa = ((i * 1.0 * samplingFrequency) / samples);
-	break;
-    }
-    Serial.print(abscissa, 6);
-    if(scaleType==SCL_FREQUENCY)
-      Serial.print("Hz");
-    Serial.print(" ");
-    Serial.println(vData[i], 4);
-  }
-  Serial.println();
-}
-
-```
-
-Note that FFT.majorPeak() ``Returns an estimation of the dominant frequency according to the interpolation of the biggest peak found on the magnitude array`` which is  503.166771 while the max frequency of the a peak is around 1200 as expected. Indeed the Computed magnitudes are:
-
-```
-0.000000Hz 19.3725
-78.125000Hz 19.4808
-156.250000Hz 19.4963
-234.375000Hz 17.5681
-312.500000Hz 7.6937
-390.625000Hz 285.2706
-468.750000Hz 1508.3488
-546.875000Hz 1275.2104
-625.000000Hz 149.1638
-703.125000Hz 8.7482
-781.250000Hz 5.8810
-859.375000Hz 6.5036
-937.500000Hz 6.7344
-1015.625000Hz 14.6614
-1093.750000Hz 173.3189
-1171.875000Hz 760.4988
-1250.000000Hz 623.6484
-1328.125000Hz 52.2926
-1406.250000Hz 7.5248
-1484.375000Hz 12.7204
-1562.500000Hz 13.0229
-1640.625000Hz 12.5002
-1718.750000Hz 11.8706
-1796.875000Hz 11.2927
-1875.000000Hz 10.7984
-1953.125000Hz 10.3874
-2031.250000Hz 10.0515
-2109.375000Hz 9.7820
-2187.500000Hz 9.5711
-2265.625000Hz 9.4129
-2343.750000Hz 9.3029
-2421.875000Hz 9.2381
-```
-![](assets/images/2025-04-04-17-13-56.png)
-
-More realistically the signal is observed by the ADC, as in the following [example](https://github.com/kosme/arduinoFFT/blob/master/Examples/FFT_03/FFT_03.ino)
-
-![](assets/images/2025-03-10-09-14-30.png)
-
-[on wokwi](https://wokwi.com/projects/425024705467787265)
-
-```c
-
-#include "arduinoFFT.h"
-
-/*
-These values can be changed in order to evaluate the functions
-*/
-#define CHANNEL 12
-const uint16_t samples = 64; //This value MUST ALWAYS be a power of 2
-const double samplingFrequency = 100; //Hz, must be less than 10000 due to ADC
-unsigned int sampling_period_us;
-unsigned long microseconds;
-
-/*
-These are the input and output vectors
-Input vectors receive computed results from FFT
-*/
-double vReal[samples];
-double vImag[samples];
-
-/* Create FFT object */
-ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, samples, samplingFrequency);
-
-void setup()
-{
-  sampling_period_us = round(1000000*(1.0/samplingFrequency));
-  Serial.begin(115200);
-  while(!Serial);
-  Serial.println("Ready");
-}
-
-void loop()
-{
-  /*SAMPLING*/
-  microseconds = micros();
-  for(int i=0; i<samples; i++)
-  {
-      vReal[i] = analogRead(CHANNEL);
-      vImag[i] = 0;
-      while(micros() - microseconds < sampling_period_us){
-        //empty loop
-      }
-      microseconds += sampling_period_us;
-  }
-  // ... 
-  double x = FFT.majorPeak();
-  Serial.println(x, 6); //Print out what frequency is the most dominant.
-  while(1); /* Run Once */
-  // delay(2000); /* Repeat after delay */
-}
-```
---> 
 ## A simple experimental setup
 
-A virtual signal is a practical approach to generate arbitrary signals using one EPS32 as the signal generator, and the other as the sampler. 
+https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/virtual%20sensor
+
+A virtual signal is a practical approach to generate "arbitrary" signals using one EPS32 as the signal generator, and the other as the sampler. 
 
 The two ESP32 are connected as in the following picture
 
@@ -229,21 +28,26 @@ The node on the right sample the generated signal by the [ADC](https://www.elect
 | **GND**              | $\longleftrightarrow$ | **GND**                | Common Reference |
 | **USB Power**        |                       | **USB Power**          | Power Supply     |
 
-<!--
-### The Signal Generator
+### ESP32 A: The Generator (Sender)
 
-```c
+The straightforward implementation 
+
+```c++
 
 #include <Arduino.h>
 
 // Define the DAC and ADC pins
 const int dacPin = 25;   // DAC1 (GPIO 25) for sinusoid output
 
+
 // Parameters for the sine wave
 const int amplitude = 100;   // Amplitude of the sine wave (max 255 for 8-bit DAC)
 const int offset = 128;      // DC offset (middle of the DAC range)
 const float signalFrequency = 5.0;  // Frequency of the sine wave in Hz
 int samplingFrequencyDAC = 1000; // sampling theorem should be at least 2*frequency
+
+
+
 
 void setup() {
   Serial.begin(115200);
@@ -257,55 +61,19 @@ void loop() {
       for (int i = 0; i < samplingFrequencyDAC; i++) {
       int sineValue = (int)(amplitude * sin(2.0 * PI * signalFrequency * i / samplingFrequencyDAC) + offset);
       dacWrite(dacPin, sineValue);  // Write to DAC (8-bit value)
+      /*
       Serial.print(">");
       Serial.print("dac:");    
       Serial.println(sineValue);
-      delay(round(1.0/samplingFrequencyDAC*1000));
+      */
+      delay(round(1.0/samplingFrequencyDAC*1000)); // in milliseconds
       } 
     
 }
 
 ```
 
-![](assets/images/2024-12-17-03-54-47.png)
-
-### The Sampler
-
-```c
-
-#include <Arduino.h>
-
-const int adcPin = 34;   // ADC1 (GPIO 34) for reading the sinusoid
-int samplingFrequencyADC = 500; // sampling theorem should be at least 2*frequency
-const uint16_t samples = 512; 
-
-void setup() {
-  Serial.begin(115200);
-  analogReadResolution(10); 
-  analogSetAttenuation(ADC_11db);  // Set ADC attenuation (default 0dB)
-}
-
-void loop() {
-
-  for(int i=0; i<samples; i++)
-   {
-      Serial.print(">");
-      Serial.print("adc:");    
-      Serial.println(analogRead(adcPin)-512);
-      delay(round(1.0/samplingFrequencyADC*1000));
-  }
-}
-
-```
-
-![](assets/images/2024-12-17-03-53-48.png)
-
-[source code](https://github.com/andreavitaletti/documents/tree/main/PlatformIO/Projects/virtual%20sensor)
--->
-
-### ESP32 A: The Generator (Sender)
-
-This code uses a pre-calculated lookup table (LUT) to store sine values. This is much more efficient than calculating `sin()` on the fly, allowing for a smoother signal.
+The following code uses a pre-calculated lookup table to store sine values. This is  more efficient than calculating `sin()` on the fly, allowing for a smoother signal.
 
 ```C++
 // ESP32 SENDER CODE
@@ -361,13 +129,9 @@ void setup() {
 }
 
 void loop() {
-  int rawValue = analogRead(ADC_PIN);
-  
+  int rawValue = analogRead(ADC_PIN); // from 0 to 4095  
   // Print to Serial Plotter
-  // We include a "Floor" and "Ceiling" to keep the graph stable
-  Serial.print("Min:0,Max:4095,Signal:");
   Serial.println(rawValue);
-  
   delayMicroseconds(500); // Sample rate control
 }
 ```
@@ -397,90 +161,91 @@ According to the **Nyquist-Shannon Sampling Theorem**, your sampling frequency m
 
 A 42x oversampling ratio means you will get a very high-fidelity reconstruction of the sine wave on your Serial Plotter.
 
+> [!EXERCISE]
+>Write a FreeRTOS program running two tasks: one to generate the signal, the other to sample it
+
 ## The Sampler in  FreeRTOS
 
-Two tasks, one samples the environment the other perform a computation on the samples
+https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/FFT
+
+Two tasks, one samples the environment the other performs a computation on the samples, specifically the FFT
 
 ```c++
 
-#include <Arduino.h>
+#include <arduinoFFT.h>
+#include <math.h>
 
-// Configuration
-#define ADC_PIN 34
-#define WINDOW_SIZE 20  // Number of samples to average
-#define QUEUE_LEN 50    // Size of the data buffer
+#define SAMPLES 1024
+#define SAMPLING_FREQUENCY 1000 // Reduced for stability during testing
 
-// Handle for the Queue
-QueueHandle_t adcQueue;
+double vReal[SAMPLES];
+double vImag[SAMPLES];
+TaskHandle_t FFTTaskHandle = NULL;
+ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, SAMPLES, SAMPLING_FREQUENCY);
 
-// Task 1: High-frequency sampling
-void taskSampleADC(void *pvParameters) {
-    for (;;) {
-        int rawValue = analogRead(ADC_PIN);
-        
-        // Send sample to queue (don't block if full to keep timing consistent)
-        xQueueSend(adcQueue, &rawValue, 0);
-        
-        // Sampling at ~2kHz (500us)
-        vTaskDelay(pdMS_TO_TICKS(1)); 
-        // Note: For microsecond precision, use micros() timing or a hardware timer
+
+void TaskSample(void *pvParameters) {
+  // Use a lower priority or ensure we don't starve the IDLE task
+  const double TARGET_FREQ = 100.0;
+  const double AMPLITUDE = 50.0;
+
+  while (1) {
+    for (int i = 0; i < SAMPLES; i++) {
+      // Calculate synthetic sine
+      float time = (float)i / (float)SAMPLING_FREQUENCY;
+      vReal[i] = AMPLITUDE * sin(2.0 * M_PI * TARGET_FREQ * time);
+      // vReal[i] = analogRead(34); // Read from GPIO 34
+      vImag[i] = 0;
+      
+      // CRITICAL: Small delay to prevent Watchdog Trigger
+      // If SAMPLING_FREQUENCY is low, this works fine.
+      vTaskDelay(pdMS_TO_TICKS(1)); 
     }
+    
+    xTaskNotifyGive(FFTTaskHandle);
+    
+    // Give the CPU a breather between buffers
+    vTaskDelay(pdMS_TO_TICKS(10));
+  }
 }
 
-// Task 2: Computation and Reporting
-void taskAverageADC(void *pvParameters) {
-    int receivedValue;
-    long sum = 0;
-    int count = 0;
+void TaskFFT(void *pvParameters) {
+  while (1) {
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    for (;;) {
-        // Wait for data from the queue (block indefinitely until data arrives)
-        if (xQueueReceive(adcQueue, &receivedValue, portMAX_DELAY)) {
-            sum += receivedValue;
-            count++;
+    FFT.windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD);
+    FFT.compute(FFT_FORWARD);
+    FFT.complexToMagnitude();
 
-            // Once we have enough samples, calculate and print
-            if (count >= WINDOW_SIZE) {
-                float average = (float)sum / WINDOW_SIZE;
-                
-                Serial.print("Min:0,Max:4095,AvgSignal:");
-                Serial.println(average);
-
-                // Reset for next window
-                sum = 0;
-                count = 0;
-            }
-        }
-    }
+    Serial.printf("Peak: %.2f Hz\n", FFT.majorPeak());
+  }
 }
 
 void setup() {
-    Serial.begin(115200);
-    analogSetAttenuation(ADC_11db);
+  Serial.begin(115200);
+  delay(1000); // Give serial time to start
 
-    // Create the queue to hold 'int' types
-    adcQueue = xQueueCreate(QUEUE_LEN, sizeof(int));
-
-    if (adcQueue != NULL) {
-        // Create Producer Task (Higher priority)
-        xTaskCreate(taskSampleADC, "SampleTask", 2048, NULL, 2, NULL);
-        
-        // Create Consumer Task (Lower priority)
-        xTaskCreate(taskAverageADC, "AverageTask", 2048, NULL, 1, NULL);
-    }
+  // Increased stack size to 8192 to prevent Stack Overflow
+  xTaskCreatePinnedToCore(TaskSample, "Sampler", 8192, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(TaskFFT, "FFT_Proc", 8192, NULL, 1, &FFTTaskHandle, 0);
 }
 
 void loop() {
-    // FreeRTOS uses the tasks; loop() stays empty or handles low-priority UI
-    vTaskDelete(NULL); 
+  vTaskDelete(NULL);
 }
 
 ```
 
+> [!WARNING]
+>FFT.majorPeak() is not what you need to find out the max frequency
+
+> [!EXERCISE]
+>Instead of using a single buffer use two: while one is filled up the other is analysed. Update the code to compute the max frequency
+
 ---
 ### How to go faster
 
-In previous sections we achieve Hz frequencies, If you want to reach **Kilohertz** signal frequencies, the `delayMicroseconds()` approach becomes unreliable because the "background noise" of the code (the time it takes to process the loop) becomes a large percentage of the total time. That is when we switch to **I2S (Inter-IC Sound)**, which uses a hardware clock to "push" data to the DAC or "pull" it from the ADC at exact intervals, like a metronome.
+In previous sections we achieve Hz frequencies, If you want to reach **Kilohertz** signal frequencies, the `delayMicroseconds()` approach becomes ineffective because the overhead (the time it takes to process the loop) becomes a large percentage of the total time. That is when we switch to **I2S (Inter-IC Sound)**, which uses a hardware clock to "push" data to the DAC or "pull" it from the ADC at exact intervals, like a metronome.
 
 Instead of the CPU manually toggling the DAC or reading the ADC in a loop, the I2S hardware uses a dedicated clock to stream data in the background. This allows for frequencies in the **kilohertz (kHz)** range with perfect timing.
 
@@ -596,96 +361,6 @@ At 44.1 kHz, the **Serial Plotter** will struggle to keep up if you print every 
 ### FFT (Fast Fourier Transform)
 
 Performing an **FFT (Fast Fourier Transform)** is where the magic happens. It allows the Receiver ESP32 to "look" at the incoming sine wave and calculate its frequency mathematically, rather than just drawing a line on a screen.
-
-To do this, we’ll use the `arduinoFFT` library. You will need to install it via the Arduino Library Manager (**Sketch > Include Library > Manage Libraries...** and search for "arduinoFFT").
-
-### The Receiver FFT Code (ESP32 B)
-
-This code collects a batch of samples (usually a power of 2, like 128 or 256) and converts that "Time Domain" data into "Frequency Domain" data.
-
-```c++
-#include "driver/i2s.h"
-#include "arduinoFFT.h"
-
-#define SAMPLE_RATE 44100
-#define SAMPLES 256             // Must be a power of 2
-#define SAMPLING_FREQ 44100     // Match the Sender
-
-double vReal[SAMPLES];
-double vImag[SAMPLES];
-ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, SAMPLES, SAMPLING_FREQ);
-
-void setup() {
-  Serial.begin(115200);
-  
-  // I2S Configuration (Same as previous Receiver code)
-  i2s_config_t i2s_config = {
-    .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX | I2S_MODE_ADC_BUILT_IN),
-    .sample_rate = SAMPLE_RATE,
-    .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
-    .channel_format = I2S_CHANNEL_FMT_ONLY_RIGHT,
-    .communication_format = I2S_COMM_FORMAT_STAND_I2S,
-    .dma_buf_count = 8,
-    .dma_buf_len = 64,
-    .use_apll = false
-  };
-
-  i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);
-  i2s_set_adc_mode(ADC_UNIT_1, ADC1_CHANNEL_6); // GPIO34
-  i2s_adc_enable(I2S_NUM_0);
-}
-
-void loop() {
-  // 1. Collect SAMPLES from I2S
-  for (int i = 0; i < SAMPLES; i++) {
-    uint16_t sample;
-    size_t bytes_read;
-    i2s_read(I2S_NUM_0, &sample, sizeof(sample), &bytes_read, portMAX_DELAY);
-    vReal[i] = (double)(sample & 0x0FFF); // Raw ADC value
-    vImag[i] = 0.0;                       // Imaginary part is 0 for real signals
-  }
-
-  // 2. Process FFT
-  FFT.windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD); // Smooth the data
-  FFT.compute(FFT_FORWARD);
-  FFT.complexToMagnitude();
-
-  // 3. Find the Peak Frequency
-  double peak = FFT.majorPeak();
-
-  // 4. Output to Serial Plotter
-  // This will show a spike at the frequency of your sine wave
-  for (int i = 2; i < (SAMPLES / 2); i++) { // Skip DC offset at index 0-1
-    Serial.println(vReal[i]); 
-  }
-  
-  Serial.print("Detected Peak: ");
-  Serial.print(peak);
-  Serial.println(" Hz");
-
-  delay(500); // Pause so we can read the text
-}
-```
-
----
-
-### How to Interpret the Results
-
-When you open the **Serial Plotter**, you will no longer see a "moving" wave. Instead, you will see a **Spectrum**:
-
-- The **X-axis** represents Frequency (from 0 Hz to $Sampling Rate / 2$).
-    
-- The **Y-axis** represents Magnitude (how "strong" that frequency is).
-    
-- If your Sender is sending a 440 Hz tone, you will see a sharp vertical spike at the 440 Hz mark on the graph.
-    
-
-### Why use a "Window" (Hamming)?
-
-In the code, you'll see `FFT_WIN_TYP_HAMMING`. If your sample starts or ends in the middle of a wave cycle, it creates "spectral leakage" (noise in the frequency graph). The Windowing function fades the beginning and end of your sample buffer to zero to make the math cleaner and the peak sharper.
-
----
-
 ### Other experiments
 
 
