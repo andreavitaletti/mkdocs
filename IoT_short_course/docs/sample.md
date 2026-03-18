@@ -11,7 +11,7 @@ Usually IoT applications need to observe a physical phenomenon. This is done by 
 
 ## A simple experimental setup
 
-https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/virtual%20sensor
+:fontawesome-brands-github: [https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/virtual%20sensor](https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/virtual%20sensor)
 
 A virtual signal is a practical approach to generate "arbitrary" signals using one EPS32 as the signal generator, and the other as the sampler. 
 
@@ -109,7 +109,9 @@ To find the frequency ($f$), we use:
 
 $$f = \frac{1}{T} = \frac{1}{0.0256} \approx 39 \text{ Hz}$$
 
-> **Note:** The actual frequency will be slightly lower (closer to **37-38 Hz**) because the `dacWrite()` function and the `for` loop overhead add a few extra microseconds per step.
+!!! note
+
+	The actual frequency will be slightly lower (closer to **37-38 Hz**) because the `dacWrite()` function and the `for` loop overhead add a few extra microseconds per step.
 
 ---
 ### ESP32 B: The Receiver (Sampler)
@@ -161,12 +163,56 @@ According to the **Nyquist-Shannon Sampling Theorem**, your sampling frequency m
 
 A 42x oversampling ratio means you will get a very high-fidelity reconstruction of the sine wave on your Serial Plotter.
 
-> [!EXERCISE]
->Write a FreeRTOS program running two tasks: one to generate the signal, the other to sample it
+!!! question "exercise"
+
+	Write a FreeRTOS program running two tasks: one to generate the signal, the other to sample it
+
+### A possible alternative using the PC
+
+![](assets/images/2024-12-17-04-23-56.png)
+
+[ref](https://forum.arduino.cc/t/how-to-read-data-from-audio-jack/458301/3)
+
+``` python3 -m pip install sounddevice ```
+
+```python
+
+# Use the sounddevice module
+# http://python-sounddevice.readthedocs.io/en/0.3.10/
+
+import numpy as np
+import sounddevice as sd
+import time
+
+# Samples per second
+sps = 44100
+
+# Frequency / pitch
+freq_hz = 2
+
+# Duration
+duration_s = 5.0
+
+# Attenuation so the sound is reasonable
+atten = 1.0 # 0.3
+
+# NumpPy magic to calculate the waveform
+each_sample_number = np.arange(duration_s * sps)
+waveform = np.sin(2 * np.pi * each_sample_number * freq_hz / sps)
+waveform_quiet = waveform * atten
+
+# Play the waveform out the speakers
+sd.play(waveform_quiet, sps)
+time.sleep(duration_s)
+sd.stop()
+
+```
+
+[Online Tone Generator](https://onlinetonegenerator.com/)
 
 ## The Sampler in  FreeRTOS
 
-https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/FFT
+:fontawesome-brands-github:  [https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/FFT](https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/FFT)
 
 Two tasks, one samples the environment the other performs a computation on the samples, specifically the FFT
 
@@ -236,11 +282,13 @@ void loop() {
 
 ```
 
-> [!WARNING]
->FFT.majorPeak() is not what you need to find out the max frequency
+!!! warning
 
-> [!EXERCISE]
->Instead of using a single buffer use two: while one is filled up the other is analysed. Update the code to compute the max frequency
+	FFT.majorPeak() is not what you need to find out the max frequency
+
+!!! question "Exercise"
+
+	Instead of using a single buffer use two: while one is filled up the other is analysed. Update the code to compute the max frequency
 
 ---
 ### How to go faster
@@ -357,57 +405,9 @@ void loop() {
 ### One Final Caveat
 
 At 44.1 kHz, the **Serial Plotter** will struggle to keep up if you print every single point. That's why the receiver code above only prints one sample from every buffer "chunk." If you want to see the full wave at high speed, you'd usually store a large buffer and then "dump" it to the serial port all at once.
-
-### FFT (Fast Fourier Transform)
-
-Performing an **FFT (Fast Fourier Transform)** is where the magic happens. It allows the Receiver ESP32 to "look" at the incoming sine wave and calculate its frequency mathematically, rather than just drawing a line on a screen.
 ### Other experiments
 
-
-1. **Change the Sender Frequency:** Change `SINE_FREQ` to 1000.0 and watch the peak move to the right on the receiver's plot.    
+1. **Change the Sender Frequency**   
 2. **Add Noise:** Try touching the signal wire with your finger. You'll see the "noise floor" (the messy small bumps at the bottom of the graph) jump up.
 3. **Square Wave:** Change the Sender to output a square wave instead of a sine wave. In the FFT, you will see the **fundamental frequency** plus a series of "harmonics" (smaller peaks at 3x, 5x, and 7x the frequency).
-
-## A possible alternative using the PC
-
-![](assets/images/2024-12-17-04-23-56.png)
-
-[ref](https://forum.arduino.cc/t/how-to-read-data-from-audio-jack/458301/3)
-
-``` python3 -m pip install sounddevice ```
-
-```python
-
-# Use the sounddevice module
-# http://python-sounddevice.readthedocs.io/en/0.3.10/
-
-import numpy as np
-import sounddevice as sd
-import time
-
-# Samples per second
-sps = 44100
-
-# Frequency / pitch
-freq_hz = 2
-
-# Duration
-duration_s = 5.0
-
-# Attenuation so the sound is reasonable
-atten = 1.0 # 0.3
-
-# NumpPy magic to calculate the waveform
-each_sample_number = np.arange(duration_s * sps)
-waveform = np.sin(2 * np.pi * each_sample_number * freq_hz / sps)
-waveform_quiet = waveform * atten
-
-# Play the waveform out the speakers
-sd.play(waveform_quiet, sps)
-time.sleep(duration_s)
-sd.stop()
-
-```
-
-[Online Tone Generator](https://onlinetonegenerator.com/)
 
