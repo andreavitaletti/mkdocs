@@ -45,6 +45,8 @@ By using the **Anchor Method** ($base + elapsed \times mult$), we ensure that:
 
 ###  ESP32 Code (C++)
 
+:fontawesome-brands-github: [https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/Digital_twin](https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/Digital_twin)
+
 We add a `SET_PHASE` command to set the initial "Wall Clock" time.
 
 ```c++
@@ -110,50 +112,86 @@ The Python script now performs two steps:
 1. **Sync Phase:** Sends the current PC time immediately upon connection.
 2. **Sync Frequency:** Continues to calculate and send the drift multiplier.
 
-Python
+Python - only relevant parts, full code available at  :fontawesome-brands-github: [https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/Digital_twin](https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/Digital_twin)
 
 ```python
 import serial
 import time
 from sklearn.linear_model import LinearRegression
 
-# ... (Previous Class Setup) ...
-
-def main():
-    twin = ClockDigitalTwin()
-    phase_synced = False
-    
-    with serial.Serial('COM3', 115200, timeout=1) as ser:
-        time.sleep(2) # Wait for ESP32 reboot
+class ClockDigitalTwin:
+    def add_sample(self, esp_micros):
+        # Record the "Gold Standard" time from the PC
+        now_pc = time.time()
         
-        while True:
-            # 1. INITIAL PHASE SYNC
-            if not phase_synced:
-                now = time.time()
-                ser.write(f"SET_PHASE:{now:.3f}\n".encode())
-                phase_synced = True
-                print(f"Sent initial Phase: {now}")
+        self.esp_raw_micros.append([esp_micros])
+        self.pc_ref_seconds.append(now_pc)
+        
+        # Keep only the most recent samples to adapt to temperature changes
+        if len(self.esp_raw_micros) > WINDOW_SIZE:
+            self.esp_raw_micros.pop(0)
+            self.pc_ref_seconds.pop(0)
+    def calculate_multiplier(self):
+        if len(self.esp_raw_micros) < 5:
+            return None # Not enough data yet
+        
+        # Fit model: PC_Time = (m * ESP_Micros) + c
+        self.model.fit(self.esp_raw_micros, self.pc_ref_seconds)
+        
+        # The slope 'm' tells us how many PC seconds pass per 1 ESP32 microsecond
+        # We multiply by 1,000,000 because the ESP32 works in microseconds
+        multiplier = self.model.coef_[0] * 1_000_000
+        return multiplier
 
-            line = ser.readline().decode('utf-8').strip()
-            if "RAW_MICROS" in line:
-                # Parse: RAW_MICROS:12345,CUR_WALL:17000.123
-                parts = line.split(",")
-                raw_micros = int(parts[0].split(":")[1])
-                esp_thinks_wall = float(parts[1].split(":")[1])
-                
-                twin.add_sample(raw_micros)
-                
-                # 2. FREQUENCY ADJUSTMENT
-                mult = twin.calculate_multiplier()
-                if mult:
-                    ser.write(f"SET_MULT:{mult:.8f}\n".encode())
-                    error = time.time() - esp_thinks_wall
-                    print(f"Correction sent. Current Error: {error*1000:.2f}ms")
+with serial.Serial(...) as ser:
+            time.sleep(2) # Wait for ESP32 reboot
+            ser.reset_input_buffer() # Clear old data
+            
+            while True:
+                # 1. INITIAL PHASE SYNC
+                if not phase_synced:
+                    now = time.time()
+                    ser.write(f"SET_PHASE:{now:.3f}\n".encode())
+                    phase_synced = True
+
+                line = ser.readline().decode('utf-8', errors='ignore').strip()
+                if not line:
+                    continue
+
+                if "ACK" in line:
+                    print(f"ESP32: {line}")
+                    
+                if "RAW_MICROS" in line:
+                    try:
+                        # Parse: RAW_MICROS:12345,CUR_WALL:17000.123
+                        parts = line.split(",")
+                        raw_micros = int(parts[0].split(":")[1])
+                        esp_thinks_wall = float(parts[1].split(":")[1])
+                        
+                        twin.add_sample(raw_micros)
+                        
+                        # 2. FREQUENCY ADJUSTMENT
+                        mult = twin.calculate_multiplier()
+                        if mult:
+                            ser.write(f"SET_MULT:{mult:.8f}\n".encode())
+                            error = time.time() - esp_thinks_wall
+                            print(f"[PC] Time: {time.time():.3f} | [ESP] Thinks: {esp_thinks_wall:.3f} | Error: {error*1000:.2f}ms | Mult: {mult:.8f}")
 ```
 
+```
+[PC] Time: 1773932593.460 | [ESP] Thinks: 1773932593.483 | Error: -22.51ms | Mult: 0.99999873
+ESP32: ACK: Rate Adjusted.
+[PC] Time: 1773932598.463 | [ESP] Thinks: 1773932598.484 | Error: -20.65ms | Mult: 0.99999029
+```
 
 1. **The Phase Correction (`SET_PHASE`)**: This is like setting a watch. It happens once (or rarely) to align the two clocks to the same "zero" point.
 2. **The Frequency Correction (`SET_MULT`)**: This is like adjusting the watch's internal gears. It happens continuously to ensure that as the ESP32 gets hot or cold, the Digital Twin keeps the "Virtual Clock" perfectly aligned with the PC.
+
+![image-2026319229688.png](assets/images/image-2026319229688.png)
+
+!!! note
+
+	20ms is not a true 'clock error,' but simply represents the physical latency required for a log string to travel from the ESP32 at 115200 baud (~3ms), traverse the USB cable, be processed by the PC's operating system drivers, pass through the Python stack, and finally be parsed to trigger `time.time()`. The PC will always capture the `time.time()` stamp with roughly a 20-millisecond delay relative to the exact instant the ESP32 captured the `micros()` value.
 
 !!! warning
     
