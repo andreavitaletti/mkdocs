@@ -71,7 +71,7 @@ The designer needs a proxy for "Confidence." They decide to measure **"Step Freq
 
 By designing this proxy, the designer has turned a "vague feeling of nervousness" into a hard numerical value that can be used to iterate the design of the shoe's outsole flare or traction pattern.
 
-### Comparison of Direct vs. Proxy Measurement
+#### Comparison of Direct vs. Proxy Measurement
 
 | **Qualitative Goal**    | **Direct Sensor (Impossible)** | **Designer’s Proxy (The "Hack")**                                                                                                                                       |
 | ----------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -80,6 +80,6 @@ By designing this proxy, the designer has turned a "vague feeling of nervousness
 | **Mental Fatigue**      | Direct neuron monitoring.      | **Pupil Dilation / Eye-Track Jitter:** Measuring how much visual focus is required to maintain balance on a treadmill.                                                  |
 
 ---
-!!! node How I wrote this document
+!!! note "How I wrote this document"
 
 	I sketch the concept roughly, [Gemini](https://gemini.google.com/) (in this case) provides a cleaner version, I review the version and iterate up to a point where I'm satisfied. It is a fair example of a **collaborative, data-informed feedback loop** ;-)
