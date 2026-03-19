@@ -31,6 +31,7 @@ nav:
     - Blockchain: BC
     - Startup: Startup
     - IoT: https://andreavitaletti.github.io/IoT_short_course/
+    - data-*: 'data-* design.md'
     - links: links.md
     - thesis: thesis.md
 
