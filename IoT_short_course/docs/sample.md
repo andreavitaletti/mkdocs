@@ -116,7 +116,7 @@ $$f = \frac{1}{T} = \frac{1}{0.0256} \approx 39 \text{ Hz}$$
 ---
 ### ESP32 B: The Receiver (Sampler)
 
-This code reads the signal and prints it to the Serial Plotter. Note the use of `analogReadAttenuation`, which sets the voltage range to approximately 0V–3.1V to better match the DAC output.
+This code reads the signal and prints it to the Serial interface. Note the use of `analogReadAttenuation`, which sets the voltage range to approximately 0V–3.1V to better match the DAC output.
 
 ```c++
 // ESP32 RECEIVER CODE
@@ -132,7 +132,7 @@ void setup() {
 
 void loop() {
   int rawValue = analogRead(ADC_PIN); // from 0 to 4095  
-  // Print to Serial Plotter
+  // Print to Serial 
   Serial.println(rawValue);
   delayMicroseconds(500); // Sample rate control
 }
@@ -161,7 +161,11 @@ According to the **Nyquist-Shannon Sampling Theorem**, your sampling frequency m
 - **Sampler:** ~1,666 Hz
 - **Oversampling Ratio:** ~42x
 
-A 42x oversampling ratio means you will get a very high-fidelity reconstruction of the sine wave on your Serial Plotter.
+A 42x oversampling ratio means you will get a very high-fidelity reconstruction of the sine wave on your Serial.
+
+!!! question "exercise"
+
+	Use a Serial Plotter (such as [Better Serial Plotter](https://github.com/nathandunk/BetterSerialPlotter)) to plot the signal
 
 !!! question "exercise"
 
@@ -386,7 +390,7 @@ void loop() {
   // Read a block of samples from the DMA buffer
   i2s_read(I2S_NUM, &buffer, sizeof(buffer), &bytes_read, portMAX_DELAY);
 
-  // Print just the first sample of each block to Serial Plotter (to avoid flooding)
+  // Print just the first sample of each block to Serial  (to avoid flooding)
   Serial.println(buffer[0] & 0x0FFF); // Mask 12 bits for ADC
 }
 ```
@@ -410,4 +414,3 @@ At 44.1 kHz, the **Serial Plotter** will struggle to keep up if you print every 
 1. **Change the Sender Frequency**   
 2. **Add Noise:** Try touching the signal wire with your finger. You'll see the "noise floor" (the messy small bumps at the bottom of the graph) jump up.
 3. **Square Wave:** Change the Sender to output a square wave instead of a sine wave. In the FFT, you will see the **fundamental frequency** plus a series of "harmonics" (smaller peaks at 3x, 5x, and 7x the frequency).
-

@@ -45,9 +45,50 @@ The following picture from [https://doi.org/10.3390/s18072104 ](https://doi.org/
 
 ![](assets/images/2025-04-10-18-03-51.png)
 
+!!! tip
+    
+    It is always a valuable exercise to estimate the power consumption of your app with a diagram similar to the one above. Nonetheless, it is then necessary to confirm your estimation by measurements.
+
 ## ESP32 Sleep Modes
 
-[ESP32 supports two major power saving modes](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/sleep_modes.html): Light-sleep and Deep-sleep. There are several wakeup sources in the sleep modes. The following are excellent sources of information to understand how to ESP32 Sleep Modes and Their Power Consumption. 
+[ESP32 supports two major power saving modes](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/sleep_modes.html): Light-sleep and Deep-sleep.
+
+A nice pictorial representation of these modes is available at [lastminuteengineers](https://lastminuteengineers.com/esp32-sleep-modes-power-consumption/)
+
+### Light Sleep
+
+In Light-sleep mode, the digital peripherals, most of the RAM, and CPUs are *clock-gated* and their supply voltage is reduced. Upon exit from Light-sleep, the digital peripherals, RAM, and CPUs resume operation and their internal states are preserved.
+
+Clock gating is a power-saving technique used in digital circuits. A processor works because a clock signal tells all components when to update their state. If the clock keeps ticking, circuits keep switching—and switching consumes power. Clock gating means temporarily stopping the clock signal to parts of the circuit that aren’t doing anything. When a block (e.g. digital peripherals, RAM, and CPUs) is clock-gated, it is effectively “paused”. Its internal data (state) is kept intact, but it doesn’t switch or compute, so it saves energy.
+
+### Deep Sleep
+
+In Deep-sleep mode, the CPUs, most of the RAM, and all digital peripherals that are clocked from APB_CLK are powered off. The only parts of the chip that remain powered on are: RTC controller, ULP coprocessor, RTC FAST memory, RTC SLOW memory. Deep-sleep is a much more aggressive power-saving mode than Light-sleep, and the key difference is power is actually removed, not just paused.
+
+* CPUs are completely off → The main processors stop running entirely, All execution halts. When the chip wakes up, it restarts from reset (like powering it on again), not from where it left off
+* Most RAM is lost → Regular RAM is powered down → data is erased. Any variables, stack, heap, program state are gone. Only RTC FAST and SLOW memory survive → So anything you need after wake-up must be stored there (or in flash)
+* Digital peripherals are off → Peripherals using APB_CLK (timers, UART, SPI, I²C, etc.) are disabled. They stop working and lose configuration → After wake-up, you must reinitialize everything
+
+Only RTC domain stays alive. The chip keeps a tiny “always-on” subsystem:
+
+ * RTC controller → manages sleep & wake-up
+ * ULP coprocessor → can run small programs at ultra-low power
+ * RTC memories → retain small amounts of data
+
+This allows:
+
+* Timed wake-ups (e.g., every 10 seconds)
+* Sensor monitoring without waking the main CPU
+
+### Connectivity and Sleep Modes
+
+In Deep-sleep and Light-sleep modes, the wireless peripherals are powered down. Before entering Deep-sleep or Light-sleep modes, the application must disable Wi-Fi and Bluetooth using the appropriate calls.
+
+If Wi-Fi/Bluetooth connections need to be maintained, enable Wi-Fi/Bluetooth Modem-sleep mode and automatic Light-sleep feature (see Power Management APIs). This allows the system to wake up from sleep automatically when required by the Wi-Fi/Bluetooth driver, thereby maintaining the connection.
+
+### Wakeup
+
+There are several wakeup sources in the sleep modes. The following are excellent sources of information to understand how to ESP32 Sleep Modes and Their Power Consumption. 
 
 * [Insight Into ESP32 Sleep Modes and Their Power Consumption](https://lastminuteengineers.com/esp32-sleep-modes-power-consumption/)
 * [ESP32 Deep Sleep Mode](https://www.electronicwings.com/esp32/esp32-deep-sleep-mode)
@@ -143,6 +184,46 @@ In a true FreeRTOS environment, if you want "Task 1" to trigger "Task 2" **while
 
 ## How to measure energy consumption
 
+### INA219 Power Monitor with ESP32
+
+The [INA219](https://learn.adafruit.com/adafruit-ina219-current-sensor-breakout/wiring) is a high-side current shunt and power monitor with an $I^2C$ interface. It is ideal for monitoring the power consumption of battery-powered projects.
+
+
+### INA219 Pinout
+The INA219 module typically breaks out the following pins for power and communication.
+
+| Pin | Function | Description |
+| :--- | :--- | :--- |
+| **VCC** | Power Supply | 3.3V – 5V (3.3V recommended for ESP32) |
+| **GND** | Ground | Common Ground |
+| **SDA** | $I^2C$ Data | Serial Data line |
+| **SCL** | $I^2C$ Clock | Serial Clock line |
+| **VIN+** | Input (+) | Connect to the **Positive** of the Power Source |
+| **VIN-** | Output (-) | Connect to the **Positive** side of the Load |
+
+### ESP32 Wiring Diagram
+This table shows the standard $I^2C$ wiring for an ESP32 Development Board.
+
+| INA219 Pin | ESP32 Pin | Note |
+| :--- | :--- | :--- |
+| **VCC** | 3.3V | Logic level matching |
+| **GND** | GND | Common Ground |
+| **SDA** | GPIO 21 | Default SDA |
+| **SCL** | GPIO 22 | Default SCL |
+
+### Load Connection Logic
+To measure current, the sensor must be placed in **series** on the high side of your circuit.
+
+| Connection | Direction | Target |
+| :--- | :--- | :--- |
+| **Power Source (+)** | → | **VIN+** |
+| **VIN-** | → | **Load (+)** |
+| **Load (-)** | → | **Ground** |
+
+!!! info "Measurement Principle"
+    The INA219 measures the **shunt voltage** drop across a precision resistor located between **VIN+** and **VIN-**. It then calculates the current ($I$) based on the known resistance.
+
+<!--
 In the following example, the LOAD is our ESP32 and we use the [INA219](https://learn.adafruit.com/adafruit-ina219-current-sensor-breakout/wiring) connected to an Arduino UNO to measure the power consumption. The same can be obtained using another ESP32 instead of the UNO, but remember the correct pins for SDA (default is GPIO 21) SCL (default is GPIO 22) ([See the schematics](assets/images/esp32_dev_kit_pinout_v1_mischianti.jpg))
 
 * Connect board VIN (red wire) to Arduino 5V if you are running a 5V board Arduino (Mega, etc.). If your board is 3V, connect to that instead.
@@ -151,11 +232,11 @@ In the following example, the LOAD is our ESP32 and we use the [INA219](https://
 * Connect board SDA (blue wire) to Arduino SDA
 * Connect Vin+ to the positive terminal of the power supply for the circuit under test
 * Connect Vin- to the positive terminal or lead of the load
+--> 
 
 [Note on Heltec V3](https://github.com/ShotokuTech/HeltecLoRa32v3_I2C/tree/main)
 
-
-![](assets/images/2025-04-10-18-50-11.png)
+![](assets/images/INA219.drawio.png)
 
 [source](https://learn.adafruit.com/adafruit-ina219-current-sensor-breakout/wiring "https://learn.adafruit.com/adafruit-ina219-current-sensor-breakout/wiring")
 
@@ -178,7 +259,6 @@ void setup(void)
   }
 
   uint32_t currentFrequency;
-  Serial.println("Hello!");
   
   // Initialize the INA219.
   // By default the initialization will use the largest range (32V, 2A).  However
@@ -265,6 +345,7 @@ void setup() {
 void loop() {} // We don't need loop as ESP32 will initilize each time.
 
 ```
+
 
 We use [Better Serial Plotter](https://github.com/nathandunk/BetterSerialPlotter) to visualize the data.
 

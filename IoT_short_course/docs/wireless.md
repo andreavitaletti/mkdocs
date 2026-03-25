@@ -13,7 +13,7 @@ The following table compares different wireless technologies. WiFi has the highe
 
 
 
-In our experiments, we us LoRaWAN. In particular, we have a Gateway connected to [The Thing Network (TTN)](https://www.thethingsnetwork.org/).
+In our experiments, we encourage the use of LoRaWAN. In particular, we have a Gateway connected to [The Thing Network (TTN)](https://www.thethingsnetwork.org/).
 
 Heltec, produces a nice device, the [WiFi LoRa 32(V3)](https://heltec.org/project/wifi-lora-32-v3/), that we use in our experiments. 
 
@@ -23,10 +23,18 @@ It is basically the ttn-otaa example available in the [rgot-org/TTN_esp32](https
 
 ![](assets/images/2025-01-18-08-11-47.png)
 
+!!! Note 
+    
+    Despite the fact that WiFi si not appropriate for many IoT application, it is a convenient technology. While **the use of LORA is strongly encouraged**, the use of WiFi is acceptable provided that 1) you employ suitable energy saving policies, 2) you assume a reasonable **scale down** factor from WiFi consumptions to LORA ones, 3) your measurements meet the requirements of the application. 
+    
+    As an example a possible scale down factor for RX/TX Power, according to the above table, is 50 (from 250mA (Wifi) to 5ma (LORA))  
+
 
 ## Ad-hoc networking
 
-## 1️⃣ **ESP-NOW (ESP32 Proprietary, Peer-to-Peer Mesh)**
+In some cases ad-hoc networking, namely a networking that does not rely on pre-existing infrastructure is necessary.
+
+### ESP-NOW (ESP32 Proprietary, Peer-to-Peer Mesh)
 
 https://github.com/espressif/esp-now/tree/master
 
@@ -44,9 +52,7 @@ A low-latency, connectionless, peer-to-peer protocol developed by Espressif. It 
 **Pros:** Very fast, low-power, native to ESP32.  
 **Cons:** Multi-hop requires you to implement your own routing; no automatic self-organization.
 
----
-
-## 2️⃣ **painlessMesh**
+### painlessMesh
 
 https://gitlab.com/painlessMesh/painlessMesh
 
@@ -67,7 +73,7 @@ An open-source **mesh networking library** for ESP8266/ESP32 using Arduino frame
 
 ---
 
-## 3️⃣ **ESP-MESH (Espressif Official Wi-Fi Mesh)**
+### ESP-MESH (Espressif Official Wi-Fi Mesh)
 
 Espressif’s **official Wi-Fi mesh protocol**. Fully multi-hop and self-organizing. Designed for **large-scale ESP32 networks**.
     
@@ -86,7 +92,7 @@ Espressif’s **official Wi-Fi mesh protocol**. Fully multi-hop and self-organiz
 
 ---
 
-## 4️⃣ **Custom Multi-Hop Protocols Using Wi-Fi Ad-Hoc Mode**
+### Custom Multi-Hop Protocols Using Wi-Fi Ad-Hoc Mode
 
 ESP32 supports **Wi-Fi Station + Soft-AP mode**, which allows you to implement **ad-hoc networks manually**. Each node can act as a relay.
     
@@ -101,7 +107,7 @@ ESP32 supports **Wi-Fi Station + Soft-AP mode**, which allows you to implement *
 
 ---
 
-## 🔹 Comparison Table
+### Comparison Table
 
 |Protocol / Library|Multi-Hop|Self-Organizing|Arduino Support|Ease of Use|Best Use Case|
 |---|---|---|---|---|---|
@@ -112,5 +118,6 @@ ESP32 supports **Wi-Fi Station + Soft-AP mode**, which allows you to implement *
 
 ---
 
-💡 **Tip:**  
-For most IoT courses or projects on ESP32, **painlessMesh** is the easiest way to teach **true multi-hop, self-organizing networks** in Arduino. ESP-MESH is more production-ready but heavier.
+!!! Tip
+    
+    For most IoT PoC on ESP32, **painlessMesh** is the easiest way to experiment with multi-hop, self-organizing networks. ESP-MESH is more production-ready but heavier.
