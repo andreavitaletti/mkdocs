@@ -2,6 +2,9 @@
 
 ## Power the ESP32
 
+To power the ESP32 you can use [several methods](https://esp32io.com/tutorials/how-to-power-esp32)  skteched below:
+
+
 ### USB Port (Easiest & Most Common)
 The most straightforward method is to plug a micro-USB or USB-C cable (depending on your board) into a computer, a 5V wall adapter (like an old phone charger), or a portable power bank. 
 
@@ -20,6 +23,21 @@ If you already have a stable, regulated 3.3V supply, you can connect it directly
 
 *Critical Danger:* This method bypasses the onboard voltage regulator. If your supply exceeds 3.6V, you will damage the ESP32 chip.
 *Use Case:* This is common for battery-powered projects using a dedicated external regulator or specific battery types.
+
+> [!TIP]
+> if you don't need 5V in you project, use 3.3V, it will save energy. However, finding suitable batteries is not easy!
+> if the battery does not exceed 3.6V as in the LiFePO4, you can connect the battery to the 3.3V and bypass the voltage regulator
+
+
+<!--
+!!! tip
+
+    if you don't need 5V in you project, use 3.3V, it will save energy. However, finding suitable batteries is not easy!
+
+    if the battery does not exceed 3.6V as in the LiFePO4, you can connect the battery to the 3.3V and bypass the voltage regulator
+-->
+
+![](assets/images/2025-04-11-14-59-39.png)
 
 ## Power consumption
 
@@ -122,27 +140,6 @@ If you put the sleep command in `setup()`, the ESP32 might go to sleep before th
 ### Important Real-World Note
 
 In a true FreeRTOS environment, if you want "Task 1" to trigger "Task 2" **while the chip is already awake**, you would use a **Semaphore** or **Event Group**. However, because Deep Sleep triggers a full reboot, the "trigger" here is actually the CPU reset and the shared RTC memory.
-
-## Powering the ESP32
-
-To power the ESP32 you can use [several methods](https://esp32io.com/tutorials/how-to-power-esp32) 
-
-The ESP32 works at 3.3V. You can apply 5V to the Vin and an internal voltage regulator drops it down to 3.3V, but this costs energy because it is because a linear regulator that converts the excess voltage into heat.  
-
-> [!TIP]
-> if you don't need 5V in you project, use 3.3V, it will save energy. However, finding suitable batteries is not easy!
-> if the battery does not exceed 3.6V as in the LiFePO4, you can connect the battery to the 3.3V and bypass the voltage regulator
-
-
-<!--
-!!! tip
-
-    if you don't need 5V in you project, use 3.3V, it will save energy. However, finding suitable batteries is not easy!
-
-    if the battery does not exceed 3.6V as in the LiFePO4, you can connect the battery to the 3.3V and bypass the voltage regulator
--->
-
-![](assets/images/2025-04-11-14-59-39.png)
 
 ## How to measure energy consumption
 
