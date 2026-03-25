@@ -1,5 +1,28 @@
 # Energy
 
+## Power the ESP32
+
+### USB Port (Easiest & Most Common)
+The most straightforward method is to plug a micro-USB or USB-C cable (depending on your board) into a computer, a 5V wall adapter (like an old phone charger), or a portable power bank. 
+
+*Pros:* Safe, provides both power and data for programming, and is regulated on-board.
+*Note:*  Ensure you use a data-capable USB cable if you also need to upload code. 
+
+### The 5V (or VIN) Pin
+You can provide an external unregulated power supply directly to the 5V or VIN pin and a GND (ground) pin. 
+Voltage Range: Typically 5V to 12V.
+
+*Efficiency:* Higher voltages (like 9V or 12V) will cause the onboard regulator to generate more heat.
+*Warning:* There is often no reverse polarity protection on these pins. Connecting power backward can instantly fry the board. 
+
+### The 3.3V Pin (Regulated Power)
+If you already have a stable, regulated 3.3V supply, you can connect it directly to the 3.3V and GND pins. 
+
+*Critical Danger:* This method bypasses the onboard voltage regulator. If your supply exceeds 3.6V, you will damage the ESP32 chip.
+*Use Case:* This is common for battery-powered projects using a dedicated external regulator or specific battery types.
+
+## Power consumption
+
 The following picture from [https://doi.org/10.3390/s18072104 ](https://doi.org/10.3390/s18072104) depicts a typical sensor working scenario, where a node alternates different activities each with a different power consumption
 
 ![](assets/images/2025-04-10-18-03-51.png)
@@ -259,4 +282,3 @@ A powerful alternative is [Serial-Studio](https://github.com/Serial-Studio/Seria
 ## Energy Harvesting
 
 [Power ESP32/ESP8266 with Solar Panels](https://randomnerdtutorials.com/power-esp32-esp8266-solar-panels-battery-level-monitoring/)
-
