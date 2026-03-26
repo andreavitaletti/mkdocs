@@ -395,8 +395,6 @@ void loop() {
 }
 ```
 
----
-
 ### Why this is better
 
 1. **DMA (Direct Memory Access):** The I2S hardware uses DMA. This means it writes directly to a chunk of memory (the buffer) without the CPU having to intervene for every single bit.
@@ -414,3 +412,15 @@ At 44.1 kHz, the **Serial Plotter** will struggle to keep up if you print every 
 1. **Change the Sender Frequency**   
 2. **Add Noise:** Try touching the signal wire with your finger. You'll see the "noise floor" (the messy small bumps at the bottom of the graph) jump up.
 3. **Square Wave:** Change the Sender to output a square wave instead of a sine wave. In the FFT, you will see the **fundamental frequency** plus a series of "harmonics" (smaller peaks at 3x, 5x, and 7x the frequency).
+
+## A reference scenario
+
+![sample-20260326-153310.png](assets/images/sample-20260326-153310.png)
+
+1. You initially oversample at the max speed
+2. Then you comute the FFT to extract the $f_{max}$ . As much you are capable of computing it locally as "better" it is. Note that this is application dependant, but the idea is always the same, local means more difficult and more energy efficient ... the salt of our course!
+3. Adjust the sampling frequency to $f_s > 2 \cdot f_{max}$
+
+!!! note
+    
+    We can now correctly reconstract the signal with an approproate $f_s$ . This is also useful to define the correct duty-cycle to reduce energy consumption (see [here](energy.md))
