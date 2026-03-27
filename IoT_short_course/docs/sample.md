@@ -418,7 +418,7 @@ At 44.1 kHz, the **Serial Plotter** will struggle to keep up if you print every 
 ![sample-20260326-153310.png](assets/images/sample-20260326-153310.png)
 
 1. You initially oversample at the max speed
-2. Then you comute the FFT to extract the $f_{max}$ . As much you are capable of computing it locally as "better" it is. Note that this is application dependant, but the idea is always the same, local means more difficult and more energy efficient ... the salt of our course!
+2. Then you comute the FFT to extract the $f_{max}$ . The more you can compute locally, the “better” it is. Of course, this depends on the application, but the principle is always the same: local computation is harder, yet more energy-efficient… the very essence of our course!
 3. Adjust the sampling frequency to $f_s > 2 \cdot f_{max}$
 
 !!! note

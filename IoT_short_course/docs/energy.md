@@ -48,12 +48,21 @@ The following picture from [https://doi.org/10.3390/s18072104 ](https://doi.org/
 !!! tip
     
     It is always a valuable exercise to estimate the power consumption of your app with a diagram similar to the one above. Nonetheless, it is then necessary to confirm your estimation by measurements.
+
+## Duty cycle    
+   
+The duty cycle of a system is the fraction of time it is active compared to the total period.    
     
 ![energy-20260327-080521.png](assets/images/energy-20260327-080521.png)
 
+!!! exercise
+    Assuming the ESP32 is powered by a 3.6V - 1000mAh LiFePO4 battery. What is a lower bound on the active time? How does it change with a 50% duty cycle?
+
+In many systems, the device only needs to be active for a tiny fraction of each cycle (in the figure above, only 1%). That small active window lets us save a huge amount of energy, stretching the system’s operation time so it can meet the application’s needs. 
+
 !!! tip
     
-    Determining the optimal duty cycle and supporting this choice with sound arguments is a fundamental aspect of the project.
+    Determining the optimal duty cycle for an application and supporting this choice with sound arguments is a fundamental aspect of the project.
 
 ## ESP32 Sleep Modes
 

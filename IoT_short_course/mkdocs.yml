@@ -31,6 +31,9 @@ extra_javascript:
 
 plugins:
   - gh-admonitions
+  - to-pdf:
+      author: Andrea Vitaletti
+      enabled_if_env: ENABLE_PDF_EXPORT
 
 nav:
   - Home: index.md
