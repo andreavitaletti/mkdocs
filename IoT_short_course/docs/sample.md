@@ -294,8 +294,8 @@ void loop() {
 
 	Instead of using a single buffer use two: while one is filled up the other is analysed. Update the code to compute the max frequency
 
----
-### How to go faster
+
+## How to go faster
 
 In previous sections we achieve Hz frequencies, If you want to reach **Kilohertz** signal frequencies, the `delayMicroseconds()` approach becomes ineffective because the overhead (the time it takes to process the loop) becomes a large percentage of the total time. That is when we switch to **I2S (Inter-IC Sound)**, which uses a hardware clock to "push" data to the DAC or "pull" it from the ADC at exact intervals, like a metronome.
 

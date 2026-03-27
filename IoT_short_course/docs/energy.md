@@ -8,36 +8,36 @@ To power the ESP32 you can use [several methods](https://esp32io.com/tutorials/h
 ### USB Port (Easiest & Most Common)
 The most straightforward method is to plug a micro-USB or USB-C cable (depending on your board) into a computer, a 5V wall adapter (like an old phone charger), or a portable power bank. 
 
-*Pros:* Safe, provides both power and data for programming, and is regulated on-board.
-*Note:*  Ensure you use a data-capable USB cable if you also need to upload code. 
+!!! note
+    Safe, provides both power and data for programming, and is regulated on-board.
+    
+    Ensure you use a data-capable USB cable if you also need to upload code. 
 
 ### The 5V (or VIN) Pin
 You can provide an external unregulated power supply directly to the 5V or VIN pin and a GND (ground) pin. 
 Voltage Range: Typically 5V to 12V.
 
-*Efficiency:* Higher voltages (like 9V or 12V) will cause the onboard regulator to generate more heat.
-*Warning:* There is often no reverse polarity protection on these pins. Connecting power backward can instantly fry the board. 
+!!! warning
+    Higher voltages (like 9V or 12V) will cause the onboard regulator to generate more heat -> energy waste.
+    
+    There is often no reverse polarity protection on these pins. Connecting power backward can instantly fry the board. 
 
 ### The 3.3V Pin (Regulated Power)
 If you already have a stable, regulated 3.3V supply, you can connect it directly to the 3.3V and GND pins. 
 
-*Critical Danger:* This method bypasses the onboard voltage regulator. If your supply exceeds 3.6V, you will damage the ESP32 chip.
-*Use Case:* This is common for battery-powered projects using a dedicated external regulator or specific battery types.
-
-> [!TIP]
-> if you don't need 5V in you project, use 3.3V, it will save energy. However, finding suitable batteries is not easy!
-> if the battery does not exceed 3.6V as in the LiFePO4, you can connect the battery to the 3.3V and bypass the voltage regulator
+!!! danger
+    This method bypasses the onboard voltage regulator. If your supply exceeds 3.6V, you will damage the ESP32 chip.
 
 
-<!--
 !!! tip
 
     if you don't need 5V in you project, use 3.3V, it will save energy. However, finding suitable batteries is not easy!
-
     if the battery does not exceed 3.6V as in the LiFePO4, you can connect the battery to the 3.3V and bypass the voltage regulator
--->
 
-![](assets/images/2025-04-11-14-59-39.png)
+
+![energy-20260327-080957.png](assets/images/energy-20260327-080957.png)
+
+The Heltec V3 has a nice battery management: Integrated lithium battery management system with charge and discharge management, overcharge protection, and automatic switching between USB and battery power.
 
 ## Power consumption
 
@@ -48,12 +48,31 @@ The following picture from [https://doi.org/10.3390/s18072104 ](https://doi.org/
 !!! tip
     
     It is always a valuable exercise to estimate the power consumption of your app with a diagram similar to the one above. Nonetheless, it is then necessary to confirm your estimation by measurements.
+    
+![energy-20260327-080521.png](assets/images/energy-20260327-080521.png)
+
+!!! tip
+    
+    Determining the optimal duty cycle and supporting this choice with sound arguments is a fundamental aspect of the project.
 
 ## ESP32 Sleep Modes
 
+![energy-20260327-082701.png](assets/images/energy-20260327-082701.png)
+[:fontawesome-brands-creative-commons: :fontawesome-brands-creative-commons-by:](https://www.researchgate.net/figure/Comparison-of-the-energy-consumption-of-different-ESP32-developer-modules-12_tbl1_369763204)
+
+* **Active Mode:** Fully powered, running Wi-Fi or CPU tasks.
+* **Modem-Sleep:** Wi-Fi radio is off but CPU can run. Power consumption depends on CPU frequency.
+* **Light-Sleep:** CPU paused, RAM retained, low-power clocks can run.
+* **Deep-Sleep:** CPU off, most peripherals off, only RTC (real-time clock) can wake up the chip.
+    * ULP active: Ultra-Low-Power co-processor is active.
+    * ULP sensor-monitored: Low-power monitoring using ULP at 1% load
+    * RTC timer + memory: Only RTC and memory retained.
+* **Hibernation:** Only RTC timer active; everything else off.
+
 [ESP32 supports two major power saving modes](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/sleep_modes.html): Light-sleep and Deep-sleep.
 
-A nice pictorial representation of these modes is available at [lastminuteengineers](https://lastminuteengineers.com/esp32-sleep-modes-power-consumption/)
+!!!tip 
+    A visual representation of these modes can be found at: [lastminuteengineers](https://lastminuteengineers.com/esp32-sleep-modes-power-consumption/)
 
 ### Light Sleep
 
@@ -88,7 +107,7 @@ If Wi-Fi/Bluetooth connections need to be maintained, enable Wi-Fi/Bluetooth Mod
 
 ### Wakeup
 
-There are several wakeup sources in the sleep modes. The following are excellent sources of information to understand how to ESP32 Sleep Modes and Their Power Consumption. 
+There are several wake-up sources available in the ESP32 sleep modes. The following resources provide excellent information for understanding ESP32 sleep modes and their power consumption.
 
 * [Insight Into ESP32 Sleep Modes and Their Power Consumption](https://lastminuteengineers.com/esp32-sleep-modes-power-consumption/)
 * [ESP32 Deep Sleep Mode](https://www.electronicwings.com/esp32/esp32-deep-sleep-mode)
@@ -238,8 +257,6 @@ In the following example, the LOAD is our ESP32 and we use the [INA219](https://
 
 ![](assets/images/INA219.drawio.png)
 
-[source](https://learn.adafruit.com/adafruit-ina219-current-sensor-breakout/wiring "https://learn.adafruit.com/adafruit-ina219-current-sensor-breakout/wiring")
-
 ```c
 
 // use https://github.com/nathandunk/BetterSerialPlotter to visualize the data
@@ -310,6 +327,15 @@ void loop(void)
 
 ```
 
+![energy-20260327-085242.png](assets/images/energy-20260327-085242.png)
+
+
+1. `getShuntVoltage_mV()` Voltage drop across the small $0.1 \Omega$ shunt resistor on the board. This is the raw data used to determine how much current is flowing (see `getCurrent_mA()`).
+2. `getBusVoltage_V()` Voltage between the V- pin and Ground.  This tells you the nominal supply voltage to the load; doesn’t include the small drop across the shunt resistor.
+3. `getCurrent_mA()` The chip takes the Shunt Voltage and divides it by the Shunt Resistance $I = \frac{V_{shunt}}{R_{shunt}}$
+4. `getPower_mW()` A simple multiplication of the bus voltage and the current. $P = V_{bus} \times I$
+5. `loadvoltage = busvoltage + (shuntvoltage / 1000)`This line calculates the total voltage at the source. Since there is a tiny drop across the sensor itself, the "true" source voltage is the voltage at the load plus what was lost across the shunt. Note that we divide shuntvoltage by 1000 to convert millivolts into volts so the units match.
+
 ```c
 
 /*
@@ -351,12 +377,12 @@ We use [Better Serial Plotter](https://github.com/nathandunk/BetterSerialPlotter
 
 ![](assets/images/2025-04-11-10-45-59.png)
 
-[source code](https://github.com/andreavitaletti/PlatformIO/tree/main/Projects/power_simple)
 
 A powerful alternative is [Serial-Studio](https://github.com/Serial-Studio/Serial-Studio?tab=readme-ov-file)
 
-> [!EXERCISE]
->Write a simple code  that  mimics the diagram at the beginning of this section of a typical sensor working scenario and measure the consumption of each activity
+!!! exercise
+    Write a simple code  that  mimics the diagram at the beginning of this section of a typical sensor working scenario and measure the consumption of each activity
+
 ## Energy Harvesting
 
 [Power ESP32/ESP8266 with Solar Panels](https://randomnerdtutorials.com/power-esp32-esp8266-solar-panels-battery-level-monitoring/)
