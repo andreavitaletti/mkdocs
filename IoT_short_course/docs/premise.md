@@ -2,18 +2,23 @@ If you ask multiple people what the Internet of Things (IoT) is, you will likely
 
 The Raspberry Pi, Jetson Nano, and Arduino Uno Q can handle relatively complex tasks, including AI workloads, whereas the resource-constrained ESP32 cannot easily achieve the same performance.
 
-In this course, we make an **unconditional choice**: students will work with the **ESP32 powered by a battery**
+!!!note
+    In this course, we make an **unconditional choice**: students will work with the **ESP32 powered by a battery**
 
 **Why?**
 
+- From a teaching perspective, it provides the most valuable learning experience, emphasising efficiency and thoughtful system design.
 - It presents a greater challenge, encouraging careful design.
 - Solutions developed for the resource-limited ESP32 will generally scale easily to more powerful devices.
-- The battery force you to design power efficient solutions
-- From a teaching perspective, it provides the most valuable learning experience, emphasising efficiency and thoughtful system design.
+- The battery force students to design power efficient solutions
+
+!!! note
+    In many IoT environments, particularly industrial ones, devices are easily line-powered. Yet, the constraints of battery-powered design offer a much more engaging set of challenges.
+
 
 Regardless of the fact that, for simplicity, you might use a more resource-demanding (“non-IoT‑friendly”) technology, we expect you to **demonstrate a thoughtful design process and provide a prototype** that shows how you optimised limited resources to meet your application’s requirements.
 
-It is well known that Wi-Fi is not particularly IoT-friendly, as it consumes a significant amount of energy. At the same time, most ESP32 devices natively support Wi-Fi, making it a very convenient choice.
+As an example, it is well known that Wi-Fi is not particularly IoT-friendly, as it consumes a significant amount of energy. At the same time, most ESP32 devices natively support Wi-Fi, making it a very convenient choice.
 
 While we encourage you to challenge yourself with more IoT-friendly technologies (e.g., LoRa), using WiFi is perfectly acceptable **provided that you demonstrate the following**:
 
@@ -26,13 +31,5 @@ This approach ensures that even when using convenient technologies like Wi-Fi, y
 
 <!-- both the admonitions below work, but the second one is rendered properly also on obsidian -->
 
-<!--
 !!! note
-
     We value the process and the right questions with sound answers more than the final product.
--->
-
-> [!NOTE]
->We value the process and the right questions with sound answers more than the final product!
-
-

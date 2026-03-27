@@ -1,5 +1,11 @@
 # Digital Twin
 
+A **digital twin** is a virtual representation of a physical system that stays continuously synchronized with it through real-time data, enabling real-time monitoring, predictive simulation, and closed-loop control. In other words, it is a live, data-driven model of a real object, process, or environment. Specifically, sensors on the physical system send continuous data to the digital model, keeping the digital twin up-to-date with what is happening in reality. This data also trains and feeds a model, which is the core component to run simulations to predict performance, failures, and behavior under different conditions. This enables testing different scenarios, including most problematic ones, without putting at risk the real system. The results of the simulations inform decision-makers and guide the actions into the physical system, enabling adaptive control, automated tuning, and optimization of operation. In summary, a typical digital twin forms an iterative loop,  continuously improving with more data, encompassing the following tasks: sense, model, predict, act. This enables faster experimentation rounds (especially when physical tests are slow or expensive), cost reduction, enhanced reliability, intelligent automation, and continuous improvement through data-driven feedback.
+
+The following picture depicts a Digital Twin for a fermentator developed in collaboration with [yeastime](https://yeastime.com/)
+
+![](assets/images/DT.drawio.png)
+
 ## Estimating clock drift 
 
 ESP32 internal oscillators are cost-effective but notoriously sensitive to temperature, leading to a drift that can be several seconds a day.
@@ -246,6 +252,8 @@ We can run epanet-js on nodejs and specifically run a bridge interfacing the EPA
 
 In other words we can use the ESP32 as a sensor of a simulated water distribution network
 
+The bridge code, tunning on node 
+
 ```js
 const { Project, Workspace } = require('epanet-js');
 const { SerialPort } = require('serialport');
@@ -294,3 +302,8 @@ function runSimulation() {
 
 setInterval(runSimulation, 3000);
 ```
+
+!!!tip 
+    A similar approach can be exploited to interface multiple simulators, however in many case a convenient WASM implementation (i.e. epanet.js), as for EPANET, does not exixt. 
+    
+    As an example, for traffic simulation you might consider [SUMO](https://eclipse.dev/sumo/). The process is more complex, since you need a local installation, but the approach is the same as the one described above for water.
