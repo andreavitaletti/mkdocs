@@ -75,3 +75,17 @@ the usual architectural assumption to have a central entity in charge of collect
 ### Goal of the thesis
 
 The thesis aims at develop tools and methodology to proofs in zero knowledge that sensitive business data are compliant to specific criteria- Since data are sensitive they cannot be disclosed (zero-knowledge), but the company is interested to provide formal evidences (i.e. proofs) that it is compliant to specific criteria and/or standards. As an example, given a public available reference vector of features, the company what to provide a proof that its private features are within a given distance (e.g. cosine similarity) from the reference vector. This can be done in [Circom](https://docs.circom.io/) under suitable assumptions.
+
+## Blockchain for the Digital Product Passport
+
+A Digital Product Passport (DPP) is a digital record that provides detailed, standardized information about a product throughout its lifecycle. The concept is increasingly promoted within the European Union’s Circular Economy Action Plan and sustainable product policies. Its purpose is to improve transparency, traceability, and sustainability of products.
+
+Blockchain is often considered a key enabling technology for DPPs, as explored in Digital Product Passports: A Blockchain-based Perspective, a recent report by the EU Blockchain Observatory and Forum.
+
+### Goal of the thesis
+
+The main purpose of this thesis is to analyse whether Blockchain truly represents a viable solution and to implement a PoC. The initial hype around Blockchain has passed, and it is now essential to provide strong arguments supporting its adoption. The search for a “killer application” for Blockchain continues, and it is not yet fully clear whether DPPs will fulfill this role. In this context, we also aim to consider the Italian Blockchain Service Infrastructure (IBSI) as a potential platform for implementing DPPs based on the relevant standardization activities such as the [GS1](https://www.gs1.org/standards/standards-emerging-regulations/DPP).  
+
+Importantly, the EU DPP adoption roadmap provides a phased rollout: starting with batteries in February 2027, followed by construction products in 2028, and extending to major sectors such as textiles and electronics by 2030. Should Blockchain prove to be a suitable solution, this roadmap will be a real, structured opportunity for its implementation and adoption.
+
+IBIS employs [Hyperledger Besu](https://besu.hyperledger.org/). The PoC for the thesis will be developed in such technology and possibly then migrated to the IBSI testnet.
